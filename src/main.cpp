@@ -2,10 +2,11 @@
 #include <Arduino.h>
 #endif
 
+#include <state_field_registry.hpp>
 #include <main_loop.hpp>
 
-StateFieldRegistry sfr;
-MainLoop main_loop(sfr);
+StateFieldRegistry sfr = StateFieldRegistry{0};
+MainLoop main_loop = MainLoop(sfr);
 
 void setup() {
   // put your setup code here, to run once:
