@@ -2,7 +2,7 @@
 #include <time_task.hpp>
 
 MainLoop::MainLoop(StateFieldRegistry& sfr) : 
-    sfr_(sfr_),
+    sfr_(sfr),
     task_list_{TimeTask(sfr_)}
     {
 }
