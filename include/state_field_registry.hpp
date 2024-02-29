@@ -15,7 +15,7 @@
 struct StateFieldRegistry{
     float time_t_average_cucle_time_us = -1;
     int time_t_control_cycle_limit_us = 20000;
-    uint32_t time_t_last_cycle_start_us = 0;
+    uint32_t time_t_last_cycle_end_us = 0;
     uint64_t mcl_control_cycle_num = 0;
 };
 

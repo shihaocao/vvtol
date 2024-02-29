@@ -21,7 +21,7 @@ TimeTask::TimeTask(StateFieldRegistry& sfr) : sfr_(sfr) {
 }
 
 void TimeTask::setup() {
-    sfr_.time_t_last_cycle_start_us = micro_count();
+    sfr_.time_t_last_cycle_end_us = micro_count();
 };
 
 void TimeTask::delay_for_us(uint32_t delay_us) {
@@ -37,7 +37,9 @@ void TimeTask::execute() {
     uint32_t now_us = micro_count();
 
     // Calculate the target end time
-    unsigned long target_end_time_us = sfr_.time_t_last_cycle_start_us + sfr_.time_t_control_cycle_limit_us;
+    unsigned long target_end_time_us = sfr_.time_t_last_cycle_end_us + sfr_.time_t_control_cycle_limit_us;
+    // Update last_cycle_start_us for the next cycle
+    sfr_.time_t_last_cycle_end_us = target_end_time_us;
 
     // Calculate the sleep duration to meet the target cycle time
     long sleep_duration_us = target_end_time_us - now_us;
@@ -45,8 +47,11 @@ void TimeTask::execute() {
     // Sleep for the calculated duration if it is positive
     if (sleep_duration_us > 0) {
         delay_for_us(sleep_duration_us);
+    } else {
+        // We had a desync, the last cycle end time is not true anymore, update it
+        sfr_.time_t_last_cycle_end_us = target_end_time_us;
+    
+        // TODO increment a desync counter, and maybe measure it    
     }
 
-    // Update last_cycle_start_us for the next cycle
-    sfr_.time_t_last_cycle_start_us = micro_count();
 }

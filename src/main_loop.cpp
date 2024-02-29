@@ -1,5 +1,6 @@
 #include <main_loop.hpp>
 #include <time_task.hpp>
+#include <log.hpp>
 
 MainLoop::MainLoop(StateFieldRegistry& sfr) : 
     sfr_(sfr),
@@ -17,4 +18,5 @@ void MainLoop::execute() {
     for (auto task : task_list_) {
         task.execute();
     }
+    spdlog::info("Loop done!");
 }
