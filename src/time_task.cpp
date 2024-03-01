@@ -54,4 +54,6 @@ void TimeTask::execute() {
         // TODO increment a desync counter, and maybe measure it    
     }
 
+    // increment the cycle counter
+    sfr_.mcl_control_cycle_num++;
 }

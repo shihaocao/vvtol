@@ -8,17 +8,15 @@
 #include <thread>
 #endif
 
-class TimeTask : public Task{
+class MainControlSM : public Task{
     StateFieldRegistry& sfr_;
 
-    static uint32_t micro_count();
 public:
-
-    static void delay_for_us(uint32_t delay_us);
-
-    TimeTask(StateFieldRegistry& sfr);
+    MainControlSM(StateFieldRegistry& sfr);
 
     void setup() override;
+
+    MainControlState autonomous_control();
 
     void execute() override;
 };
