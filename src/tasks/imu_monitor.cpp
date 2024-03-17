@@ -75,6 +75,7 @@ ImuMonitor::ImuMonitor(StateFieldRegistry& sfr) : sfr_(sfr) {
 }
 
 void ImuMonitor::setup() {
+  #ifndef NATIVE
   // Set the SCL and SDA pins for I2C communication
   Wire2.setSCL(24);
   Wire2.setSDA(25);
@@ -110,11 +111,12 @@ void ImuMonitor::setup() {
 //   bno08x.enableReport(SH2_ROTATION_VECTOR);
 //   bno08x.enableReport(SH2_GYROSCOPE_CALIBRATED);
 //   bno08x.enableReport(SH2_MAGNETIC_FIELD_CALIBRATED);
-
+  #endif
 };
 
 
 void ImuMonitor::execute() {
+    #ifndef NATIVE
     // Create a single sensor value container
     sh2_SensorValue_t sensorValue;
 
@@ -151,6 +153,8 @@ void ImuMonitor::execute() {
         }
     }
 
+    global_counter_manager.reset_all_counters();
+
     // Print linear acceleration data
     Serial.print("Linear Acceleration: ");
     Serial.print("X = ");
@@ -167,6 +171,8 @@ void ImuMonitor::execute() {
     // Serial.print(sfr_.imu_acc_vec_f.y());
     // Serial.print(", Z = ");
     // Serial.println(sfr_.imu_acc_vec_f.z());
+    #endif
+
     // // Calibration data
     // uint8_t calibrationStatus;
     // bno08x.getCalibrationStatus(&calibrationStatus);
