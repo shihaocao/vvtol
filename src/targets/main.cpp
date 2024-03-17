@@ -4,13 +4,24 @@
 
 #include <state_field_registry.hpp>
 #include <main_loop.hpp>
+#include <atomic>
+#include <csignal>
 
 StateFieldRegistry sfr = StateFieldRegistry{0};
 MainLoop main_loop = MainLoop(sfr);
 
+std::atomic<bool> keepRunning(true);
+
+void signalHandler(int signum) {
+    log() << "Interrupt signal (" << signum << ") received.\n";
+    keepRunning = false;
+}
+
 void setup() {
   // put your setup code here, to run once:
   main_loop.setup();
+  std::signal(SIGINT, signalHandler);
+
 }
 
 void loop() {
@@ -21,8 +32,10 @@ void loop() {
 #ifdef NATIVE
 int main() {
   setup();
-  while(true) {
+  while(keepRunning) {
     loop();
   }
+  log() << stats().to_string();
+  log().flush();
 }
 #endif

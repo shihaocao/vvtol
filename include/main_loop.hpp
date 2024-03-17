@@ -7,12 +7,12 @@
 #include <task.hpp>
 #include <imu_monitor.hpp>
 #include <functional>
-
+#include <common/stats.hpp>
 
 class MainLoop : public Task<MainLoop> {
     StateFieldRegistry& sfr_;
     std::tuple<ImuMonitor, MainControlSM, TimeTask> task_list_;
-
+    Stats stats_;
 public:
     MainLoop(StateFieldRegistry& sfr);
 

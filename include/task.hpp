@@ -1,6 +1,7 @@
 #pragma once
 
 #include <log.hpp>
+#include <common/stats.hpp>
 
 // class Task {
 // public:
@@ -22,10 +23,12 @@ public:
     void execute_w_timer() {
         // Directly access the 'name' member variable of the Derived class
         std::string& name = static_cast<Derived*>(this)->name;
-        log_printf("Starting timer for: %s", name.c_str());
+        stats().start_mark(name);
+        // log_printf("Starting timer for: %s", name.c_str());
         // Call the execute method, which is specific to the derived class
         static_cast<Derived*>(this)->execute();
-        log_printf("Stopping timer for: %s", name.c_str());
+        // log_printf("Stopping timer for: %s", name.c_str());
+        stats().end_mark(name);
     }
 };
 

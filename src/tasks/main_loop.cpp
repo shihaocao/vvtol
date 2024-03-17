@@ -24,4 +24,6 @@ void MainLoop::setup() {
 void MainLoop::execute() {
     std::apply([](auto&&... tasks) { (..., tasks.execute_w_timer()); }, task_list_);
     // spdlog::info("Loop done!");
+
+    log().flush(); // flush at the end of every CC, **ATLEAST** users can flush more if needed
 }
