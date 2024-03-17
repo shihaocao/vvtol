@@ -7,11 +7,11 @@
 MainLoop::MainLoop(StateFieldRegistry& sfr) : 
     sfr_(sfr),
     task_list_(
-        {
+        
             ImuMonitor(sfr_),
             MainControlSM(sfr_),
             TimeTask(sfr_)
-        })
+        )
     {
 }
 

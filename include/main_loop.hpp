@@ -6,6 +6,8 @@
 #include <time_task.hpp>
 #include <task.hpp>
 #include <imu_monitor.hpp>
+#include <functional>
+
 
 class MainLoop : public Task {
     StateFieldRegistry& sfr_;

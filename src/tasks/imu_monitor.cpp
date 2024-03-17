@@ -54,8 +54,8 @@ class CounterManager {
         SingleCounter temp{
             total_count_
         };
-        auto it = counters_.emplace_back(total_count_);
-        return it;
+        counters_.emplace_back(total_count_);
+        return counters_.back();
     }
 
     void reset_all_counters() {
@@ -126,7 +126,7 @@ void ImuMonitor::execute() {
                 if(!lin_acc_counter.trip())
                     break;
 
-                sfr_.linear_acc_vec_f = {
+                sfr_.imu_linear_acc_vec_f = {
                     sensorValue.un.linearAcceleration.x,
                     sensorValue.un.linearAcceleration.y,
                     sensorValue.un.linearAcceleration.z
@@ -154,19 +154,19 @@ void ImuMonitor::execute() {
     // Print linear acceleration data
     Serial.print("Linear Acceleration: ");
     Serial.print("X = ");
-    Serial.print(sfr_.linear_acc_vec_f.x);
-    Serial.print(", Y = ");
-    Serial.print(sfr_.linear_acc_vec_f.y);
-    Serial.print(", Z = ");
-    Serial.println(sfr_.linear_acc_vec_f.z);
+    Serial.print(sfr_.imu_linear_acc_vec_f.x());
+    // Serial.print(", Y = ");
+    // Serial.print(sfr_.imu_linear_acc_vec_f.y());
+    // Serial.print(", Z = ");
+    // Serial.println(sfr_.imu_linear_acc_vec_f.z());
 
-    Serial.print("Accelerometer: ");
-    Serial.print("X = ");
-    Serial.print(sfr_.imu_acc_vec_f.x);
-    Serial.print(", Y = ");
-    Serial.print(sfr_.imu_acc_vec_f.y);
-    Serial.print(", Z = ");
-    Serial.println(sfr_.imu_acc_vec_f.z);
+    // Serial.print("Accelerometer: ");
+    // Serial.print("X = ");
+    // Serial.print(sfr_.imu_acc_vec_f.x());
+    // Serial.print(", Y = ");
+    // Serial.print(sfr_.imu_acc_vec_f.y());
+    // Serial.print(", Z = ");
+    // Serial.println(sfr_.imu_acc_vec_f.z());
     // // Calibration data
     // uint8_t calibrationStatus;
     // bno08x.getCalibrationStatus(&calibrationStatus);
