@@ -26,5 +26,8 @@ struct StateFieldRegistry{
 
     GncControl::State gnc_state = GncControl::State::EMPTY;
     GncControl::State target_gnc_state = GncControl::State::EMPTY;
+
+    Vector3f imu_linear_acc_vec_f{};
+    Vector3f imu_acc_vec_f{};
 };
 

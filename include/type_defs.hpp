@@ -1,5 +1,10 @@
 #pragma once
 
+#ifndef NATIVE
+#include <Arduino.h>
+#endif
+
+#include <array>
 
 namespace MainControl {
     enum State : unsigned char {
@@ -23,3 +28,10 @@ namespace GncControl {
         HALT = 6,
     };
 }
+
+using Vector4f = std::array<float, 4>;
+using Vector4d = std::array<float, 4>;
+using Vector3f = std::array<float, 3>;
+using Vector3d = std::array<float, 3>;
+using Vector2f = std::array<float, 2>;
+using Vector2d = std::array<float, 2>;

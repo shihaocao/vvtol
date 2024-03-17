@@ -7,7 +7,6 @@
 #include <chrono>
 #include <thread>
 #endif
-#include "spdlog/spdlog.h"
 
 // MainControlSM::MainControlSM(StateFieldRegistry& sfr) : sfr_(sfr), empty_cvd_({
 //         { [&] { return sfr_.mcl_control_cycle_num - sfr_.last_transition_ccno  > 10;},
@@ -47,10 +46,10 @@ MainControl::State MainControlSM::autonomous_control() {
             return MainControl::State::ARMED;
         case MainControl::State::ARMED:
             // do your preflight checks here, and make sure the subsystems are ready
-            TimeTask::delay_for_us(1000);
+            ImuMonitor::delay_for_us(1000);
             return MainControl::State::FLIGHT;
         case MainControl::State::FLIGHT:
-            TimeTask::delay_for_us(1000); // wait gotta figure out how to do this construct.
+            ImuMonitor::delay_for_us(1000); // wait gotta figure out how to do this construct.
             return MainControl::State::SAFEHOLD;
     }
 }

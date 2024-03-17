@@ -1,7 +1,9 @@
-// log.hpp
-#pragma once
+#ifndef LOG_HPP
+#define LOG_HPP
 
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/base_sink.h"
+#include <stdarg.h>
 
-void setup_logger();
+void log_init();
+void log_printf(const char* format, ...);
+
+#endif // LOG_HPP
