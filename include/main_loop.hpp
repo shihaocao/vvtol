@@ -9,14 +9,14 @@
 #include <functional>
 
 
-class MainLoop : public Task {
+class MainLoop : public Task<MainLoop> {
     StateFieldRegistry& sfr_;
     std::tuple<ImuMonitor, MainControlSM, TimeTask> task_list_;
 
 public:
     MainLoop(StateFieldRegistry& sfr);
 
-    void setup() override;
+    void setup();
 
-    void execute() override;
+    void execute();
 };

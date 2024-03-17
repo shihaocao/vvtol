@@ -9,17 +9,19 @@
 #include <thread>
 #endif
 
-class MainControlSM : public Task{
+class MainControlSM : public Task<MainControlSM>{
     StateFieldRegistry& sfr_;
 
     ContinuationDispatchVector empty_cvd_;
 
 public:
+    std::string name = "main_control_sm";
+
     MainControlSM(StateFieldRegistry& sfr);
 
-    void setup() override;
+    void setup();
 
     MainControl::State autonomous_control();
 
-    void execute() override;
+    void execute();
 };

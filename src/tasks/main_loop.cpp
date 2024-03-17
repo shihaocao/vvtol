@@ -22,6 +22,6 @@ void MainLoop::setup() {
 }
 
 void MainLoop::execute() {
-    std::apply([](auto&&... tasks) { (..., tasks.execute()); }, task_list_);
+    std::apply([](auto&&... tasks) { (..., tasks.execute_w_timer()); }, task_list_);
     // spdlog::info("Loop done!");
 }

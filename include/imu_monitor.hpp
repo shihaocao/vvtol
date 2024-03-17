@@ -8,14 +8,15 @@
 #include <thread>
 #endif
 
-class ImuMonitor : public Task{
+class ImuMonitor : public Task<ImuMonitor>{
     StateFieldRegistry& sfr_;
 
 public:
+    std::string name = "imu_montor";
 
     ImuMonitor(StateFieldRegistry& sfr);
 
-    void setup() override;
+    void setup();
 
-    void execute() override;
+    void execute();
 };
