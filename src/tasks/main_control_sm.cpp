@@ -33,6 +33,8 @@ MainControlSM::MainControlSM(StateFieldRegistry& sfr) : sfr_(sfr), empty_cvd_({}
                 log_printf("Waiting for imu to calibrate");
                 sfr.mc_state = MainControl::State::ARMED;
                 log_printf("Going to armed!");
+
+                log() << global_stats.to_string() << '\n';
             } 
     );
 }

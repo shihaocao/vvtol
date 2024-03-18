@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <memory>
+#include <vector_defs.hpp>
 
 void log_init();
 void log_printf(const char* format, ...);
@@ -30,6 +31,27 @@ public:
         return *this;
     }
 
+    // template<typename T>
+    // Logger& operator<<(Vector<T, 2> v2) {
+    //     stream << "(" << v2.x() << ", " << v2.y() << ")\n";
+    //     return *this;
+    // }
+
+    // template<typename T>
+    // Logger& operator<<(Vector<T, 3> v) {
+    //     stream << "(" << v.x() << ", " << v.y() << ", " << v.z() << ")\n";
+    //     return *this;
+    // }
+    template<typename T, size_t N>
+    Logger& operator<<(Vector<T, N> v) {
+        stream << "(";
+        // this should be evaluated at compile time.
+        for(unsigned int i = 0; i < N - 1; i++) {
+            stream << v[i] << ", ";
+        }
+        stream << v[N-1] << ")\n";
+        return *this;
+    }
 
     // Overload << operator for various types
     template<typename T>

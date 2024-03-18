@@ -23,16 +23,20 @@ int n_readings;
 class SingleCounter {
 public:
     bool is_counted_;
-    std::atomic<int>& total_count_ref_;
-    SingleCounter(std::atomic<int>& count_ref) : 
-        is_counted_(false),
-        total_count_ref_(count_ref) {};
+    // std::atomic<int>& total_count_ref_;
+    SingleCounter() : 
+        is_counted_(false) {};
+
+    SingleCounter(SingleCounter&) = delete;
+    SingleCounter& operator=(SingleCounter&) = delete;
+    SingleCounter(SingleCounter&&) = default;;;
+    SingleCounter& operator=(SingleCounter&&) = default;
 
     bool trip() {
         if(is_counted_){
             return false;        }
         is_counted_ = true;
-        total_count_ref_++;
+        // total_count_ref_++;
         return true;
     }
 
@@ -50,16 +54,13 @@ class CounterManager {
 
     CounterManager() {};
 
-    SingleCounter issue_new_counter() {
-        SingleCounter temp{
-            total_count_
-        };
-        counters_.emplace_back(total_count_);
+    SingleCounter& issue_new_counter() {
+        counters_.emplace_back();
         return counters_.back();
     }
 
     void reset_all_counters() {
-        for (auto c : counters_) {
+        for (auto& c : counters_) {
             c.reset();
         }
     }
@@ -121,12 +122,13 @@ void ImuMonitor::execute() {
     sh2_SensorValue_t sensorValue;
 
     // Poll the BNO085 sensor for data
-    while (bno08x.getSensorEvent(&sensorValue) && global_counter_manager.at_target()) {
+    while (bno08x.getSensorEvent(&sensorValue)) {
         switch (sensorValue.sensorId) {
             case SH2_LINEAR_ACCELERATION:
-                static SingleCounter lin_acc_counter = global_counter_manager.issue_new_counter();
-                if(!lin_acc_counter.trip())
+                static SingleCounter& lin_acc_counter = global_counter_manager.issue_new_counter();
+                if(!lin_acc_counter.trip()) {
                     break;
+                }
 
                 sfr_.imu_linear_acc_vec_f = {
                     sensorValue.un.linearAcceleration.x,
@@ -136,7 +138,7 @@ void ImuMonitor::execute() {
                 break;
 
             case SH2_ACCELEROMETER:
-                static SingleCounter acc_counter = global_counter_manager.issue_new_counter();
+                static SingleCounter& acc_counter = global_counter_manager.issue_new_counter();
                 if(!acc_counter.trip())
                     break;
 
@@ -156,9 +158,10 @@ void ImuMonitor::execute() {
     global_counter_manager.reset_all_counters();
 
     // Print linear acceleration data
-    Serial.print("Linear Acceleration: ");
-    Serial.print("X = ");
-    Serial.print(sfr_.imu_linear_acc_vec_f.x());
+    // log_printf("Linear Acceleration: ");
+    // log_printf("X = ");
+    // log_printf(sfr_.imu_linear_acc_vec_f.x());
+    // log() << "Linear acceleration: " << sfr_.imu_linear_acc_vec_f;
     // Serial.print(", Y = ");
     // Serial.print(sfr_.imu_linear_acc_vec_f.y());
     // Serial.print(", Z = ");
