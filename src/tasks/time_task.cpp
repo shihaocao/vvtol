@@ -55,8 +55,8 @@ void TimeTask::execute() {
     }
 
     if (sfr_.mcl_control_cycle_num % 100 == 0) {
-        log() << "CCNO: " << sfr_.mcl_control_cycle_num;
-        // log() << global_stats.to_string();
+        log() << "CCNO: " << sfr_.mcl_control_cycle_num << '\n';
+        log() << global_stats.to_string() << '\n';
     }
 
     // increment the cycle counter

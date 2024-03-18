@@ -6,9 +6,18 @@
 #include <sstream>
 #include <unordered_map>
 #include <vector>
+#include <optional>
 
 class StatsResult {
   public:
+    // StatsResult(std::vector<std::chrono::nanoseconds> deltas);
+    // StatsResult(StatsResult&) = delete;
+    // StatsResult& operator=(StatsResult&) = delete;
+    // StatsResult(StatsResult&&) = default;
+    // StatsResult& operator=(StatsResult&&) = default;
+
+    std::vector<std::chrono::nanoseconds> deltas_;
+    bool is_empty = false;
     std::string key;
     std::chrono::nanoseconds total_ns_;
     std::chrono::nanoseconds avgs_ns_;

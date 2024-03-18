@@ -29,7 +29,7 @@ public:
 
     SingleCounter(SingleCounter&) = delete;
     SingleCounter& operator=(SingleCounter&) = delete;
-    SingleCounter(SingleCounter&&) = default;;;
+    SingleCounter(SingleCounter&&) = default;
     SingleCounter& operator=(SingleCounter&&) = default;
 
     bool trip() {

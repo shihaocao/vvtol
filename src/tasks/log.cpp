@@ -23,7 +23,7 @@ void log_printf(const char* format, ...) {
     vprintf(format, args);
     printf("\n");
 #else
-    char buffer[256];
+    char buffer[512];
     vsnprintf(buffer, sizeof(buffer), format, args);
     Serial.println(buffer);
 #endif

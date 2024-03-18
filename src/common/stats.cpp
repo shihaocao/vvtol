@@ -6,7 +6,13 @@
 #include <sstream>
 #include <iomanip> // For std::fixed and std::setprecision
 
+// StatsResult::StatsResult(std::vector<std::chrono::nanoseconds> deltas) : deltas_(deltas) {};
+
 std::string StatsResult::to_string() {
+    if (deltas_.size() == 0) {
+        return "No Data";
+    }
+
     std::stringstream ss;
     // Convert nanoseconds to milliseconds for display, fixed to 3 decimal places
     ss << std::fixed << std::setprecision(3);
@@ -29,13 +35,15 @@ void Stats::calculate() {
     for (const auto& key : set_keys_) {
         auto& starts = set_starts_[key];
         auto& ends = set_ends_[key];
-        std::vector<std::chrono::nanoseconds> deltas;
+        std::vector<std::chrono::nanoseconds> deltas{};
 
+        if (starts.size() > 0 && ends.size() > 0) {
         for (size_t i = 0; i < starts.size(); ++i) {
             deltas.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(ends[i] - starts[i]));
         }
+        }
 
-        set_results_[key] = Stats::calculate_result(key, deltas);
+        set_results_[key] = std::move(Stats::calculate_result(key, deltas));
     }
     calculated = true;
 }
@@ -54,7 +62,7 @@ void Stats::hist_e(const std::string &mark_name) {
 }
 
 std::string Stats::to_string() {
-    if (!calculated) calculate();
+    calculate();
     std::stringstream ss;
 
     // Calculate the max key length
@@ -75,8 +83,11 @@ std::string Stats::to_string() {
 // Assuming calculateSetResult becomes a private static method in Stats, here is its definition:
 StatsResult Stats::calculate_result(const std::string& key, std::vector<std::chrono::nanoseconds>& deltas) {
     StatsResult result;
+    result.deltas_ = deltas;
     result.key = key;
-    if (deltas.empty()) return result;
+    if (deltas.empty()) {
+        return result;
+    }
 
     auto total = std::accumulate(deltas.begin(), deltas.end(), std::chrono::nanoseconds(0));
     auto avg = total / deltas.size();
