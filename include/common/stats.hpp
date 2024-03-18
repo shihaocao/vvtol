@@ -9,14 +9,13 @@
 
 class StatsResult {
   public:
-
+    std::string key;
     std::chrono::nanoseconds total_ns_;
     std::chrono::nanoseconds avgs_ns_;
     std::chrono::nanoseconds mins_ns_;
     std::chrono::nanoseconds maxs_ns_;
     std::vector<std::tuple<float, std::chrono::nanoseconds>> percentiles_ns_;
     std::string to_string();
-
 };
 
 class Stats {
@@ -38,7 +37,7 @@ public:
   void hist_s( const std::string &mark_name );
   void hist_e( const std::string &mark_name );
 
-  StatsResult calculate_result(std::vector<std::chrono::nanoseconds>& deltas);
+  StatsResult calculate_result(const std::string& key, std::vector<std::chrono::nanoseconds>& deltas);
 
   std::string to_string();
 };

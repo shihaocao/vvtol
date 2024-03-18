@@ -3,17 +3,24 @@
 #include <numeric>
 #include <cmath>
 
-// Definition of StatsResult::to_string, assuming public or appropriate getters are added
+#include <sstream>
+#include <iomanip> // For std::fixed and std::setprecision
+
 std::string StatsResult::to_string() {
     std::stringstream ss;
-    ss << "Total: " << total_ns_.count() << " ns, "
-       << "Avg: " << avgs_ns_.count() << " ns, "
-       << "Min: " << mins_ns_.count() << " ns, "
-       << "Max: " << maxs_ns_.count() << " ns, "
-       << "Percentiles: ";
+    // Convert nanoseconds to milliseconds for display, fixed to 3 decimal places
+    ss << std::fixed << std::setprecision(3);
+
+    // Format the statistics
+    ss << "[Min, Max: " << std::setw(7) << mins_ns_.count() / 1e6 << ", " << std::setw(7) << maxs_ns_.count() / 1e6 << "], "
+       << "Tot:" << std::setw(9) << total_ns_.count() / 1e6 << ", "
+       << "Avg:" << std::setw(7) << avgs_ns_.count() / 1e6 << ", "
+       << "Percs:";
+
     for (auto& p : percentiles_ns_) {
-        ss << std::get<0>(p) << "%: " << std::get<1>(p).count() << " ns, ";
+        ss << " " << std::setw(7) << std::get<1>(p).count() / 1e6;
     }
+
     return ss.str();
 }
 
@@ -28,7 +35,7 @@ void Stats::calculate() {
             deltas.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(ends[i] - starts[i]));
         }
 
-        set_results_[key] = Stats::calculate_result(deltas);
+        set_results_[key] = Stats::calculate_result(key, deltas);
     }
     calculated = true;
 }
@@ -49,15 +56,26 @@ void Stats::hist_e(const std::string &mark_name) {
 std::string Stats::to_string() {
     if (!calculated) calculate();
     std::stringstream ss;
+
+    // Calculate the max key length
+    int max_key_length = 0;
+    for (const auto& pair : set_results_) {
+        max_key_length = std::max(max_key_length, static_cast<int>(pair.first.length()));
+    }
+
+    // Iterate through the results and print
     for (const auto& key : set_keys_) {
-        ss << "Key: " << key << ", " << set_results_[key].to_string() << std::endl;
+        // Calculate padding for the current key
+        int padding = max_key_length - key.length();
+        ss << "Key: " << key << std::string(padding, ' ') << ", " << set_results_[key].to_string() << std::endl;
     }
     return ss.str();
 }
 
 // Assuming calculateSetResult becomes a private static method in Stats, here is its definition:
-StatsResult Stats::calculate_result(std::vector<std::chrono::nanoseconds>& deltas) {
+StatsResult Stats::calculate_result(const std::string& key, std::vector<std::chrono::nanoseconds>& deltas) {
     StatsResult result;
+    result.key = key;
     if (deltas.empty()) return result;
 
     auto total = std::accumulate(deltas.begin(), deltas.end(), std::chrono::nanoseconds(0));
