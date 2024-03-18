@@ -21,14 +21,14 @@ class StatsResult {
 class Stats {
 private:
 public:
-  using SysClock = std::chrono::system_clock;
-  using SysTimePoint = std::chrono::time_point<SysClock>;
-  using SysTimePointVec = std::vector<SysTimePoint>;
+  using StatsClock = std::chrono::steady_clock;
+  using StatsTimePoint = std::chrono::time_point<StatsClock>;
+  using StatsTimePointVec = std::vector<StatsTimePoint>;
 
   std::vector<std::string> set_keys_;
 
-  std::unordered_map<std::string, SysTimePointVec> set_starts_;
-  std::unordered_map<std::string, SysTimePointVec> set_ends_;
+  std::unordered_map<std::string, StatsTimePointVec> set_starts_;
+  std::unordered_map<std::string, StatsTimePointVec> set_ends_;
   std::unordered_map<std::string, StatsResult> set_results_;
 
   bool calculated = false;

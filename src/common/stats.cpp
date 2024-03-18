@@ -43,14 +43,14 @@ void Stats::calculate() {
 void Stats::hist_s(const std::string &mark_name) {
     if (set_starts_.find(mark_name) == set_starts_.end()) {
         set_keys_.push_back(mark_name);
-        set_starts_[mark_name] = SysTimePointVec();
-        set_ends_[mark_name] = SysTimePointVec();
+        set_starts_[mark_name] = StatsTimePointVec();
+        set_ends_[mark_name] = StatsTimePointVec();
     }
-    set_starts_[mark_name].push_back(SysClock::now());
+    set_starts_[mark_name].push_back(StatsClock::now());
 }
 
 void Stats::hist_e(const std::string &mark_name) {
-    set_ends_[mark_name].push_back(SysClock::now());
+    set_ends_[mark_name].push_back(StatsClock::now());
 }
 
 std::string Stats::to_string() {
