@@ -1,36 +1,44 @@
 #pragma once
 
-#include <unordered_map>
-#include <vector>
 #include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <iomanip>
+#include <unordered_map>
+#include <vector>
 
-class Stats
-{
-private:
-  using SysClock = std::chrono::system_clock;
-  using SysTimePoint = std::chrono::time_point<SysClock>;
+class StatsResult {
+  public:
 
-  std::unordered_map<std::string, size_t> stats_;
-  std::unordered_map<std::string, SysTimePoint> start_marks_;
-  std::unordered_map<std::string, SysTimePoint> end_marks_;
-  std::vector<std::string> mark_keys_;
-  std::vector<std::string> stat_keys_;
-  static constexpr size_t stats_width_ = 32;
-  static constexpr bool print_mark_sf_ = false;
+    std::chrono::nanoseconds total_ns_;
+    std::chrono::nanoseconds avgs_ns_;
+    std::chrono::nanoseconds mins_ns_;
+    std::chrono::nanoseconds maxs_ns_;
+    std::vector<std::tuple<float, std::chrono::nanoseconds>> percentiles_ns_;
+    std::string to_string();
 
-public:
-  ~Stats();
-
-  static Stats& instance();
-  void set_stat(const std::string &stat_name, size_t value);
-  void start_mark(const std::string &mark_name);
-  void end_mark(const std::string &mark_name);
-  std::string to_string();
 };
 
-inline Stats& stats() {
-    return Stats::instance();
-}
+class Stats {
+private:
+public:
+  using SysClock = std::chrono::system_clock;
+  using SysTimePoint = std::chrono::time_point<SysClock>;
+  using SysTimePointVec = std::vector<SysTimePoint>;
+
+  std::vector<std::string> set_keys_;
+
+  std::unordered_map<std::string, SysTimePointVec> set_starts_;
+  std::unordered_map<std::string, SysTimePointVec> set_ends_;
+  std::unordered_map<std::string, StatsResult> set_results_;
+
+  bool calculated = false;
+  void calculate();
+
+  void hist_s( const std::string &mark_name );
+  void hist_e( const std::string &mark_name );
+
+  StatsResult calculate_result(std::vector<std::chrono::nanoseconds>& deltas);
+
+  std::string to_string();
+};

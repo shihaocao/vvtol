@@ -6,6 +6,7 @@
 #include <main_loop.hpp>
 #include <atomic>
 #include <csignal>
+#include <globals.hpp>
 
 StateFieldRegistry sfr = StateFieldRegistry{0};
 MainLoop main_loop = MainLoop(sfr);
@@ -35,7 +36,9 @@ int main() {
   while(keepRunning) {
     loop();
   }
-  log() << stats().to_string();
+  
+  // explicilty dump the logs instead of doing it in a destructor
+  log() << global_stats.to_string();
   log().flush();
 }
 #endif
