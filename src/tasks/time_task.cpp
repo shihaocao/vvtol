@@ -64,4 +64,5 @@ void TimeTask::execute() {
 
     // increment the cycle counter
     sfr_.mcl_control_cycle_num++;
+    log() << "Time task end\n";
 }

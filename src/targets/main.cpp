@@ -26,8 +26,15 @@ void setup() {
 }
 
 void loop() {
+  log() << "MAIN START\n";
+
   // put your main code here, to run repeatedly:
   main_loop.execute();
+
+  // explicilty dump the logs instead of doing it in a destructor
+  log() << global_stats.to_string();\
+  log() << "MAIN DONE\n";
+  // log().flush();
 }
 
 #ifdef NATIVE
@@ -38,7 +45,8 @@ int main() {
   }
   
   // explicilty dump the logs instead of doing it in a destructor
-  log() << global_stats.to_string();
+  log() << global_stats.to_string();\
+  log() << "MAIN DONE\n";
   log().flush();
 }
 #endif

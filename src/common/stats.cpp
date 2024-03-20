@@ -45,7 +45,6 @@ void Stats::calculate() {
 
         set_results_[key] = std::move(Stats::calculate_result(key, deltas));
     }
-    calculated = true;
 }
 
 void Stats::hist_s(const std::string &mark_name) {

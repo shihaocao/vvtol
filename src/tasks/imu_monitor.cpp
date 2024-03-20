@@ -17,15 +17,17 @@
 Adafruit_BNO08x bno08x;
 const uint8_t BNO085_ADDRESS = 0x4A;
 #endif
-int n_readings;
+static constexpr int N_TARGET_READINGS = 2;
 long reportIntervalUs = 10000;
 
 class SingleCounter {
 public:
     bool is_counted_;
-    // std::atomic<int>& total_count_ref_;
-    SingleCounter() : 
-        is_counted_(false) {};
+    std::atomic<int>& total_count_ref_;
+    // SingleCounter() : 
+    //     is_counted_(false) {};
+    SingleCounter(std::atomic<int>& count_ref) : 
+        is_counted_(false), total_count_ref_(count_ref) {};
 
     SingleCounter(SingleCounter&) = delete;
     SingleCounter& operator=(SingleCounter&) = delete;
@@ -35,11 +37,11 @@ public:
     bool trip() {
         if(is_counted_){
             log() << "tripped\n";
-            return false;        
+            return total_count_ref_ == N_TARGET_READINGS;        
         }
         is_counted_ = true;
-        // total_count_ref_++;
-        return true;
+        total_count_ref_++;
+        return total_count_ref_ == N_TARGET_READINGS;        
     }
 
     void reset() {
@@ -49,7 +51,6 @@ public:
 
 class CounterManager {
     public:
-    int total_target_count_ = 0;
     std::atomic<int> total_count_{0};
 
     std::vector<SingleCounter> counters_{};
@@ -57,7 +58,9 @@ class CounterManager {
     CounterManager() {};
 
     SingleCounter& issue_new_counter() {
-        counters_.emplace_back();
+        // counters_.emplace_back();
+        counters_.emplace_back(total_count_);
+
         return counters_.back();
     }
 
@@ -65,10 +68,12 @@ class CounterManager {
         for (auto& c : counters_) {
             c.reset();
         }
+        total_count_ = 0;
     }
 
     bool at_target() {
-        return total_target_count_ == total_count_;
+        log() << "total: " << total_count_;
+        return total_count_ == N_TARGET_READINGS;
     }
 };
 
@@ -107,7 +112,7 @@ void ImuMonitor::setup() {
   }
 
   // Enable all desired sensor reports
-  n_readings = 6;
+  const int n_bno_readings = 2;
   bno08x.enableReport(SH2_LINEAR_ACCELERATION, reportIntervalUs);
   bno08x.enableReport(SH2_ACCELEROMETER, reportIntervalUs);
 //   bno08x.enableReport(SH2_GRAVITY);
@@ -117,6 +122,8 @@ void ImuMonitor::setup() {
 //   bno08x.enableReport(SH2_GAME_ROTATION_VECTOR);
 //   bno08x.enableReport(SH2_ARVR_STABILIZED_RV);
 
+  static_assert(N_TARGET_READINGS == n_bno_readings);
+
   log() << "Setup complete" << '\n';
 //   bno08x.enableReport(SH2_MAGNETIC_FIELD_CALIBRATED);
   #endif
@@ -124,17 +131,25 @@ void ImuMonitor::setup() {
 
 
 void ImuMonitor::execute() {
+    log() << "IMU EXE\n";
     #ifndef NATIVE
     // Create a single sensor value container
-    sh2_SensorValue_t sensorValue;
 
     // Poll the BNO085 sensor for data
-    while (bno08x.getSensorEvent(&sensorValue)) {
+    while ( !global_counter_manager.at_target() ) {
+        delayMicroseconds(1000);
+        log() << "try\n";
+        sh2_SensorValue_t sensorValue;
+        bool is_new_event = bno08x.getSensorEvent(&sensorValue);
+        if(!is_new_event) {
+            continue;
+        }
         log() << "Sensor event" << '\n';
         switch (sensorValue.sensorId) {
             case SH2_LINEAR_ACCELERATION:
+                log() << "LIN_ACC\n";
                 static SingleCounter& lin_acc_counter = global_counter_manager.issue_new_counter();
-                if(!lin_acc_counter.trip()) {
+                if(lin_acc_counter.trip()) {
                     goto loop_done;
                 }
 
@@ -146,9 +161,11 @@ void ImuMonitor::execute() {
                 break;
 
             case SH2_ACCELEROMETER:
+                log() << "ACC\n";
                 static SingleCounter& acc_counter = global_counter_manager.issue_new_counter();
-                if(!acc_counter.trip())
+                if(acc_counter.trip()) {
                     goto loop_done;
+                }
 
                 sfr_.imu_acc_vec_f = {
                     sensorValue.un.accelerometer.x,
@@ -159,7 +176,7 @@ void ImuMonitor::execute() {
 
             case SH2_GYROSCOPE_CALIBRATED:
                 static SingleCounter& gyr_counter = global_counter_manager.issue_new_counter();
-                if(!gyr_counter.trip())
+                if(gyr_counter.trip())
                     goto loop_done;
 
                 sfr_.imu_gyr_vec = {
@@ -171,7 +188,7 @@ void ImuMonitor::execute() {
 
             case SH2_ROTATION_VECTOR:
                 static SingleCounter& rv_counter = global_counter_manager.issue_new_counter();
-                if(!rv_counter.trip())
+                if(rv_counter.trip())
                     goto loop_done;
 
                 sfr_.imu_rot_vec_quat = {
@@ -184,7 +201,7 @@ void ImuMonitor::execute() {
 
             case SH2_GAME_ROTATION_VECTOR:
                 static SingleCounter& gm_rv_counter = global_counter_manager.issue_new_counter();
-                if(!gm_rv_counter.trip())
+                if(gm_rv_counter.trip())
                     goto loop_done;
 
                 sfr_.imu_game_rot_vec_quat = {
@@ -197,7 +214,7 @@ void ImuMonitor::execute() {
 
             case SH2_GYRO_INTEGRATED_RV:
                 static SingleCounter& gi_rv_counter = global_counter_manager.issue_new_counter();
-                if(!gi_rv_counter.trip())
+                if(gi_rv_counter.trip())
                     goto loop_done;
 
                 sfr_.imu_gyro_int_rot_vec_quat = {
@@ -210,7 +227,7 @@ void ImuMonitor::execute() {
 
             case SH2_ARVR_STABILIZED_RV:
                 static SingleCounter& ar_rv_counter = global_counter_manager.issue_new_counter();
-                if(!ar_rv_counter.trip())
+                if(ar_rv_counter.trip())
                     goto loop_done;
 
                 sfr_.imu_ar_stab_rot_vec_quat = {
@@ -226,6 +243,7 @@ void ImuMonitor::execute() {
                 // Handle unknown sensor events if needed
                 break;
         }
+        log() << "Switch done\n";
     }
     loop_done:
     log() << "Done";
