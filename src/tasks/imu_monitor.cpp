@@ -18,7 +18,7 @@ Adafruit_BNO08x bno08x;
 const uint8_t BNO085_ADDRESS = 0x4A;
 #endif
 int n_readings;
-
+long reportIntervalUs = 10000;
 
 class SingleCounter {
 public:
@@ -34,7 +34,9 @@ public:
 
     bool trip() {
         if(is_counted_){
-            return false;        }
+            log() << "tripped\n";
+            return false;        
+        }
         is_counted_ = true;
         // total_count_ref_++;
         return true;
@@ -106,11 +108,16 @@ void ImuMonitor::setup() {
 
   // Enable all desired sensor reports
   n_readings = 6;
-  bno08x.enableReport(SH2_LINEAR_ACCELERATION);
-  bno08x.enableReport(SH2_ACCELEROMETER);
+  bno08x.enableReport(SH2_LINEAR_ACCELERATION, reportIntervalUs);
+  bno08x.enableReport(SH2_ACCELEROMETER, reportIntervalUs);
 //   bno08x.enableReport(SH2_GRAVITY);
-//   bno08x.enableReport(SH2_ROTATION_VECTOR);
 //   bno08x.enableReport(SH2_GYROSCOPE_CALIBRATED);
+//   bno08x.enableReport(SH2_ROTATION_VECTOR);
+//   bno08x.enableReport(SH2_GYRO_INTEGRATED_RV);
+//   bno08x.enableReport(SH2_GAME_ROTATION_VECTOR);
+//   bno08x.enableReport(SH2_ARVR_STABILIZED_RV);
+
+  log() << "Setup complete" << '\n';
 //   bno08x.enableReport(SH2_MAGNETIC_FIELD_CALIBRATED);
   #endif
 };
@@ -123,11 +130,12 @@ void ImuMonitor::execute() {
 
     // Poll the BNO085 sensor for data
     while (bno08x.getSensorEvent(&sensorValue)) {
+        log() << "Sensor event" << '\n';
         switch (sensorValue.sensorId) {
             case SH2_LINEAR_ACCELERATION:
                 static SingleCounter& lin_acc_counter = global_counter_manager.issue_new_counter();
                 if(!lin_acc_counter.trip()) {
-                    break;
+                    goto loop_done;
                 }
 
                 sfr_.imu_linear_acc_vec_f = {
@@ -140,7 +148,7 @@ void ImuMonitor::execute() {
             case SH2_ACCELEROMETER:
                 static SingleCounter& acc_counter = global_counter_manager.issue_new_counter();
                 if(!acc_counter.trip())
-                    break;
+                    goto loop_done;
 
                 sfr_.imu_acc_vec_f = {
                     sensorValue.un.accelerometer.x,
@@ -149,11 +157,78 @@ void ImuMonitor::execute() {
                 };
                 break;
 
+            case SH2_GYROSCOPE_CALIBRATED:
+                static SingleCounter& gyr_counter = global_counter_manager.issue_new_counter();
+                if(!gyr_counter.trip())
+                    goto loop_done;
+
+                sfr_.imu_gyr_vec = {
+                    sensorValue.un.gyroscope.x,
+                    sensorValue.un.gyroscope.y,
+                    sensorValue.un.gyroscope.z
+                };
+                break;
+
+            case SH2_ROTATION_VECTOR:
+                static SingleCounter& rv_counter = global_counter_manager.issue_new_counter();
+                if(!rv_counter.trip())
+                    goto loop_done;
+
+                sfr_.imu_rot_vec_quat = {
+                    sensorValue.un.rotationVector.i,
+                    sensorValue.un.rotationVector.j,
+                    sensorValue.un.rotationVector.k,
+                    sensorValue.un.rotationVector.real
+                };
+                break;
+
+            case SH2_GAME_ROTATION_VECTOR:
+                static SingleCounter& gm_rv_counter = global_counter_manager.issue_new_counter();
+                if(!gm_rv_counter.trip())
+                    goto loop_done;
+
+                sfr_.imu_game_rot_vec_quat = {
+                    sensorValue.un.gameRotationVector.i,
+                    sensorValue.un.gameRotationVector.j,
+                    sensorValue.un.gameRotationVector.k,
+                    sensorValue.un.gameRotationVector.real
+                };
+                break;
+
+            case SH2_GYRO_INTEGRATED_RV:
+                static SingleCounter& gi_rv_counter = global_counter_manager.issue_new_counter();
+                if(!gi_rv_counter.trip())
+                    goto loop_done;
+
+                sfr_.imu_gyro_int_rot_vec_quat = {
+                    sensorValue.un.gyroIntegratedRV.i,
+                    sensorValue.un.gyroIntegratedRV.j,
+                    sensorValue.un.gyroIntegratedRV.k,
+                    sensorValue.un.gyroIntegratedRV.real
+                };
+                break;
+
+            case SH2_ARVR_STABILIZED_RV:
+                static SingleCounter& ar_rv_counter = global_counter_manager.issue_new_counter();
+                if(!ar_rv_counter.trip())
+                    goto loop_done;
+
+                sfr_.imu_ar_stab_rot_vec_quat = {
+                    sensorValue.un.arvrStabilizedRV.i,
+                    sensorValue.un.arvrStabilizedRV.j,
+                    sensorValue.un.arvrStabilizedRV.k,
+                    sensorValue.un.arvrStabilizedRV.real
+                };
+                break;
+
+
             default:
                 // Handle unknown sensor events if needed
                 break;
         }
     }
+    loop_done:
+    log() << "Done";
 
     global_counter_manager.reset_all_counters();
 

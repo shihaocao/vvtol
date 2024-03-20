@@ -54,8 +54,11 @@ void TimeTask::execute() {
         // TODO increment a desync counter, and maybe measure it    
     }
 
-    if (sfr_.mcl_control_cycle_num % 100 == 0) {
+    if (sfr_.mcl_control_cycle_num % 10 == 0) {
         log() << "CCNO: " << sfr_.mcl_control_cycle_num << '\n';
+    }
+
+    if (sfr_.mcl_control_cycle_num % 100 == 0) {
         log() << global_stats.to_string() << '\n';
     }
 
