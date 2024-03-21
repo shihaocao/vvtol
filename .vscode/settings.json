@@ -63,5 +63,7 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "csignal": "cpp"
-    }
+    },
+    "editor.formatOnSave": true
+
 }

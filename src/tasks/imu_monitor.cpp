@@ -10,270 +10,111 @@
 #include <atomic>
 
 #ifndef NATIVE
-#include <Adafruit_BNO08x.h>
+#include <Adafruit_BNO055.h>
 #endif
+#include <utility/imumaths.h>
 
 #ifndef NATIVE
-Adafruit_BNO08x bno08x;
 const uint8_t BNO085_ADDRESS = 0x4A;
 #endif
-static constexpr int N_TARGET_READINGS = 2;
-long reportIntervalUs = 10000;
 
-class SingleCounter {
-public:
-    bool is_counted_;
-    std::atomic<int>& total_count_ref_;
-    // SingleCounter() : 
-    //     is_counted_(false) {};
-    SingleCounter(std::atomic<int>& count_ref) : 
-        is_counted_(false), total_count_ref_(count_ref) {};
+Adafruit_BNO055 bno_imu = Adafruit_BNO055(55, 0x28);
 
-    SingleCounter(SingleCounter&) = delete;
-    SingleCounter& operator=(SingleCounter&) = delete;
-    SingleCounter(SingleCounter&&) = default;
-    SingleCounter& operator=(SingleCounter&&) = default;
-
-    bool trip() {
-        if(is_counted_){
-            log() << "tripped\n";
-            return total_count_ref_ == N_TARGET_READINGS;        
-        }
-        is_counted_ = true;
-        total_count_ref_++;
-        return total_count_ref_ == N_TARGET_READINGS;        
-    }
-
-    void reset() {
-        is_counted_ = false;
-    }
-};
-
-class CounterManager {
-    public:
-    std::atomic<int> total_count_{0};
-
-    std::vector<SingleCounter> counters_{};
-
-    CounterManager() {};
-
-    SingleCounter& issue_new_counter() {
-        // counters_.emplace_back();
-        counters_.emplace_back(total_count_);
-
-        return counters_.back();
-    }
-
-    void reset_all_counters() {
-        for (auto& c : counters_) {
-            c.reset();
-        }
-        total_count_ = 0;
-    }
-
-    bool at_target() {
-        log() << "total: " << total_count_;
-        return total_count_ == N_TARGET_READINGS;
-    }
-};
-
-CounterManager global_counter_manager;
-
-ImuMonitor::ImuMonitor(StateFieldRegistry& sfr) : sfr_(sfr) {
+ImuMonitor::ImuMonitor(StateFieldRegistry &sfr) : sfr_(sfr)
+{
 }
 
-void ImuMonitor::setup() {
-  #ifndef NATIVE
-  // Set the SCL and SDA pins for I2C communication
-  Wire2.setSCL(24);
-  Wire2.setSDA(25);
+void ImuMonitor::setup()
+{
+#ifndef NATIVE
 
-  // Initialize I2C
-  Wire2.begin();
-
-  // Try to initialize!
-  if (!bno08x.begin_I2C(BNO085_ADDRESS, &Wire2)) {
-    Serial.println("Failed to find BNO08x chip");
-    while (1) { delay(10); }
-  }
-  Serial.println("BNO08x Found!");
-
-  for (int n = 0; n < bno08x.prodIds.numEntries; n++) {
-    Serial.print("Part ");
-    Serial.print(bno08x.prodIds.entry[n].swPartNumber);
-    Serial.print(": Version :");
-    Serial.print(bno08x.prodIds.entry[n].swVersionMajor);
-    Serial.print(".");
-    Serial.print(bno08x.prodIds.entry[n].swVersionMinor);
-    Serial.print(".");
-    Serial.print(bno08x.prodIds.entry[n].swVersionPatch);
-    Serial.print(" Build ");
-    Serial.println(bno08x.prodIds.entry[n].swBuildNumber);
+  if (!bno_imu.begin())
+  {
+    // debug print
+    log() << "NOT FUNCTIONAL!";
   }
 
-  // Enable all desired sensor reports
-  const int n_bno_readings = 2;
-  bno08x.enableReport(SH2_LINEAR_ACCELERATION, reportIntervalUs);
-  bno08x.enableReport(SH2_ACCELEROMETER, reportIntervalUs);
-//   bno08x.enableReport(SH2_GRAVITY);
-//   bno08x.enableReport(SH2_GYROSCOPE_CALIBRATED);
-//   bno08x.enableReport(SH2_ROTATION_VECTOR);
-//   bno08x.enableReport(SH2_GYRO_INTEGRATED_RV);
-//   bno08x.enableReport(SH2_GAME_ROTATION_VECTOR);
-//   bno08x.enableReport(SH2_ARVR_STABILIZED_RV);
+  // absolute fusion mode
+  bno_imu.setMode(adafruit_bno055_opmode_t::OPERATION_MODE_NDOF);
 
-  static_assert(N_TARGET_READINGS == n_bno_readings);
+  /** Remap Axis Settings to P1 per the BNO055 spec. */
+  bno_imu.setAxisRemap(Adafruit_BNO055::adafruit_bno055_axis_remap_config_t::REMAP_CONFIG_P1);
+  bno_imu.setAxisSign(Adafruit_BNO055::adafruit_bno055_axis_remap_sign_t::REMAP_SIGN_P1);
+
+#ifdef LOAD_CALI
+  /** Load a specific set of sensor offsets */
+  unsigned char offsets[22] = {242, 255, 214, 255, 243, 255, 250, 254, 0, 255, 105, 0, 255, 255, 1, 0, 255, 255, 232, 3, 146, 2}; // calibrated from scao bno_imu @ 06/14
+  bno_imu.setSensorOffsets(offsets);
+#endif
+  // set mode just in case
+  bno_imu.setMode(adafruit_bno055_opmode_t::OPERATION_MODE_NDOF);
+
+  // NOT NECESSARY MODIFY SHIHAO FORK IF DEFAULT INITIALIZATION IS REQUIRED
+
+  /* Use external crystal for better accuracy */
+  bno_imu.setExtCrystalUse(true);
 
   log() << "Setup complete" << '\n';
-//   bno08x.enableReport(SH2_MAGNETIC_FIELD_CALIBRATED);
-  #endif
+  //   bno08x.enableReport(SH2_MAGNETIC_FIELD_CALIBRATED);
+#endif
 };
 
+void ImuMonitor::execute()
+{
+  log() << "IMU EXE\n";
+#ifndef NATIVE
+  // linear_acc_vec is acceleration without gravity
+  sensors_event_t linear_acc_vec,
+      // acc_vec includes gravity
+      acc_vec,
+      // gravity vector
+      grav_vec,
+      // orientation in euler angles
+      euler_vec,
+      // gyroscope, angular acceleration vector
+      gyr_vec,
+      // magnetometer vector
+      mag_vec;
 
-void ImuMonitor::execute() {
-    log() << "IMU EXE\n";
-    #ifndef NATIVE
-    // Create a single sensor value container
+  // poll actual i2c device, and fill containers
+  bno_imu.getEvent(&linear_acc_vec, Adafruit_BNO055::VECTOR_LINEARACCEL);
+  bno_imu.getEvent(&acc_vec, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  bno_imu.getEvent(&gyr_vec, Adafruit_BNO055::VECTOR_GYROSCOPE);
+  bno_imu.getEvent(&euler_vec, Adafruit_BNO055::VECTOR_EULER);
 
-    // Poll the BNO085 sensor for data
-    while ( !global_counter_manager.at_target() ) {
-        delayMicroseconds(1000);
-        log() << "try\n";
-        sh2_SensorValue_t sensorValue;
-        bool is_new_event = bno08x.getSensorEvent(&sensorValue);
-        if(!is_new_event) {
-            continue;
-        }
-        log() << "Sensor event" << '\n';
-        switch (sensorValue.sensorId) {
-            case SH2_LINEAR_ACCELERATION:
-                log() << "LIN_ACC\n";
-                static SingleCounter& lin_acc_counter = global_counter_manager.issue_new_counter();
-                if(lin_acc_counter.trip()) {
-                    goto loop_done;
-                }
+  bno_imu.getEvent(&grav_vec, Adafruit_BNO055::VECTOR_GRAVITY);
+  bno_imu.getEvent(&mag_vec, Adafruit_BNO055::VECTOR_MAGNETOMETER);
 
-                sfr_.imu_linear_acc_vec_f = {
-                    sensorValue.un.linearAcceleration.x,
-                    sensorValue.un.linearAcceleration.y,
-                    sensorValue.un.linearAcceleration.z
-                };
-                break;
+  sfr_.imu_linear_acc_vec_f = {
+      linear_acc_vec.acceleration.x,
+      linear_acc_vec.acceleration.y,
+      linear_acc_vec.acceleration.z};
 
-            case SH2_ACCELEROMETER:
-                log() << "ACC\n";
-                static SingleCounter& acc_counter = global_counter_manager.issue_new_counter();
-                if(acc_counter.trip()) {
-                    goto loop_done;
-                }
+  sfr_.imu_acc_vec_f = {
+      acc_vec.acceleration.x,
+      acc_vec.acceleration.y,
+      acc_vec.acceleration.z};
 
-                sfr_.imu_acc_vec_f = {
-                    sensorValue.un.accelerometer.x,
-                    sensorValue.un.accelerometer.y,
-                    sensorValue.un.accelerometer.z
-                };
-                break;
+  sfr_.imu_gyr_vec = {
+      gyr_vec.acceleration.x,
+      gyr_vec.acceleration.y,
+      gyr_vec.acceleration.z};
 
-            case SH2_GYROSCOPE_CALIBRATED:
-                static SingleCounter& gyr_counter = global_counter_manager.issue_new_counter();
-                if(gyr_counter.trip())
-                    goto loop_done;
+  sfr_.imu_euler_vec = {
+      euler_vec.orientation.x,
+      euler_vec.orientation.y,
+      euler_vec.orientation.z,
+  };
 
-                sfr_.imu_gyr_vec = {
-                    sensorValue.un.gyroscope.x,
-                    sensorValue.un.gyroscope.y,
-                    sensorValue.un.gyroscope.z
-                };
-                break;
+  // poll for quatnernion
+  imu::Quaternion local_quat = bno_imu.getQuat();
 
-            case SH2_ROTATION_VECTOR:
-                static SingleCounter& rv_counter = global_counter_manager.issue_new_counter();
-                if(rv_counter.trip())
-                    goto loop_done;
+  sfr_.imu_quat = {
+      local_quat.w(),
+      local_quat.x(),
+      local_quat.y(),
+      local_quat.z()};
 
-                sfr_.imu_rot_vec_quat = {
-                    sensorValue.un.rotationVector.i,
-                    sensorValue.un.rotationVector.j,
-                    sensorValue.un.rotationVector.k,
-                    sensorValue.un.rotationVector.real
-                };
-                break;
-
-            case SH2_GAME_ROTATION_VECTOR:
-                static SingleCounter& gm_rv_counter = global_counter_manager.issue_new_counter();
-                if(gm_rv_counter.trip())
-                    goto loop_done;
-
-                sfr_.imu_game_rot_vec_quat = {
-                    sensorValue.un.gameRotationVector.i,
-                    sensorValue.un.gameRotationVector.j,
-                    sensorValue.un.gameRotationVector.k,
-                    sensorValue.un.gameRotationVector.real
-                };
-                break;
-
-            case SH2_GYRO_INTEGRATED_RV:
-                static SingleCounter& gi_rv_counter = global_counter_manager.issue_new_counter();
-                if(gi_rv_counter.trip())
-                    goto loop_done;
-
-                sfr_.imu_gyro_int_rot_vec_quat = {
-                    sensorValue.un.gyroIntegratedRV.i,
-                    sensorValue.un.gyroIntegratedRV.j,
-                    sensorValue.un.gyroIntegratedRV.k,
-                    sensorValue.un.gyroIntegratedRV.real
-                };
-                break;
-
-            case SH2_ARVR_STABILIZED_RV:
-                static SingleCounter& ar_rv_counter = global_counter_manager.issue_new_counter();
-                if(ar_rv_counter.trip())
-                    goto loop_done;
-
-                sfr_.imu_ar_stab_rot_vec_quat = {
-                    sensorValue.un.arvrStabilizedRV.i,
-                    sensorValue.un.arvrStabilizedRV.j,
-                    sensorValue.un.arvrStabilizedRV.k,
-                    sensorValue.un.arvrStabilizedRV.real
-                };
-                break;
-
-
-            default:
-                // Handle unknown sensor events if needed
-                break;
-        }
-        log() << "Switch done\n";
-    }
-    loop_done:
-    log() << "Done";
-
-    global_counter_manager.reset_all_counters();
-
-    // Print linear acceleration data
-    // log_printf("Linear Acceleration: ");
-    // log_printf("X = ");
-    // log_printf(sfr_.imu_linear_acc_vec_f.x());
-    // log() << "Linear acceleration: " << sfr_.imu_linear_acc_vec_f;
-    // Serial.print(", Y = ");
-    // Serial.print(sfr_.imu_linear_acc_vec_f.y());
-    // Serial.print(", Z = ");
-    // Serial.println(sfr_.imu_linear_acc_vec_f.z());
-
-    // Serial.print("Accelerometer: ");
-    // Serial.print("X = ");
-    // Serial.print(sfr_.imu_acc_vec_f.x());
-    // Serial.print(", Y = ");
-    // Serial.print(sfr_.imu_acc_vec_f.y());
-    // Serial.print(", Z = ");
-    // Serial.println(sfr_.imu_acc_vec_f.z());
-    #endif
-
-    // // Calibration data
-    // uint8_t calibrationStatus;
-    // bno08x.getCalibrationStatus(&calibrationStatus);
-    // sys_cal.set(calibrationStatus & 0x03);
-    // gyro_cal.set((calibrationStatus >> 2) & 0x03);
-    // accel_cal.set((calibrationStatus >> 4) & 0x03);
-    // mag_cal.set((calibrationStatus >> 6) & 0x03);
+#endif
+  // mag_cal.set((calibrationStatus >> 6) & 0x03);
 }
