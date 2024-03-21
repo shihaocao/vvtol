@@ -15,7 +15,7 @@
 #endif
 
 #ifndef NATIVE
-Adafruit_BNO055 bno_imu = Adafruit_BNO055(55, 0x28);
+Adafruit_BNO055 bno_imu = Adafruit_BNO055(55, 0x28, &Wire2);
 #endif
 
 ImuMonitor::ImuMonitor(StateFieldRegistry &sfr) : sfr_(sfr)
@@ -25,7 +25,11 @@ ImuMonitor::ImuMonitor(StateFieldRegistry &sfr) : sfr_(sfr)
 void ImuMonitor::setup()
 {
 #ifndef NATIVE
+  Wire2.setSCL(24);
+  Wire2.setSDA(25);
 
+  // Initialize I2C
+  Wire2.begin();
   if (!bno_imu.begin())
   {
     // debug print
@@ -112,6 +116,8 @@ void ImuMonitor::execute()
       local_quat.x(),
       local_quat.y(),
       local_quat.z()};
+
+  log() << sfr_.imu_gyr_vec;
 
 #endif
   // mag_cal.set((calibrationStatus >> 6) & 0x03);
