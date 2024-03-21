@@ -11,14 +11,12 @@
 
 #ifndef NATIVE
 #include <Adafruit_BNO055.h>
-#endif
 #include <utility/imumaths.h>
+#endif
 
 #ifndef NATIVE
-const uint8_t BNO085_ADDRESS = 0x4A;
-#endif
-
 Adafruit_BNO055 bno_imu = Adafruit_BNO055(55, 0x28);
+#endif
 
 ImuMonitor::ImuMonitor(StateFieldRegistry &sfr) : sfr_(sfr)
 {
