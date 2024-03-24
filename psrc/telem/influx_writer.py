@@ -26,18 +26,19 @@ try:
         point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
         
         # Add 50 different telemetry fields to the point
-        for i in range(50):
-            # Oscillate each telemetry field using a sinusoidal function
-            # and apply a random perturbation
-            telemetry_value = sin(elapsed_time * 2 * pi / 5) + random.uniform(1, 1)
-            v = copy.copy(telemetry_value)
-            point.field(f"dummy{i}", v)
+        # for i in range(50):
+        #     # Oscillate each telemetry field using a sinusoidal function
+        #     # and apply a random perturbation
+        telemetry_value = sin(elapsed_time * 2 * pi / 5) + random.uniform(1, 1)
+        point.field(f"dummy{0}", telemetry_value)
+        telemetry_value2 = sin(elapsed_time * 3 * pi / 5) + random.uniform(1, 1) - 2
+        point.field(f"dummy{1}", telemetry_value2)
 
         point.time(time.time_ns())  # Use current time in nanoseconds
         write_api.write(bucket=bucket, org=org, record=point)
 
         # Wait for 0.01 second before the next iteration
-        time.sleep(0.1)
+        time.sleep(0.01)
 except KeyboardInterrupt:
     print("Simulation stopped by user.")
 finally:

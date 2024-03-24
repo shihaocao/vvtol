@@ -1,0 +1,1 @@
+mavgen.py --lang=C++11 --wire-protocol=2.0 -o include/mav/mav_gen include/mav/sfr.xml

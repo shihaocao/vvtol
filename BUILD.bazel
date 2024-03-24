@@ -28,3 +28,13 @@ cc_binary(
     # You may not need the copts line depending on your setup and how the protobuf headers are included.
     # copts = ["-Iexternal/com_google_protobuf/src"],
 )
+
+cc_binary(
+    name = "mav_pipe_write",
+    srcs = ["src/targets/mav_pipe_write.cpp"],
+    deps = [
+        "//include/mav:mavlink_headers"
+        # Depending on your setup, you might need to specify protobuf dependencies here.
+        # For example, "@com_google_protobuf//:protobuf",
+    ],
+)
