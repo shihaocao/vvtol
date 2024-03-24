@@ -33,14 +33,4 @@ struct StateFieldRegistry
     Vector3f imu_gyr_vec{};
     Vector4f imu_euler_vec{};
     Vector4d imu_quat{};
-
-    // Vector4f imu_rot_vec_quat{};
-    // float imu_rot_vec_accurac = 0;
-
-    // Vector4f imu_game_rot_vec_quat{};
-
-    // Vector4f imu_gyro_int_rot_vec_quat{};
-    // Vector3f imu_gyro_int_w_vec{};
-
-    // Vector4f imu_ar_stab_rot_vec_quat{};
 };

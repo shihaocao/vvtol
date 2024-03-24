@@ -2,20 +2,19 @@ import influxdb_client, os, time
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from math import sin, pi
-
+import random
+import copy
 token = os.environ.get("INFLUXDB_TOKEN")
 org = "vvtol"
 url = "http://localhost:8086"
 
 write_client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 
-bucket="vvtol_telem"
+bucket = "vvtol_telem"
 
 write_api = write_client.write_api(write_options=SYNCHRONOUS)
-   
-# Initial GPS coordinates
-initial_latitude = 40.7128
-initial_longitude = 74.0060
+
+# Vehicle ID
 vehicle_id = "123ABC"
 
 try:
@@ -23,22 +22,23 @@ try:
     while True:
         elapsed_time = time.time() - start_time
 
-        # Oscillate latitude and longitude using a sinusoidal function
-        latitude = initial_latitude + 10 * sin(elapsed_time * 2 * pi / 5)
-        longitude = initial_longitude + 10 * sin(elapsed_time * 2 * pi / 5)
+        # Create a point with the vehicle ID
+        point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
+        
+        # Add 50 different telemetry fields to the point
+        for i in range(50):
+            # Oscillate each telemetry field using a sinusoidal function
+            # and apply a random perturbation
+            telemetry_value = sin(elapsed_time * 2 * pi / 5) + random.uniform(1, 1)
+            v = copy.copy(telemetry_value)
+            point.field(f"dummy{i}", v)
 
-        point = (
-            Point("vehicle_position")
-            .tag("vehicle_id", vehicle_id)
-            .field("latitude", latitude)
-            .field("longitude", longitude)
-            .time(time.time_ns())  # Use current time in nanoseconds
-        )
+        point.time(time.time_ns())  # Use current time in nanoseconds
         write_api.write(bucket=bucket, org=org, record=point)
 
-        # Wait for 1 second before the next iteration
-        time.sleep(1)
+        # Wait for 0.01 second before the next iteration
+        time.sleep(0.1)
 except KeyboardInterrupt:
     print("Simulation stopped by user.")
 finally:
-    client.close()
+    write_client.close()
