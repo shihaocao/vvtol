@@ -1,3 +1,6 @@
 [submodule "external/spdlog"]
 	path = external/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "external/influxdb-cpp"]
+	path = external/influxdb-cpp
+	url = https://github.com/orca-zhang/influxdb-cpp.git

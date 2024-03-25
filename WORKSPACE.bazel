@@ -5,3 +5,42 @@ http_archive(
     urls = ["https://github.com/protocolbuffers/protobuf/releases/download/v3.15.8/protobuf-all-3.15.8.tar.gz"],
     strip_prefix = "protobuf-3.15.8",
 )
+
+# WORKSPACE file
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+# # Or, example using git_repository
+# git_repository(
+#     name = "influxdb_cpp_client",
+#     remote = "https://github.com/offa/influxdb-cxx.git",
+#     tag = "v0.7.2", # Use the commit or tag you need
+# )
+
+# load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "rules_foreign_cc",
+    sha256 = "476303bd0f1b04cc311fc258f1708a5f6ef82d3091e53fd1977fa20383425a6a",
+    strip_prefix = "rules_foreign_cc-0.10.1",
+    url = "https://github.com/bazelbuild/rules_foreign_cc/releases/download/0.10.1/rules_foreign_cc-0.10.1.tar.gz",
+)
+
+load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+
+# This sets up some common toolchains for building targets. For more details, please see
+# https://bazelbuild.github.io/rules_foreign_cc/0.10.1/flatten.html#rules_foreign_cc_dependencies
+rules_foreign_cc_dependencies()
+
+http_archive(
+    name = "libinflux_cxx",
+    build_file="//bazel/external:libinflux_cxx.BUILD",
+    strip_prefix = "influxdb-cxx-0.7.2",
+    url = "https://github.com/offa/influxdb-cxx/archive/refs/tags/v0.7.2.tar.gz",
+    # tag = "v0.7.2"
+)
+
+# rules_foreign_cc setup (assuming you've already added it)
+load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+rules_foreign_cc_dependencies()
