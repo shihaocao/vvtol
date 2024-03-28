@@ -1,0 +1,5 @@
+cc_library(
+    name = "influxdb-cpp-headers",
+    hdrs = ['influxdb-cpp/influxdb.hpp'],
+    visibility = ["//visibility:public"],
+)

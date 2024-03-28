@@ -44,12 +44,22 @@ cc_binary(
     name = "cpp_influx_writer",
     srcs = ["src/targets/cpp_influx_writer.cpp"],
     deps = [
-        "//external:influxdb_cpp_headers"
+        # "@libinflux_cxx//:libinflux_cxx"
+
+        # "//thirdparty:influxdb-cpp-headers"
         # "//include/mav:mavlink_headers",
         # "@libinflux_cxx//:libinflux_cxx"
         #  "//bazel/external:libinflux_cxx"
         # Depending on your setup, you might need to specify protobuf dependencies here.
         # For example, "@com_google_protobuf//:protobuf",
     ],
+
+    # this is so sinful
+    copts = [
+        "-I/usr/local/include",  # Only necessary if headers are in non-standard locations
+    ],
+    linkopts = [
+        "-libInfluxDB.so",
+    ]
 )
 
