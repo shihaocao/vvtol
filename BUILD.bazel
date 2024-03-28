@@ -1,33 +1,30 @@
 # Load the cc_proto_library rule if your setup requires it.
 # This is typically required for older versions or specific setups.
-load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library")
-load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_cc//cc:defs.bzl", "cc_proto_library")
 
-proto_library(
-    name = "state_field_registry_proto",
-    srcs = ["include/protos/state_field_registry.proto"],
-)
+# proto_library(
+#     name = "state_field_registry_proto",
+#     srcs = ["include/protos/state_field_registry.proto"],
+# )
 
-cc_proto_library(
-    name = "state_field_registry_cc_proto",
-    deps = [":state_field_registry_proto"],
-    # Include this if you specifically need to refer to the protobuf runtime library.
-    # You might not need to specify this depending on your Bazel version and setup.
-    # Always refer to the latest documentation or your project's setup requirements.
-)
+# cc_proto_library(
+#     name = "state_field_registry_cc_proto",
+#     deps = [":state_field_registry_proto"],
+#     # Include this if you specifically need to refer to the protobuf runtime library.
+#     # You might not need to specify this depending on your Bazel version and setup.
+#     # Always refer to the latest documentation or your project's setup requirements.
+# )
 
-cc_binary(
-    name = "send_data",
-    srcs = ["src/targets/struct_serialize.cpp"],
-    deps = [
-        ":state_field_registry_cc_proto",
-        # Depending on your setup, you might need to specify protobuf dependencies here.
-        # For example, "@com_google_protobuf//:protobuf",
-    ],
-    # You may not need the copts line depending on your setup and how the protobuf headers are included.
-    # copts = ["-Iexternal/com_google_protobuf/src"],
-)
+# cc_binary(
+#     name = "send_data",
+#     srcs = ["src/targets/struct_serialize.cpp"],
+#     deps = [
+#         ":state_field_registry_cc_proto",
+#         # Depending on your setup, you might need to specify protobuf dependencies here.
+#         # For example, "@com_google_protobuf//:protobuf",
+#     ],
+#     # You may not need the copts line depending on your setup and how the protobuf headers are included.
+#     # copts = ["-Iexternal/com_google_protobuf/src"],
+# )
 
 cc_binary(
     name = "mav_pipe_write",
@@ -44,8 +41,9 @@ cc_binary(
     name = "cpp_influx_writer",
     srcs = ["src/targets/cpp_influx_writer.cpp"],
     deps = [
-        # "@libinflux_cxx//:libinflux_cxx"
-
+        "@libinflux_cxx//:libinflux_cxx"
+        # "//external:libinflux_cxx",  # This assumes your cmake rule is in the external directory
+    
         # "//thirdparty:influxdb-cpp-headers"
         # "//include/mav:mavlink_headers",
         # "@libinflux_cxx//:libinflux_cxx"
@@ -55,11 +53,11 @@ cc_binary(
     ],
 
     # this is so sinful
-    copts = [
-        "-I/usr/local/include",  # Only necessary if headers are in non-standard locations
-    ],
-    linkopts = [
-        "-libInfluxDB.so",
-    ]
+    # copts = [
+    #     "-I/usr/local/include",  # Only necessary if headers are in non-standard locations
+    # ],
+    # linkopts = [
+    #     "-libInfluxDB.so",
+    # ]
 )
 
