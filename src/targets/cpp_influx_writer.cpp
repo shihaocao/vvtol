@@ -1,4 +1,4 @@
-#include <influxdb.hpp>
+#include "external/influxdb-cpp/influxdb.hpp"
 #include <chrono>
 #include <cmath>
 #include <random>
@@ -11,9 +11,11 @@ int main()
     std::string org = "vvtol";
     std::string bucket = "vvtol_telem";
     std::string token = std::getenv("INFLUXDB_TOKEN"); // Ensure the INFLUXDB_TOKEN environment variable is set
+    std::cout << "Connecting client..." << std::endl;
 
     // Create a client
     auto client = influxdb::InfluxDBFactory::Get(url + "?org=" + org + "&bucket=" + bucket + "&token=" + token);
+    std::cout << "Client connected!" << std::endl;
 
     // Vehicle ID
     std::string vehicle_id = "123ABC";
@@ -43,7 +45,7 @@ int main()
 
             // Write the point
             client->write(std::move(point));
-
+            std::cout << "Wrote data" << std::endl;
             // Wait for 0.01 second before the next iteration
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }

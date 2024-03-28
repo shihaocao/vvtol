@@ -42,10 +42,11 @@ cc_binary(
 
 cc_binary(
     name = "cpp_influx_writer",
-    srcs = ["src/targets/mav_pipe_write.cpp"],
+    srcs = ["src/targets/cpp_influx_writer.cpp"],
     deps = [
-        "//include/mav:mavlink_headers",
-        "@libinflux_cxx//:libinflux_cxx"
+        "//external:influxdb_cpp_headers"
+        # "//include/mav:mavlink_headers",
+        # "@libinflux_cxx//:libinflux_cxx"
         #  "//bazel/external:libinflux_cxx"
         # Depending on your setup, you might need to specify protobuf dependencies here.
         # For example, "@com_google_protobuf//:protobuf",
