@@ -4,10 +4,10 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "mavlink_headers",
     hdrs = glob(
-        ["mavgen/**/*.h"],  # Include all header files from your custom protocol
+        ["mav_gen/**/*.h"],  # Include all header files from your custom protocol
     ),
     includes = [
-        "mavgen",  # Add your_custom_protocol to the include path
+        "mav_gen",  # Add your_custom_protocol to the include path
     ],
     textual_hdrs = [],  # Use this if there are any headers that should not be compiled directly but included
     deps = [],

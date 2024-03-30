@@ -9,9 +9,10 @@ from pymavlink import mavutil
 
 # Import the generated dialect package for your custom protocol
 # from psrc.mavgen.sfr_mavlink import MAVLink as mavlink2
-from psrc.mavgen import sfr_mavlink as mavlink2
+# from psrc.mavgen import sfr_mavlink as mavlink2
 # from pymavlink.dialects.v20 import sfr_mavlink as mavlink2
 # from pymavlink.dialects.v20 import sfr_mavlink as mavlink2
+from pymavlink.dialects.v20 import common as mavlink2
 
 def main():
     pipe_path = "/tmp/mavlink_pipe"
@@ -26,13 +27,14 @@ def main():
         # Create a MAVLink connection with the custom dialect
         # mav = mavutil.mavlink_connection(file=pipe_in, dialect="MAVLink")
         # mav = mavutil.mavlink_connection(file=pipe_in, dialect="sfr_mavlink")
-        mav = mavutil.mavlink_connection('file:', file=pipe_in, dialect="sfr_mavlink")
-
+        # mav = mavutil.mavlink_connection('file:', file=pipe_in, dialect="sfr_mavlink")
+        mav = mavutil.mavlink_connection(pipe_path, dialect='sfr_mavlink')
         print("Starting to read messages...")
         
         while True:
+            print("Waiting...")
             # Read a message from the pipe
-            msg = mav.recv_msg()
+            msg = mav.recv_match(type='STATE_FIELD_REGISTRY', blocking=True)
             if msg:
                 # Check if the message is of your custom type
                 if msg.get_type() == 'STATE_FIELD_REGISTRY':  # Replace with your message type
@@ -46,7 +48,7 @@ def main():
                     print(f"Received message of type {msg.get_type()}")
             
             # Limit the rate of polling the pipe to reduce CPU usage
-            time.sleep(1)
+            # time.sleep(1)
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,6 @@
 <mavlink>
+    <include>minimal.xml</include>
+
     <enums>
         <!-- Assuming the enum definitions for MainControlState and GncControlState are defined elsewhere -->
     </enums>
