@@ -67,3 +67,10 @@ http_archive(
 # rules_foreign_cc setup (assuming you've already added it)
 load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
 rules_foreign_cc_dependencies()
+
+http_archive(
+    name = "nanopb",
+    urls = ["https://github.com/nanopb/nanopb/archive/refs/tags/0.4.5.tar.gz"],  # Example URL, replace with actual
+    # sha256 = "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",  # Example SHA-256, replace with actual
+    strip_prefix = "nanopb-0.4.5",  # Adjust based on the archive structure
+)

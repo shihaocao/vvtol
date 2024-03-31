@@ -1,0 +1,14 @@
+cc_library(
+    name = "nanopb_airproto_sfr",
+    srcs = [
+        "state_field_registry.pb.c",
+    ],
+    hdrs = [
+        "state_field_registry.pb.h",
+    ],
+    deps = [
+        "@nanopb//:nanopb"
+    ],
+    visibility=["//visibility:public"]
+
+)

@@ -93,3 +93,9 @@ Honestly looking at this I'm starting to realize that I really don't want to use
 It is unlikely that I will ever use QGroundControl or anything like that so I should just opt for tools that lock me in the least. I don't want do to do this weird thing where I copy files into some outdated folder etc... and not in XML either.
 
 I think I will look into flat buffers or more and just assume that my radio link is stable. Telemetry is non critical anyway.
+
+03/31:
+
+I got airproto, my own version of mavlink using protobuf to work in Desktop, but I think I may need to use nano pb to actually run it on teensy.
+
+https://stackoverflow.com/questions/63842860/using-nanopb-and-protobuf-for-serialisation-deserialisation-together-in-applicat
