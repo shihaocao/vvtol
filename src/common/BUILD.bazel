@@ -1,0 +1,9 @@
+cc_library(
+    name = "air_proto",
+    deps = [],
+    srcs = ["air_proto.cpp"],
+    data = [],
+    hdrs = ["air_proto.hpp"],
+    visibility=["//visibility:public"]
+
+)
