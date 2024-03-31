@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "src/common/air_proto.hpp"
+#include "src/air_proto/air_proto.hpp"
 #include "include/protos/state_field_registry.pb.h"
 
 int main()

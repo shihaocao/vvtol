@@ -33,7 +33,7 @@ cc_binary(
     srcs = ["src/targets/air_proto_writer.cpp"],
     deps = [
         ":state_field_registry_cc_proto",
-        "//src/common:air_proto"
+        "//src/air_proto:air_proto"
         # Depending on your setup, you might need to specify protobuf dependencies here.
         # For example, "@com_google_protobuf//:protobuf",
     ],
