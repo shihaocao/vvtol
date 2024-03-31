@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-int AirProto::serialize_to_buffer(const google::protobuf::Message &proto)
+int AirProto::serialize_to_buffer(const StateFieldRegistry &proto)
 {
     // Insert the MAGIC byte into buffer_ first
     buffer_[0] = MAGIC_BYTE;

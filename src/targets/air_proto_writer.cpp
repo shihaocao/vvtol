@@ -68,9 +68,9 @@ int main()
 
         // Create an AirProto object and serialize the message
         AirProto air_proto;
-        // air_proto.serialize_to_buffer(state_field_registry);
+        air_proto.serialize_to_buffer(state_field_registry);
         // AirProto air_proto;
-        air_proto.serialize_to_buffer(static_cast<const google::protobuf::Message &>(state_field_registry));
+        // air_proto.serialize_to_buffer(static_cast<const google::protobuf::Message &>(state_field_registry));
 
         // Write the serialized data to the named pipe
         fwrite(air_proto.data(), 1, air_proto.size(), pipe);

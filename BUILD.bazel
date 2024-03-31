@@ -9,6 +9,8 @@ proto_library(
 cc_proto_library(
     name = "state_field_registry_cc_proto",
     deps = [":state_field_registry_proto"],
+    visibility=["//visibility:public"],
+
     # Include this if you specifically need to refer to the protobuf runtime library.
     # You might not need to specify this depending on your Bazel version and setup.
     # Always refer to the latest documentation or your project's setup requirements.
