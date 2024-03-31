@@ -63,7 +63,7 @@ void ImuMonitor::setup()
 
 void ImuMonitor::execute()
 {
-  log() << "IMU EXE\n";
+  // log() << "IMU EXE\n";
 #ifndef NATIVE
   // linear_acc_vec is acceleration without gravity
   sensors_event_t linear_acc_vec,

@@ -1,0 +1,10 @@
+# nanopb.options
+
+# Output directory for generated files
+output_dir: ./generated
+
+# C++ namespace for generated code
+namespace: state_field_registry
+
+# Maximum length of string fields
+max_size: 1024
