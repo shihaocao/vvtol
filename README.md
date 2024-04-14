@@ -114,3 +114,19 @@ alternatively, you can also run via:
 bazel run --compilation_mode=dbg //:air_nano_proto_writer
 ```
 this one uses nano pb
+
+
+## 04/14
+
+Plumbing is going well.
+
+You can run the teensy via
+
+```
+pio run -e teensy41 -t upload
+```
+
+run the python reader via
+```
+python psrc/scripts/teensy_air_proto_reader.py
+```

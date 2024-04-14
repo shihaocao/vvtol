@@ -1,4 +1,9 @@
+#ifndef TEENSY
 #include "src/air_nano_proto/air_nano_proto.hpp"
+#else
+#include "air_nano_proto/air_nano_proto.hpp"
+#endif
+
 #include "pb_encode.h"
 #include "pb_common.h"
 
@@ -20,11 +25,11 @@ int AirProto::serialize_to_buffer(const StateFieldRegistry &proto)
 
     if (!status)
     {
-        std::cout << "Encoding failed: " << PB_GET_ERROR(&stream) << std::endl;
+        // std::cout << "Encoding failed: " << PB_GET_ERROR(&stream) << std::endl;
         return -1;
     }
 
-    std::cout << "proto size: " << proto_size << std::endl;
+    // std::cout << "proto size: " << proto_size << std::endl;
 
     // Check if the serialized message fits in the remaining buffer space
     if (proto_size > MAX_BUFFER_LEN - 3)

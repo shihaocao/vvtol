@@ -117,7 +117,7 @@ void ImuMonitor::execute()
       local_quat.y(),
       local_quat.z()};
 
-  log() << sfr_.imu_gyr_vec;
+  // log() << sfr_.imu_gyr_vec;
 
 #endif
   // mag_cal.set((calibrationStatus >> 6) & 0x03);

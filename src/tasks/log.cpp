@@ -9,19 +9,17 @@
 void log_init()
 {
 #ifndef NATIVE
-#ifndef DEBUGSER
     Serial.begin(9600);
     while (!Serial)
     {
         ; // Wait for serial port to connect
     }
 #endif
-#endif
 }
 
 void log_printf(const char *format, ...)
 {
-#ifndef DEBUGSER
+#ifdef DEBUGSER
     va_list args;
     va_start(args, format);
 

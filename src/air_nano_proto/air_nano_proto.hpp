@@ -3,7 +3,7 @@
 #ifndef TEENSY
 #include "include/nanopb/state_field_registry.pb.h" // Adjust the include path to match your nanopb generated file
 #else
-#include <nanopb/state_field_registry.pb.h> // Adjust the include path to match your nanopb generated file
+#include <state_field_registry.pb.h> // Adjust the include path to match your nanopb generated file
 #endif
 
 #include <iostream>

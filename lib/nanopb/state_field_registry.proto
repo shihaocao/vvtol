@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+// Assuming the definition of MainControl::State enum
+enum MainControlState {
+    MC_EMPTY = 0; // Protobuf enums must start with 0
+    // Add other states here
+}
+
+// Assuming the definition of GncControl::State enum
+enum GncControlState {
+    GNC_EMPTY = 0; // Again, start with 0
+    // Add other states here
+}
+
+message SFVector3f {
+    repeated float elements = 1 [packed=true]; // Ensure there are exactly 3 elements
+}
+
+message SFVector4f {
+    repeated float elements = 1 [packed=true]; // Ensure there are exactly 4 elements
+}
+
+message StateFieldRegistry {
+    float time_t_average_cycle_time_us = 1;
+    int32 time_t_control_cycle_limit_us = 2;
+    uint32 time_t_last_cycle_end_us = 3;
+    uint64 last_transition_ccno = 4;
+    uint64 mcl_control_cycle_num = 5;
+
+    MainControlState mc_state = 6;
+    MainControlState target_mc_state = 7;
+
+    GncControlState gnc_state = 8;
+    GncControlState target_gnc_state = 9;
+
+    SFVector3f imu_linear_acc_vec_f = 10;
+    SFVector3f imu_acc_vec_f = 11;
+    SFVector3f imu_gyr_vec = 12;
+    SFVector4f imu_euler_vec = 13;
+    SFVector4f imu_quat = 14;
+}
