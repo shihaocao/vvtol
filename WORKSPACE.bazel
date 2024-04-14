@@ -74,3 +74,55 @@ http_archive(
     # sha256 = "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",  # Example SHA-256, replace with actual
     strip_prefix = "nanopb-0.4.5",  # Adjust based on the archive structure
 )
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# http_archive(
+#     name = "rules_python",
+#     sha256 = "c68bdc4fbec25de5b5493b8819cfc877c4ea299c0dcb15c244c5a00208cde311",
+#     strip_prefix = "rules_python-0.31.0",
+#     url = "https://github.com/bazelbuild/rules_python/releases/download/0.31.0/rules_python-0.31.0.tar.gz",
+# )
+
+# load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
+
+# py_repositories()
+
+# load()
+# load(":python_toolchain.bzl", "python_toolchain")
+
+# python_toolchain(
+#     name = "my_python_toolchain",
+#     python_interpreter_path = "/home/shihao/Code/vvtol/venv/bin/python",  # Adjust this path as necessary
+# )
+
+
+# load("@rules_python//python:repositories.bzl", "python_register_toolchains")
+
+# python_register_toolchains(
+#     name = "python_3_8",
+#     # Available versions are listed in @rules_python//python:versions.bzl.
+#     # We recommend using the same version your team is already standardized on.
+#     python_version = "3.8",
+# )
+
+
+# load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+# git_repository(
+#     name = "platformio_rules",
+#     remote = "http://github.com/mum4k/platformio_rules.git",
+#     tag = "v0.0.14",
+# )
+
+
+# load("@platformio_rules//bazel:deps.bzl", "platformio_rules_dependencies")
+# platformio_rules_dependencies()
+
+# load("@platformio_rules//bazel:transitive.bzl", "platformio_rules_transitive_dependencies")
+# platformio_rules_transitive_dependencies()
+
+# load("@platformio_rules//bazel:pip_parse.bzl", "platformio_rules_pip_parse_dependencies")
+# platformio_rules_pip_parse_dependencies()
+
+# load("@platformio_rules//bazel:pip_install.bzl", "platformio_rules_pip_install_dependencies")
+# platformio_rules_pip_install_dependencies()

@@ -99,3 +99,12 @@ I think I will look into flat buffers or more and just assume that my radio link
 I got airproto, my own version of mavlink using protobuf to work in Desktop, but I think I may need to use nano pb to actually run it on teensy.
 
 https://stackoverflow.com/questions/63842860/using-nanopb-and-protobuf-for-serialisation-deserialisation-together-in-applicat
+
+Here's how to run it:
+```
+python psrc/scripts/air_proto_reader.py 
+```
+and in the other:
+```
+bazel run --compilation_mode=dbg //:air_proto_writer
+```

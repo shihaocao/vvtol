@@ -1,5 +1,11 @@
 # Load the cc_proto_library rule if your setup requires it.
 # This is typically required for older versions or specific setups.
+# load("//:python_toolchain.bzl", "python_toolchain")
+
+# python_toolchain(
+#     name = "my_python_toolchain",
+#     python_interpreter_path = "/usr/bin/python3",  # Adjust this path as necessary
+# )
 
 
 cc_binary(
@@ -69,3 +75,27 @@ cc_binary(
     # ]
 )
 
+# load(
+#     "@platformio_rules//platformio:platformio.bzl",
+#     "platformio_library",
+#     "platformio_project",
+# )
+
+# platformio_project(
+#     name = "binary_counter",
+#     src = "binary_counter.cc",
+#     board = "megaatmega2560",
+#     framework = "arduino",
+#     platform = "atmelavr",
+#     deps = [
+#         ":Convert",
+#     ],
+#     # If you need to you can pass multiple string key-value pairs directly
+#     # to PlatformIO. All of these will appear under the environment section in
+#     # the generated platformio.ini file. That would be "[env:megaatmega2560]" in
+#     # this example. For the available options see:
+#     # http://docs.platformio.org/en/stable/projectconf.html
+#     environment_kwargs = {
+#         "board_f_cpu": "16000000L",
+#     }
+# )
