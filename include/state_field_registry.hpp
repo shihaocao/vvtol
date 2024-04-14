@@ -14,7 +14,7 @@
 // Generally, going negative is much safer than rolling over and going to zero
 
 // enforce namspacing via prefixes
-struct StateFieldRegistry
+struct StateFields
 {
     float time_t_average_cucle_time_us = -1;
     int time_t_control_cycle_limit_us = 100000;

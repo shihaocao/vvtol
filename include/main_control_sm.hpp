@@ -9,15 +9,16 @@
 #include <thread>
 #endif
 
-class MainControlSM : public Task<MainControlSM>{
-    StateFieldRegistry& sfr_;
+class MainControlSM : public Task<MainControlSM>
+{
+    StateFields &sfr_;
 
     ContinuationDispatchVector empty_cvd_;
 
 public:
     std::string name = "main_control_sm";
 
-    MainControlSM(StateFieldRegistry& sfr);
+    MainControlSM(StateFields &sfr);
 
     void setup();
 

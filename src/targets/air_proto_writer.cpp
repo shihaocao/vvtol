@@ -25,8 +25,8 @@ int main()
 
     while (true)
     {
-        // Create a StateFieldRegistry message
-        StateFieldRegistry state_field_registry;
+        // Create a StateFields message
+        StateFields state_field_registry;
 
         // Fill the message with dummy data
         state_field_registry.set_time_t_average_cycle_time_us(123.456f);

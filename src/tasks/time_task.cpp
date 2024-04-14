@@ -18,7 +18,7 @@ uint32_t TimeTask::micro_count()
 #endif
 }
 
-TimeTask::TimeTask(StateFieldRegistry &sfr) : sfr_(sfr)
+TimeTask::TimeTask(StateFields &sfr) : sfr_(sfr)
 {
 }
 

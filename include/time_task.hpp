@@ -8,16 +8,18 @@
 #include <thread>
 #endif
 
-class TimeTask : public Task<TimeTask>{
-    StateFieldRegistry& sfr_;
+class TimeTask : public Task<TimeTask>
+{
+    StateFields &sfr_;
 
     static uint32_t micro_count();
+
 public:
     std::string name = "time_task";
 
     static void delay_for_us(uint32_t delay_us);
 
-    TimeTask(StateFieldRegistry& sfr);
+    TimeTask(StateFields &sfr);
 
     void setup();
 

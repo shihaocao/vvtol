@@ -5,13 +5,13 @@
 #include <downlink_task.hpp>
 #include <log.hpp>
 
-MainLoop::MainLoop(StateFieldRegistry &sfr) : sfr_(sfr),
-                                              task_list_(
+MainLoop::MainLoop(StateFields &sfr) : sfr_(sfr),
+                                       task_list_(
 
-                                                  ImuMonitor(sfr_),
-                                                  MainControlSM(sfr_),
-                                                  DownlinkTask(sfr_),
-                                                  TimeTask(sfr_))
+                                           ImuMonitor(sfr_),
+                                           MainControlSM(sfr_),
+                                           DownlinkTask(sfr_),
+                                           TimeTask(sfr_))
 {
 }
 

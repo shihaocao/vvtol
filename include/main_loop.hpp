@@ -12,12 +12,12 @@
 
 class MainLoop : public Task<MainLoop>
 {
-    StateFieldRegistry &sfr_;
+    StateFields &sfr_;
     std::tuple<ImuMonitor, MainControlSM, DownlinkTask, TimeTask> task_list_;
     Stats stats_;
 
 public:
-    MainLoop(StateFieldRegistry &sfr);
+    MainLoop(StateFields &sfr);
 
     void setup();
 

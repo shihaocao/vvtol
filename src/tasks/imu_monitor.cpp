@@ -18,7 +18,7 @@
 Adafruit_BNO055 bno_imu = Adafruit_BNO055(55, 0x28, &Wire2);
 #endif
 
-ImuMonitor::ImuMonitor(StateFieldRegistry &sfr) : sfr_(sfr)
+ImuMonitor::ImuMonitor(StateFields &sfr) : sfr_(sfr)
 {
 }
 

@@ -10,12 +10,12 @@
 
 class DownlinkTask : public Task<DownlinkTask>
 {
-    StateFieldRegistry &sfr_;
+    StateFields &sfr_;
 
 public:
     std::string name = "downlink_task";
 
-    DownlinkTask(StateFieldRegistry &sfr);
+    DownlinkTask(StateFields &sfr);
 
     void setup();
 

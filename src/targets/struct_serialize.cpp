@@ -28,7 +28,7 @@ int main()
     }
 
     // Protobuf serialization
-    StateFieldRegistry message;
+    StateFields message;
     message.set_time_t_average_cycle_time_us(100.0);
     // Set other fields as necessary...
 
