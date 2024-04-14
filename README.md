@@ -108,3 +108,9 @@ and in the other:
 ```
 bazel run --compilation_mode=dbg //:air_proto_writer
 ```
+
+alternatively, you can also run via:
+```
+bazel run --compilation_mode=dbg //:air_nano_proto_writer
+```
+this one uses nano pb
