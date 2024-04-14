@@ -12,11 +12,11 @@ enum GncControlState {
     // Add other states here
 }
 
-message Vector3f {
+message SFVector3f {
     repeated float elements = 1 [packed=true]; // Ensure there are exactly 3 elements
 }
 
-message Vector4f {
+message SFVector4f {
     repeated float elements = 1 [packed=true]; // Ensure there are exactly 4 elements
 }
 
@@ -33,9 +33,9 @@ message StateFieldRegistry {
     GncControlState gnc_state = 8;
     GncControlState target_gnc_state = 9;
 
-    Vector3f imu_linear_acc_vec_f = 10;
-    Vector3f imu_acc_vec_f = 11;
-    Vector3f imu_gyr_vec = 12;
-    Vector4f imu_euler_vec = 13;
-    Vector4f imu_quat = 14;
+    SFVector3f imu_linear_acc_vec_f = 10;
+    SFVector3f imu_acc_vec_f = 11;
+    SFVector3f imu_gyr_vec = 12;
+    SFVector4f imu_euler_vec = 13;
+    SFVector4f imu_quat = 14;
 }

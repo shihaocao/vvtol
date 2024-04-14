@@ -9,8 +9,8 @@
 #include <vector>
 #include <atomic>
 
-// #include "air_nano_proto/air_nano_proto.hpp"
-// #include <nanopb/state_field_registry.pb.h>
+#include "air_nano_proto/air_nano_proto.hpp"
+#include <nanopb/state_field_registry.pb.h>
 
 DownlinkTask::DownlinkTask(StateFields &sfr) : sfr_(sfr)
 {

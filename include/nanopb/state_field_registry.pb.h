@@ -23,15 +23,15 @@ typedef enum _GncControlState
 } GncControlState;
 
 /* Struct definitions */
-typedef struct _Vector3f
+typedef struct _SFVector3f
 {
     pb_callback_t elements; /* Ensure there are exactly 3 elements */
-} Vector3f;
+} SFVector3f;
 
-typedef struct _Vector4f
+typedef struct _SFVector4f
 {
     pb_callback_t elements; /* Ensure there are exactly 4 elements */
-} Vector4f;
+} SFVector4f;
 
 typedef struct _StateFieldRegistry
 {
@@ -45,15 +45,15 @@ typedef struct _StateFieldRegistry
     GncControlState gnc_state;
     GncControlState target_gnc_state;
     bool has_imu_linear_acc_vec_f;
-    Vector3f imu_linear_acc_vec_f;
+    SFVector3f imu_linear_acc_vec_f;
     bool has_imu_acc_vec_f;
-    Vector3f imu_acc_vec_f;
+    SFVector3f imu_acc_vec_f;
     bool has_imu_gyr_vec;
-    Vector3f imu_gyr_vec;
+    SFVector3f imu_gyr_vec;
     bool has_imu_euler_vec;
-    Vector4f imu_euler_vec;
+    SFVector4f imu_euler_vec;
     bool has_imu_quat;
-    Vector4f imu_quat;
+    SFVector4f imu_quat;
 } StateFieldRegistry;
 
 #ifdef __cplusplus
@@ -76,42 +76,42 @@ extern "C"
 #define StateFieldRegistry_target_gnc_state_ENUMTYPE GncControlState
 
 /* Initializer values for message structs */
-#define Vector3f_init_default \
-    {                         \
-        {                     \
-            {NULL}, NULL      \
-        }                     \
+#define SFVector3f_init_default \
+    {                           \
+        {                       \
+            {NULL}, NULL        \
+        }                       \
     }
-#define Vector4f_init_default \
-    {                         \
-        {                     \
-            {NULL}, NULL      \
-        }                     \
+#define SFVector4f_init_default \
+    {                           \
+        {                       \
+            {NULL}, NULL        \
+        }                       \
     }
-#define StateFieldRegistry_init_default                                                                                                                                                                                                                               \
-    {                                                                                                                                                                                                                                                                 \
-        0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, Vector3f_init_default, false, Vector3f_init_default, false, Vector3f_init_default, false, Vector4f_init_default, false, Vector4f_init_default \
+#define StateFieldRegistry_init_default                                                                                                                                                                                                                                         \
+    {                                                                                                                                                                                                                                                                           \
+        0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector4f_init_default \
     }
-#define Vector3f_init_zero \
-    {                      \
-        {                  \
-            {NULL}, NULL   \
-        }                  \
+#define SFVector3f_init_zero \
+    {                        \
+        {                    \
+            {NULL}, NULL     \
+        }                    \
     }
-#define Vector4f_init_zero \
-    {                      \
-        {                  \
-            {NULL}, NULL   \
-        }                  \
+#define SFVector4f_init_zero \
+    {                        \
+        {                    \
+            {NULL}, NULL     \
+        }                    \
     }
-#define StateFieldRegistry_init_zero                                                                                                                                                                                                                   \
-    {                                                                                                                                                                                                                                                  \
-        0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, Vector3f_init_zero, false, Vector3f_init_zero, false, Vector3f_init_zero, false, Vector4f_init_zero, false, Vector4f_init_zero \
+#define StateFieldRegistry_init_zero                                                                                                                                                                                                                             \
+    {                                                                                                                                                                                                                                                            \
+        0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector4f_init_zero \
     }
 
 /* Field tags (for use in manual encoding/decoding) */
-#define Vector3f_elements_tag 1
-#define Vector4f_elements_tag 1
+#define SFVector3f_elements_tag 1
+#define SFVector4f_elements_tag 1
 #define StateFieldRegistry_time_t_average_cycle_time_us_tag 1
 #define StateFieldRegistry_time_t_control_cycle_limit_us_tag 2
 #define StateFieldRegistry_time_t_last_cycle_end_us_tag 3
@@ -128,15 +128,15 @@ extern "C"
 #define StateFieldRegistry_imu_quat_tag 14
 
 /* Struct field encoding specification for nanopb */
-#define Vector3f_FIELDLIST(X, a) \
+#define SFVector3f_FIELDLIST(X, a) \
     X(a, CALLBACK, REPEATED, FLOAT, elements, 1)
-#define Vector3f_CALLBACK pb_default_field_callback
-#define Vector3f_DEFAULT NULL
+#define SFVector3f_CALLBACK pb_default_field_callback
+#define SFVector3f_DEFAULT NULL
 
-#define Vector4f_FIELDLIST(X, a) \
+#define SFVector4f_FIELDLIST(X, a) \
     X(a, CALLBACK, REPEATED, FLOAT, elements, 1)
-#define Vector4f_CALLBACK pb_default_field_callback
-#define Vector4f_DEFAULT NULL
+#define SFVector4f_CALLBACK pb_default_field_callback
+#define SFVector4f_DEFAULT NULL
 
 #define StateFieldRegistry_FIELDLIST(X, a)                          \
     X(a, STATIC, SINGULAR, FLOAT, time_t_average_cycle_time_us, 1)  \
@@ -155,24 +155,24 @@ extern "C"
     X(a, STATIC, OPTIONAL, MESSAGE, imu_quat, 14)
 #define StateFieldRegistry_CALLBACK NULL
 #define StateFieldRegistry_DEFAULT NULL
-#define StateFieldRegistry_imu_linear_acc_vec_f_MSGTYPE Vector3f
-#define StateFieldRegistry_imu_acc_vec_f_MSGTYPE Vector3f
-#define StateFieldRegistry_imu_gyr_vec_MSGTYPE Vector3f
-#define StateFieldRegistry_imu_euler_vec_MSGTYPE Vector4f
-#define StateFieldRegistry_imu_quat_MSGTYPE Vector4f
+#define StateFieldRegistry_imu_linear_acc_vec_f_MSGTYPE SFVector3f
+#define StateFieldRegistry_imu_acc_vec_f_MSGTYPE SFVector3f
+#define StateFieldRegistry_imu_gyr_vec_MSGTYPE SFVector3f
+#define StateFieldRegistry_imu_euler_vec_MSGTYPE SFVector4f
+#define StateFieldRegistry_imu_quat_MSGTYPE SFVector4f
 
-    extern const pb_msgdesc_t Vector3f_msg;
-    extern const pb_msgdesc_t Vector4f_msg;
+    extern const pb_msgdesc_t SFVector3f_msg;
+    extern const pb_msgdesc_t SFVector4f_msg;
     extern const pb_msgdesc_t StateFieldRegistry_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
-#define Vector3f_fields &Vector3f_msg
-#define Vector4f_fields &Vector4f_msg
+#define SFVector3f_fields &SFVector3f_msg
+#define SFVector4f_fields &SFVector4f_msg
 #define StateFieldRegistry_fields &StateFieldRegistry_msg
 
     /* Maximum encoded size of messages (where known) */
-    /* Vector3f_size depends on runtime parameters */
-    /* Vector4f_size depends on runtime parameters */
+    /* SFVector3f_size depends on runtime parameters */
+    /* SFVector4f_size depends on runtime parameters */
     /* StateFieldRegistry_size depends on runtime parameters */
 
 #ifdef __cplusplus

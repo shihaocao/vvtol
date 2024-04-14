@@ -6,10 +6,10 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
-PB_BIND(Vector3f, Vector3f, AUTO)
+PB_BIND(SFVector3f, SFVector3f, AUTO)
 
 
-PB_BIND(Vector4f, Vector4f, AUTO)
+PB_BIND(SFVector4f, SFVector4f, AUTO)
 
 
 PB_BIND(StateFieldRegistry, StateFieldRegistry, AUTO)
