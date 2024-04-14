@@ -6,16 +6,22 @@
 #include <Arduino.h>
 #endif
 
-void log_init() {
+void log_init()
+{
 #ifndef NATIVE
+#ifndef DEBUGSER
     Serial.begin(9600);
-    while (!Serial) {
+    while (!Serial)
+    {
         ; // Wait for serial port to connect
     }
 #endif
+#endif
 }
 
-void log_printf(const char* format, ...) {
+void log_printf(const char *format, ...)
+{
+#ifndef DEBUGSER
     va_list args;
     va_start(args, format);
 
@@ -29,4 +35,5 @@ void log_printf(const char* format, ...) {
 #endif
 
     va_end(args);
+#endif
 }

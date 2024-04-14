@@ -8,13 +8,16 @@
 #include <imu_monitor.hpp>
 #include <functional>
 #include <common/stats.hpp>
+#include <downlink_task.hpp>
 
-class MainLoop : public Task<MainLoop> {
-    StateFieldRegistry& sfr_;
-    std::tuple<ImuMonitor, MainControlSM, TimeTask> task_list_;
+class MainLoop : public Task<MainLoop>
+{
+    StateFieldRegistry &sfr_;
+    std::tuple<ImuMonitor, MainControlSM, DownlinkTask, TimeTask> task_list_;
     Stats stats_;
+
 public:
-    MainLoop(StateFieldRegistry& sfr);
+    MainLoop(StateFieldRegistry &sfr);
 
     void setup();
 
