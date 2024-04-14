@@ -27,7 +27,7 @@ int main()
     {
         // Create a StateFields message
         // StateFields state_field_registry;
-        StateFields state_field_registry = StateFields_init_zero;
+        StateFieldRegistry state_field_registry = StateFieldRegistry_init_zero;
 
         // Fill the message with dummy data
         state_field_registry.time_t_average_cycle_time_us = 123.456f;
