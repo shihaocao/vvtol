@@ -16,7 +16,7 @@ class AirProtoDecoder:
         self.expected_payload_length = 0
 
     def insert_bytes(self, bytes_to_decode):
-        print(f"Inserting.. {len(bytes_to_decode)}")
+        # print(f"Inserting.. {len(bytes_to_decode)}")
         self.decoding_buffer.extend(bytes_to_decode)
         return self._process_bytes()
 
