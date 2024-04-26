@@ -28,6 +28,13 @@ void DownlinkTask::execute()
 {
     StateFieldRegistry state_field_registry = StateFieldRegistry_init_zero;
     state_field_registry.mcl_control_cycle_num = sfr_.mcl_control_cycle_num;
+    // state_field_registry.imu_gyr_vec = sfr_.imu_gyr_vec;
+    state_field_registry.time_t_average_cycle_time_us = sfr_.imu_gyr_vec[0];
+    for (size_t i = 0; i < 3; i++)
+    {
+        // state_field_registry.imu_gyr_vec[i] = sfr_.imu_gyr_vec[i];
+        // state_field_registry.imu_gyr_vec.elements[i] = sfr_.imu_gyr_vec[i];
+    }
 
     AirProto air_proto;
 

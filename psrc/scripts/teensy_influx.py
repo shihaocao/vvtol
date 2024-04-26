@@ -37,6 +37,7 @@ def post_sfr(sfr: StateFieldRegistry):
     # Create a point with the vehicle ID
     point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
     point.field("mcl_control_cycle_number", sfr.mcl_control_cycle_num)
+    point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
     # print(f"CCNO: {sfr.mcl_control_cycle_num} {type(sfr.mcl_control_cycle_num)}")
     # # Add 50 different telemetry fields to the point
     # # for i in range(50):
