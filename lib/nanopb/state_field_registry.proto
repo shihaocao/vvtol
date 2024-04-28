@@ -13,12 +13,25 @@ enum GncControlState {
 }
 
 message SFVector3f {
-    repeated float elements = 1 [packed=true]; // Ensure there are exactly 3 elements
+    repeated float elements = 1 [packed=true];
 }
 
 message SFVector4f {
-    repeated float elements = 1 [packed=true]; // Ensure there are exactly 4 elements
+    repeated float elements = 1 [packed=true];
 }
+
+// message VVector3f {
+//     float x = 1;
+//     float y = 2;
+//     float z = 3;
+// }
+
+// message VVector4f {
+//     float w = 1;
+//     float x = 2;
+//     float y = 3;
+//     float z = 4;
+// }
 
 message StateFieldRegistry {
     float time_t_average_cycle_time_us = 1;

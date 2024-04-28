@@ -10,6 +10,7 @@
             "includePath": [
                 "/home/shihao/Code/vvtol/include",
                 "/home/shihao/Code/vvtol/src",
+                "/home/shihao/Code/vvtol/lib/nanopb",
                 "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Nanopb",
                 "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Adafruit BNO055",
                 "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Adafruit BNO055/utility",
@@ -19,7 +20,6 @@
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Wire",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Wire/utility",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/cores/teensy4",
-                "/home/shihao/Code/vvtol/lib/nanopb",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/ADC",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/AccelStepper/src",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_NeoPixel",
@@ -123,6 +123,7 @@
                 "path": [
                     "/home/shihao/Code/vvtol/include",
                     "/home/shihao/Code/vvtol/src",
+                    "/home/shihao/Code/vvtol/lib/nanopb",
                     "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Nanopb",
                     "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Adafruit BNO055",
                     "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Adafruit BNO055/utility",
@@ -132,7 +133,6 @@
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Wire",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Wire/utility",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/cores/teensy4",
-                    "/home/shihao/Code/vvtol/lib/nanopb",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/ADC",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/AccelStepper/src",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_NeoPixel",
@@ -233,7 +233,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=60114",
+                "PLATFORMIO=60115",
                 "__IMXRT1062__",
                 "ARDUINO_TEENSY41",
                 "VITL",

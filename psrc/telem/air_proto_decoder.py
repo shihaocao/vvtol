@@ -39,6 +39,7 @@ class AirProtoDecoder:
             elif self.state == AirProtoDecoderState.WAITING_FOR_PAYLOAD:
                 if len(self.decoding_buffer) >= self.expected_payload_length:
                     payload = self.decoding_buffer[:self.expected_payload_length]
+                    print(f"Got payload len {len(payload)}")
                     del self.decoding_buffer[:self.expected_payload_length]
                     state_field_registry = StateFieldRegistry()
                     state_field_registry.ParseFromString(bytes(payload))

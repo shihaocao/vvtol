@@ -152,3 +152,7 @@ python psrc/scripts/teensy_air_proto_reader.py
 
 ## 04/28:
 - Added capability to restart from lost link. I think link is sometimes lost due to overcurrent maybe.
+
+- Added capability to use nano pb repeated fields as vectors.
+  - The pitfall I ran into was not realizing there was a "has_field" struct member. This needs to be set to true.
+  - The other thing I messed up was setting the .decode callback and the .encode callback. I discovered this error because I read the source code and it is a union.

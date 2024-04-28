@@ -9,6 +9,7 @@ import sys
 import serial
 
 import os
+from typing import *
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -31,28 +32,30 @@ write_api = write_client.write_api(write_options=SYNCHRONOUS)
 # Vehicle ID
 vehicle_id = "123ABC"
 
+def vec_measurement(field: Any, field_name: str, time_point: int) -> Point:
+    p = point = Point("vector_measurement") \
+        .tag("sensor", field_name) \
+        .field("x", field.elements[0]) \
+        .field("y", field.elements[1]) \
+        .field("z", field.elements[2]) \
+        .time(time_point)
+    return p
 
 def post_sfr(sfr: StateFieldRegistry):
+
+    points = []
+    time_point = time.time_ns()
 
     # Create a point with the vehicle ID
     point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
     point.field("mcl_control_cycle_number", sfr.mcl_control_cycle_num)
     point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
-    # print(f"CCNO: {sfr.mcl_control_cycle_num} {type(sfr.mcl_control_cycle_num)}")
-    # # Add 50 different telemetry fields to the point
-    # # for i in range(50):
-    # #     # Oscillate each telemetry field using a sinusoidal function
-    # #     # and apply a random perturbation
-    # telemetry_value = sin(elapsed_time * 2 * pi / 5) + random.uniform(1, 1)
-    # point.field(f"dummy{0}", telemetry_value)
-    # telemetry_value2 = sin(elapsed_time * 3 * pi / 5) + random.uniform(1, 1) - 2
-    # point.field(f"dummy{1}", telemetry_value2)
+    point.time(time_point)  # Use current time in nanoseconds
+    points.append(point)
 
-    point.time(time.time_ns())  # Use current time in nanoseconds
-    write_api.write(bucket=bucket, org=org, record=point)
+    points.append(vec_measurement(sfr.imu_gyr_vec, 'imu_gyr_vec', time_point))
 
-    # Wait for 0.01 second before the next iteration
-    # time.sleep(0.01)
+    write_api.write(bucket=bucket, org=org, record=points)
 
 class AirProtoReader:
 
@@ -73,8 +76,8 @@ class AirProtoReader:
 
         # Process the decoding result
         if isinstance(result, StateFieldRegistry):
-            # print("Decoded message:")
-            # print(result)
+            print("Decoded message:")
+            print(result)
 
             return result
         
@@ -102,7 +105,7 @@ def main():
             reader = AirProtoReader(ser)
             
             while True:
-                time.sleep(0.1)
+                time.sleep(0.01)
                 result = reader.read_and_maybe_result()
                 if result is None:
                     continue
