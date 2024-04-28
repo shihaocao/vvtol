@@ -94,26 +94,27 @@ def main():
     port = "/dev/ttyACM0"
     baud_rate = 9600  # Adjust as needed for your device
     print("RUNNING! LETS GOOO")
-    try:
-        # Open the serial port
-        ser = serial.Serial(port, baud_rate, timeout=0)  # `timeout=None` for blocking mode; set to 0 for non-blocking mode
+    while True:
+        try:
+            # Open the serial port
+            ser = serial.Serial(port, baud_rate, timeout=0)  # `timeout=None` for blocking mode; set to 0 for non-blocking mode
 
-        reader = AirProtoReader(ser)
-        
-        while True:
-            time.sleep(0.1)
-            result = reader.read_and_maybe_result()
-            if result is None:
-                continue
+            reader = AirProtoReader(ser)
+            
+            while True:
+                time.sleep(0.1)
+                result = reader.read_and_maybe_result()
+                if result is None:
+                    continue
 
-            post_sfr(result)
+                post_sfr(result)
 
-    except serial.SerialException as e:
-        print(f"Error opening serial port: {e}")
-        sys.exit(1)
-    finally:
-        if 'ser' in locals() and ser.is_open:
-            ser.close()
+        except serial.SerialException as e:
+            print(f"Error opening serial port: {e}. Trying again shortly.")
+            time.sleep(0.5)
+        finally:
+            if 'ser' in locals() and ser.is_open:
+                ser.close()
 
 if __name__ == "__main__":
     main()

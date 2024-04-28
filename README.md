@@ -149,3 +149,6 @@ run the python reader via
 ```
 python psrc/scripts/teensy_air_proto_reader.py
 ```
+
+## 04/28:
+- Added capability to restart from lost link. I think link is sometimes lost due to overcurrent maybe.
