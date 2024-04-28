@@ -47,7 +47,7 @@ message StateFieldRegistry {
     GncControlState target_gnc_state = 9;
 
     SFVector3f imu_linear_acc_vec_f = 10;
-    SFVector3f imu_acc_vec_f = 11;
+    SFVector3f imu_acc_vec_f = 11; // Why is there an _f???
     SFVector3f imu_gyr_vec = 12;
     SFVector4f imu_euler_vec = 13;
     SFVector4f imu_quat = 14;

@@ -51,6 +51,14 @@ static bool decode_float_array(pb_istream_t *stream, const pb_field_t *field, vo
 {
     return false;
 }
+
+static void link_downlink_sfr(SFVector3f &field, bool &has_field, Vector3f *sfr_field_addr)
+{
+    field.elements.arg = sfr_field_addr;
+    field.elements.funcs.encode = encode_float_array;
+    has_field = true;
+}
+
 void DownlinkTask::execute()
 {
     StateFieldRegistry state_field_registry = StateFieldRegistry_init_zero;
@@ -61,8 +69,12 @@ void DownlinkTask::execute()
     // std::array<float, 3> foo = {1, 2, 3};
     state_field_registry.imu_gyr_vec.elements.arg = &sfr_.imu_gyr_vec;
     state_field_registry.imu_gyr_vec.elements.funcs.encode = &encode_float_array;
-    // state_field_registry.imu_gyr_vec.elements.funcs.decode = &decode_float_array;
     state_field_registry.has_imu_gyr_vec = true;
+
+    link_downlink_sfr(state_field_registry.imu_acc_vec_f,
+                      state_field_registry.has_imu_acc_vec_f,
+                      &sfr_.imu_acc_vec_f);
+
     AirProto air_proto;
 
     int status = air_proto.serialize_to_buffer(state_field_registry);
