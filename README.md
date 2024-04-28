@@ -1,5 +1,24 @@
 # VTOL
 
+Start the grafana server:
+```
+sudo systemctl start grafana-server
+```
+
+Visit `localhost:9000` to see the grafana data.
+
+In one terminal run:
+```
+export INFLUXDB..
+python psrc/scripts/teensy_influx.py
+```
+
+Simultaneously run:
+```
+pio run -e teensy41 -t upload
+```
+You may need to do this from a `pio` capable terminal.
+
 ## Dev Log:
 
 03/21: Setup influx db and grafana

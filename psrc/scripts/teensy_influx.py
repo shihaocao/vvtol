@@ -52,7 +52,43 @@ def post_sfr(sfr: StateFieldRegistry):
     write_api.write(bucket=bucket, org=org, record=point)
 
     # Wait for 0.01 second before the next iteration
-    time.sleep(0.01)
+    # time.sleep(0.01)
+
+class AirProtoReader:
+
+    def __init__(self, ser: serial.Serial):
+        self.ser = ser
+        self.decoder = AirProtoDecoder()
+
+    def read_and_maybe_result(self):
+        # Read bytes from the serial port
+        data = self.ser.read(1024)  # Adjust size as needed
+
+        if not data:
+            # No data received, continue to the next iteration
+            return None
+
+        # Insert the received bytes into the decoder
+        result = self.decoder.insert_bytes(data)
+
+        # Process the decoding result
+        if isinstance(result, StateFieldRegistry):
+            # print("Decoded message:")
+            # print(result)
+
+            return result
+        
+        return None
+        # elif result == AirProtoDecoderState.WAITING_FOR_MAGIC_BYTE:
+        #     pass
+        #     # print("Waiting for magic byte...")
+        # elif result == AirProtoDecoderState.WAITING_FOR_LENGTH_BYTE_1:
+        #     pass
+        #     # print("Waiting for length byte 1...")
+        # elif result == AirProtoDecoderState.WAITING_FOR_LENGTH_BYTE_2:
+        #     pass# print("Waiting for length byte 2...")
+        # elif result == AirProtoDecoderState.WAITING_FOR_PAYLOAD:
+        #     pass# print("Waiting for payload...")
 
 def main():
     port = "/dev/ttyACM0"
@@ -62,33 +98,15 @@ def main():
         # Open the serial port
         ser = serial.Serial(port, baud_rate, timeout=0)  # `timeout=None` for blocking mode; set to 0 for non-blocking mode
 
-        decoder = AirProtoDecoder()
-
+        reader = AirProtoReader(ser)
+        
         while True:
-            # Read bytes from the serial port
-            data = ser.read(1024)  # Adjust size as needed
-
-            if not data:
-                # No data received, continue to the next iteration
+            time.sleep(0.1)
+            result = reader.read_and_maybe_result()
+            if result is None:
                 continue
 
-            # Insert the received bytes into the decoder
-            result = decoder.insert_bytes(data)
-
-            # Process the decoding result
-            if isinstance(result, StateFieldRegistry):
-                # print("Decoded message:")
-                # print(result)
-
-                post_sfr(result)
-            elif result == AirProtoDecoderState.WAITING_FOR_MAGIC_BYTE:
-                print("Waiting for magic byte...")
-            elif result == AirProtoDecoderState.WAITING_FOR_LENGTH_BYTE_1:
-                print("Waiting for length byte 1...")
-            elif result == AirProtoDecoderState.WAITING_FOR_LENGTH_BYTE_2:
-                print("Waiting for length byte 2...")
-            elif result == AirProtoDecoderState.WAITING_FOR_PAYLOAD:
-                print("Waiting for payload...")
+            post_sfr(result)
 
     except serial.SerialException as e:
         print(f"Error opening serial port: {e}")
