@@ -10,10 +10,13 @@ void log_init()
 {
 #ifndef NATIVE
     Serial.begin(9600);
-    while (!Serial)
-    {
-        ; // Wait for serial port to connect
-    }
+
+    // Disable this, we want to start going asap even if the serial
+    // is not ready.
+    // while (!Serial)
+    // {
+    //     ; // Wait for serial port to connect
+    // }
 #endif
 }
 

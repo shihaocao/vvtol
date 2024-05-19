@@ -9,3 +9,5 @@ bazel-**
 MODULE.bazel.lock
 
 venv**
+
+secrets**

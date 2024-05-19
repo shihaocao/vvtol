@@ -38,7 +38,7 @@ MainControlSM::MainControlSM(StateFields &sfr) : sfr_(sfr), empty_cvd_({})
             sfr.mc_state = MainControl::State::ARMED;
             log_printf("Going to armed!");
 
-            log() << global_stats.to_string() << '\n';
+            // log() << global_stats.to_string() << '\n';
         });
 }
 

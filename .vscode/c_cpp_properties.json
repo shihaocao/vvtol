@@ -238,6 +238,8 @@
                 "ARDUINO_TEENSY41",
                 "VITL",
                 "TEENSY",
+                "USE_RADIO",
+                "DEBUGSER",
                 "USB_SERIAL",
                 "ARDUINO=10805",
                 "TEENSYDUINO=159",

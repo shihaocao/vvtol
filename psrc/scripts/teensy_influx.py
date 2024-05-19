@@ -5,6 +5,11 @@ from math import sin, pi
 import random
 import copy
 
+import logging
+# Configure logging to display the timestamp and the log level
+logging.basicConfig(level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
 import sys
 import serial
 
@@ -14,6 +19,11 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv('secrets/influx_secrets.env')
 
 from include.protos.state_field_registry_pb2 import StateFieldRegistry
 from psrc.telem.air_proto_decoder import AirProtoDecoder, AirProtoDecoderState
@@ -22,7 +32,7 @@ from psrc.telem.air_proto_decoder import AirProtoDecoder, AirProtoDecoderState
 token = os.environ.get("INFLUXDB_TOKEN")
 org = "vvtol"
 url = "http://localhost:8086"
-
+logging.info(token)
 write_client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 
 bucket = "vvtol_telem"
@@ -77,8 +87,8 @@ class AirProtoReader:
 
         # Process the decoding result
         if isinstance(result, StateFieldRegistry):
-            print("Decoded message:")
-            print(result)
+            logging.debug("Decoded message:")
+            logging.debug(result)
 
             return result
         
@@ -94,9 +104,23 @@ class AirProtoReader:
         # elif result == AirProtoDecoderState.WAITING_FOR_PAYLOAD:
         #     pass# print("Waiting for payload...")
 
+def get_args():
+    import argparse
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--radio', action='store_true')
+    return parser.parse_args()
+
 def main():
-    port = "/dev/ttyACM0"
-    baud_rate = 9600  # Adjust as needed for your device
+
+    args = get_args()
+    if args.radio:
+        port = "/dev/ttyUSB0"
+        baud_rate = 57600
+    else:
+        port = "/dev/ttyACM0"
+        baud_rate = 9600  # Adjust as needed for your device
+
     print("RUNNING! LETS GOOO")
     while True:
         try:
