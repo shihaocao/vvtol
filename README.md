@@ -156,3 +156,15 @@ python psrc/scripts/teensy_air_proto_reader.py
 - Added capability to use nano pb repeated fields as vectors.
   - The pitfall I ran into was not realizing there was a "has_field" struct member. This needs to be set to true.
   - The other thing I messed up was setting the .decode callback and the .encode callback. I discovered this error because I read the source code and it is a union.
+
+## 05/19:
+Now that I have a HITL (SHITL) table, I was running into some issues when not having the debug port active. It was because I still had this inserted:
+
+```
+while (!Serial)
+{
+    ; // Wait for serial port to connect
+}
+```
+
+But in general, I decided I had a need to clearly communicate whether or not the main loop was making progress, so I wrote a simple BlinkLedTask.cpp to turn off and on the LED to check if the cycles were executing atleast this task every cycle.

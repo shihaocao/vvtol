@@ -10,6 +10,7 @@ MainLoop::MainLoop(StateFields &sfr) : sfr_(sfr),
 
                                            ImuMonitor(sfr_),
                                            MainControlSM(sfr_),
+                                           BlinkLedTask(sfr_),
                                            DownlinkTask(sfr_),
                                            TimeTask(sfr_))
 {
