@@ -24,19 +24,30 @@ MainControlSM::MainControlSM(StateFields &sfr) : sfr_(sfr), empty_cvd_({})
 {
     empty_cvd_.add(
         [&]
-        { return sfr.mcl_control_cycle_num - sfr.last_transition_ccno > 50; },
+        { return sfr.mcl_control_cycle_num - sfr.last_transition_ccno > 1; },
         [&]
         {
             log_printf("Waiting for initial warmup");
         });
     empty_cvd_.add(
         [&]
+        { return sfr.mcl_control_cycle_num - sfr.last_transition_ccno > 80; },
+        [&]
+        {
+            log_printf("Motor Init complete going to FLIGHT");
+            sfr.mc_state = MainControl::State::FLIGHT;
+            log_printf("Going to armed!");
+
+            // log() << global_stats.to_string() << '\n';
+        });
+    empty_cvd_.add(
+        [&]
         { return sfr.mcl_control_cycle_num - sfr.last_transition_ccno > 200; },
         [&]
         {
-            log_printf("Waiting for imu to calibrate");
-            sfr.mc_state = MainControl::State::ARMED;
-            log_printf("Going to armed!");
+            log_printf("Flight complete going to HALT");
+            sfr.mc_state = MainControl::State::HALT;
+            log_printf("Going to HALT!");
 
             // log() << global_stats.to_string() << '\n';
         });

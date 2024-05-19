@@ -172,3 +172,9 @@ But in general, I decided I had a need to clearly communicate whether or not the
 ### Debug Programs
 
 I made a standalone blink.cpp as well as a servo.cpp that makes it very easy to debug if the hardware is wrong or if the software is wrong because you're flashing very simple software that should definitely work. If it doesn't then you have a HW problem. If you have a SW problem, then the simple program would work but not the complex version.
+
+### Wiring
+
+Funny because I immediately ran into a problem where I thought I had the wiring right but I was reading the labels wrong. The debug program helped lots.
+
+Always use the wiring diagram, not the tiny numbers on the PCB...

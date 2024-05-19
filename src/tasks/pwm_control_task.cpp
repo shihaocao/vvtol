@@ -1,6 +1,7 @@
 #include <state_field_registry.hpp>
 #include <task.hpp>
 #include <pwm_control_task.hpp>
+#include <type_defs.hpp>
 
 #ifdef NATIVE
 #include <chrono>
@@ -13,11 +14,32 @@ PwmControlTask::PwmControlTask(StateFields &sfr) : sfr_(sfr)
 void PwmControlTask::setup()
 {
     fin_py.attach(FIN_PY_PIN);
+    lower_motor.attach(LOWER_MOTOR_PIN, 1000, 2000);
+
+    fin_py.write(0);
+    safe_pwm_outputs();
 };
+
+void PwmControlTask::safe_pwm_outputs()
+{
+    lower_motor.write(MOTOR_OFF_PWM);
+}
 
 void PwmControlTask::execute()
 {
+    if (sfr_.mc_state != MainControl::State::FLIGHT)
+    {
+        // TODO: Do not read from main SFR state,
+        // Read from commanded flag
+        // (SMs should propagate down, instead of looking up)
+        safe_pwm_outputs();
+        return;
+    }
+
     fin_py_pos += 5;
     fin_py_pos = fin_py_pos % 180;
     fin_py.write(fin_py_pos);
+
+    // Set some non zero throttle
+    lower_motor.write(10);
 }

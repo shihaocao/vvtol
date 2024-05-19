@@ -31,12 +31,13 @@ public:
     static constexpr int FIN_NY_PIN = 5;  // 5
 
     static constexpr int LOWER_MOTOR_PIN = 29;
+    static constexpr int MOTOR_OFF_PWM = 0;
 
     int fin_py_pos = 0;
 
     PwmControlTask(StateFields &sfr);
 
     void setup();
-
+    void safe_pwm_outputs();
     void execute();
 };
