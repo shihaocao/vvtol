@@ -35,4 +35,11 @@ struct StateFields
     Vector3f imu_gyr_vec{};
     Vector4f imu_euler_vec{};
     Vector4d imu_quat{};
+
+    float fin_py_cmd;
+    float fin_ny_cmd;
+    float fin_px_cmd;
+    float fin_nx_cmd;
+
+    float lower_motor_cmd;
 };

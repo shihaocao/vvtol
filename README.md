@@ -180,3 +180,11 @@ Funny because I immediately ran into a problem where I thought I had the wiring 
 Always use the wiring diagram, not the tiny numbers on the PCB...
 
 ### Adding a new field to the telemetry stack
+Well I'll start by getting it to compile inside HOOTL again. I want to do this to make it easier to build and test things.
+
+```
+pio run -e dev
+```
+To build HOOTL
+
+If you add new statefields, you can use `./scripts/pb_build.sh` to refresh your nanopb files after you have updated the proto.

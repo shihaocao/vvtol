@@ -20,19 +20,6 @@ message SFVector4f {
     repeated float elements = 1 [packed=true];
 }
 
-// message VVector3f {
-//     float x = 1;
-//     float y = 2;
-//     float z = 3;
-// }
-
-// message VVector4f {
-//     float w = 1;
-//     float x = 2;
-//     float y = 3;
-//     float z = 4;
-// }
-
 message StateFieldRegistry {
     float time_t_average_cycle_time_us = 1;
     int32 time_t_control_cycle_limit_us = 2;
@@ -51,4 +38,11 @@ message StateFieldRegistry {
     SFVector3f imu_gyr_vec = 12;
     SFVector4f imu_euler_vec = 13;
     SFVector4f imu_quat = 14;
+
+    float fin_py_cmd = 15;
+    float fin_ny_cmd = 16;
+    float fin_px_cmd = 17;
+    float fin_nx_cmd = 18;
+
+    float lower_motor_cmd = 19;
 }
