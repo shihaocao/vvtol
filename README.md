@@ -188,3 +188,5 @@ pio run -e dev
 To build HOOTL
 
 If you add new statefields, you can use `./scripts/pb_build.sh` to refresh your nanopb files after you have updated the proto.
+
+I also added: `scripts/run_dev.sh` which will compile the HOOTL build, and start running it in your terminal. Next time I need to get the telemetry piped to the fifo, and run from there.
