@@ -178,3 +178,5 @@ I made a standalone blink.cpp as well as a servo.cpp that makes it very easy to 
 Funny because I immediately ran into a problem where I thought I had the wiring right but I was reading the labels wrong. The debug program helped lots.
 
 Always use the wiring diagram, not the tiny numbers on the PCB...
+
+### Adding a new field to the telemetry stack

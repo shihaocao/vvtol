@@ -15,12 +15,15 @@
 class PwmControlTask : public Task<PwmControlTask>
 {
     StateFields &sfr_;
+
+#ifndef NATIVE
     Servo fin_px;
     Servo fin_nx;
     Servo fin_py;
     Servo fin_ny;
 
     Servo lower_motor;
+#endif
 
 public:
     std::string name = "pwm_control_task";

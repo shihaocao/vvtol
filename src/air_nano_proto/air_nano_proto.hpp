@@ -1,10 +1,6 @@
 #pragma once
 
-#ifndef TEENSY
-#include "include/nanopb/state_field_registry.pb.h" // Adjust the include path to match your nanopb generated file
-#else
 #include <state_field_registry.pb.h> // Adjust the include path to match your nanopb generated file
-#endif
 
 #include <iostream>
 #include <cstdint>

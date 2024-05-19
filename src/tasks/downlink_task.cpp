@@ -14,7 +14,10 @@
 #include <pb_encode.h>
 // #include <nanopb/state_field_registry.pb.h>
 #include <state_field_registry.pb.h>
+
+#ifndef NATIVE
 #include <HardwareSerial.h>
+#endif
 
 DownlinkTask::DownlinkTask(StateFields &sfr) : sfr_(sfr)
 {
@@ -86,11 +89,13 @@ void DownlinkTask::execute()
     int status = air_proto.serialize_to_buffer(state_field_registry);
     // log() << "Ser status " << status << '\n';
     // log() << "Ser data:\n";
+#ifndef NATIVE
 #ifdef USE_RADIO
     // log() << "Use radio\n";
     Serial2.write(air_proto.data(), air_proto.size()); // Write the buffer to the serial port.
 #else
     Serial.write(air_proto.data(), air_proto.size()); // Write the buffer to the serial port.
+#endif
 #endif
     // log() << "End ser data\n";
 }

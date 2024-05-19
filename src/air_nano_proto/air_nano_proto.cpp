@@ -1,8 +1,8 @@
-#ifndef TEENSY
-#include "src/air_nano_proto/air_nano_proto.hpp"
-#else
+// #ifndef TEENSY
+// #include "src/air_nano_proto/air_nano_proto.hpp"
+// #else
 #include "air_nano_proto/air_nano_proto.hpp"
-#endif
+// #endif
 
 #include "pb_encode.h"
 #include "pb_common.h"
