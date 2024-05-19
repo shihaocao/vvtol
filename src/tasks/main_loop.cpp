@@ -12,6 +12,7 @@ MainLoop::MainLoop(StateFields &sfr) : sfr_(sfr),
                                            MainControlSM(sfr_),
                                            BlinkLedTask(sfr_),
                                            DownlinkTask(sfr_),
+                                           PwmControlTask(sfr_),
                                            TimeTask(sfr_))
 {
 }

@@ -168,3 +168,7 @@ while (!Serial)
 ```
 
 But in general, I decided I had a need to clearly communicate whether or not the main loop was making progress, so I wrote a simple BlinkLedTask.cpp to turn off and on the LED to check if the cycles were executing atleast this task every cycle.
+
+### Debug Programs
+
+I made a standalone blink.cpp as well as a servo.cpp that makes it very easy to debug if the hardware is wrong or if the software is wrong because you're flashing very simple software that should definitely work. If it doesn't then you have a HW problem. If you have a SW problem, then the simple program would work but not the complex version.

@@ -10,6 +10,7 @@
             "includePath": [
                 "/home/shihao/Code/vvtol/include",
                 "/home/shihao/Code/vvtol/src",
+                "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Servo",
                 "/home/shihao/Code/vvtol/lib/nanopb",
                 "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Nanopb",
                 "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Adafruit BNO055",
@@ -90,7 +91,6 @@
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/ST7735_t3/src",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/SdFat/src",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/SerialFlash",
-                "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Servo",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/ShiftPWM",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Snooze/src",
                 "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/SoftPWM",
@@ -123,6 +123,7 @@
                 "path": [
                     "/home/shihao/Code/vvtol/include",
                     "/home/shihao/Code/vvtol/src",
+                    "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Servo",
                     "/home/shihao/Code/vvtol/lib/nanopb",
                     "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Nanopb",
                     "/home/shihao/Code/vvtol/.pio/libdeps/teensy41/Adafruit BNO055",
@@ -203,7 +204,6 @@
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/ST7735_t3/src",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/SdFat/src",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/SerialFlash",
-                    "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Servo",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/ShiftPWM",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/Snooze/src",
                     "/home/shihao/.platformio/packages/framework-arduinoteensy/libraries/SoftPWM",

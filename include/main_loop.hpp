@@ -10,6 +10,7 @@
 #include <functional>
 #include <common/stats.hpp>
 #include <downlink_task.hpp>
+#include <pwm_control_task.hpp>
 
 class MainLoop : public Task<MainLoop>
 {
@@ -18,6 +19,7 @@ class MainLoop : public Task<MainLoop>
                MainControlSM,
                BlinkLedTask,
                DownlinkTask,
+               PwmControlTask,
                TimeTask>
         task_list_;
     Stats stats_;
