@@ -93,22 +93,13 @@ class AirProtoReader:
             return result
         
         return None
-        # elif result == AirProtoDecoderState.WAITING_FOR_MAGIC_BYTE:
-        #     pass
-        #     # print("Waiting for magic byte...")
-        # elif result == AirProtoDecoderState.WAITING_FOR_LENGTH_BYTE_1:
-        #     pass
-        #     # print("Waiting for length byte 1...")
-        # elif result == AirProtoDecoderState.WAITING_FOR_LENGTH_BYTE_2:
-        #     pass# print("Waiting for length byte 2...")
-        # elif result == AirProtoDecoderState.WAITING_FOR_PAYLOAD:
-        #     pass# print("Waiting for payload...")
 
 def get_args():
     import argparse
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--radio', action='store_true')
+    parser.add_argument('--native', action='store_true')
     return parser.parse_args()
 
 def main():
@@ -117,6 +108,11 @@ def main():
     if args.radio:
         port = "/dev/ttyUSB0"
         baud_rate = 57600
+    elif args.native:
+        """TODO:
+        READ FROM A NAMED FIFO ON LINX
+        """
+        pass
     else:
         port = "/dev/ttyACM0"
         baud_rate = 9600  # Adjust as needed for your device

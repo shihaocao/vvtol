@@ -7,7 +7,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
-from include.protos.state_field_registry_pb2 import StateFieldRegistry
+from lib.nanopb.state_field_registry_pb2 import StateFieldRegistry
 from psrc.telem.air_proto_decoder import AirProtoDecoder, AirProtoDecoderState
 
 def main():
