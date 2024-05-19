@@ -4,6 +4,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 from math import sin, pi
 import random
 import copy
+from typing import *
 
 import logging
 # Configure logging to display the timestamp and the log level
@@ -12,22 +13,21 @@ logging.basicConfig(level=logging.INFO,
 
 import sys
 import serial
-
-import os
-from typing import *
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+import argparse
 
 from dotenv import load_dotenv
-import os
 
 # Load environment variables from .env file
 load_dotenv('secrets/influx_secrets.env')
 
-from include.protos.state_field_registry_pb2 import StateFieldRegistry
-from psrc.telem.air_proto_decoder import AirProtoDecoder, AirProtoDecoderState
 
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+from lib.nanopb.state_field_registry_pb2 import StateFieldRegistry
+from psrc.telem.air_proto_decoder import AirProtoDecoder, AirProtoDecoderState
 
 token = os.environ.get("INFLUXDB_TOKEN")
 org = "vvtol"
@@ -70,32 +70,30 @@ def post_sfr(sfr: StateFieldRegistry):
 
 class AirProtoReader:
 
-    def __init__(self, ser: serial.Serial):
-        self.ser = ser
+    def __init__(self, source: Any, is_serial: bool = True):
+        self.source = source
         self.decoder = AirProtoDecoder()
+        self.is_serial = is_serial
 
     def read_and_maybe_result(self):
-        # Read bytes from the serial port
-        data = self.ser.read(1024)  # Adjust size as needed
+        if self.is_serial:
+            data = self.source.read(1024)  # Adjust size as needed
+        else:
+            data = os.read(self.source.fileno(), 1024)  # Adjust size as needed
 
         if not data:
-            # No data received, continue to the next iteration
             return None
 
-        # Insert the received bytes into the decoder
         result = self.decoder.insert_bytes(data)
 
-        # Process the decoding result
         if isinstance(result, StateFieldRegistry):
             logging.debug("Decoded message:")
             logging.debug(result)
-
             return result
         
         return None
 
 def get_args():
-    import argparse
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--radio', action='store_true')
@@ -103,38 +101,40 @@ def get_args():
     return parser.parse_args()
 
 def main():
-
     args = get_args()
     if args.radio:
         port = "/dev/ttyUSB0"
         baud_rate = 57600
     elif args.native:
-        """TODO:
-        READ FROM A NAMED FIFO ON LINX
-        """
-        pass
+        pipe_path = "/tmp/native_fifo"  # Adjust the path to your named pipe
+        if not os.path.exists(pipe_path):
+            os.mkfifo(pipe_path)
     else:
         port = "/dev/ttyACM0"
-        baud_rate = 9600  # Adjust as needed for your device
+        baud_rate = 9600
 
     print("RUNNING! LETS GOOO")
     while True:
         try:
-            # Open the serial port
-            ser = serial.Serial(port, baud_rate, timeout=0)  # `timeout=None` for blocking mode; set to 0 for non-blocking mode
+            if args.radio or not args.native:
+                ser = serial.Serial(port, baud_rate, timeout=0)  # `timeout=None` for blocking mode; set to 0 for non-blocking mode
+                reader = AirProtoReader(ser)
+            else:
+                with open(pipe_path, 'rb') as fifo:
+                    reader = AirProtoReader(fifo, is_serial=False)
 
-            reader = AirProtoReader(ser)
-            
-            while True:
-                time.sleep(0.01)
-                result = reader.read_and_maybe_result()
-                if result is None:
-                    continue
-
-                post_sfr(result)
+                while True:
+                    time.sleep(0.01)
+                    result = reader.read_and_maybe_result()
+                    if result is None:
+                        continue
+                    post_sfr(result)
 
         except serial.SerialException as e:
             print(f"Error opening serial port: {e}. Trying again shortly.")
+            time.sleep(0.5)
+        except OSError as e:
+            print(f"Error opening named pipe: {e}. Trying again shortly.")
             time.sleep(0.5)
         finally:
             if 'ser' in locals() and ser.is_open:

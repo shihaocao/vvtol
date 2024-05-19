@@ -1,5 +1,5 @@
 import struct
-from include.protos.state_field_registry_pb2 import StateFieldRegistry
+from lib.nanopb.state_field_registry_pb2 import StateFieldRegistry
 
 class AirProtoDecoderState:
     WAITING_FOR_MAGIC_BYTE = 0
