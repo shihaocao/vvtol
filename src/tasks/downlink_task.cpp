@@ -4,6 +4,7 @@
 
 #ifdef NATIVE
 #include <chrono>
+#include "native_only/named_pipe_manager.hpp"
 #endif
 
 #include <vector>
@@ -17,6 +18,9 @@
 
 #ifndef NATIVE
 #include <HardwareSerial.h>
+#endif
+#ifdef NATIVE
+NamedPipeManager npm("/tmp/vvtol_downlink");
 #endif
 
 DownlinkTask::DownlinkTask(StateFields &sfr) : sfr_(sfr)
@@ -96,6 +100,10 @@ void DownlinkTask::execute()
 #else
     Serial.write(air_proto.data(), air_proto.size()); // Write the buffer to the serial port.
 #endif
+#endif
+
+#ifdef NATIVE
+    npm.writeToPipe(air_proto.data(), air_proto.size());
 #endif
     // log() << "End ser data\n";
 }

@@ -8,7 +8,7 @@ from typing import *
 
 import logging
 # Configure logging to display the timestamp and the log level
-logging.basicConfig(level=logging.INFO, 
+logging.basicConfig(level=logging.DEBUG, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 import sys
@@ -106,7 +106,7 @@ def main():
         port = "/dev/ttyUSB0"
         baud_rate = 57600
     elif args.native:
-        pipe_path = "/tmp/native_fifo"  # Adjust the path to your named pipe
+        pipe_path = "/tmp/vvtol_downlink"  # Adjust the path to your named pipe
         if not os.path.exists(pipe_path):
             os.mkfifo(pipe_path)
     else:
@@ -120,15 +120,16 @@ def main():
                 ser = serial.Serial(port, baud_rate, timeout=0)  # `timeout=None` for blocking mode; set to 0 for non-blocking mode
                 reader = AirProtoReader(ser)
             else:
-                with open(pipe_path, 'rb') as fifo:
+                with open(pipe_path, 'rb', buffering=0) as fifo:
                     reader = AirProtoReader(fifo, is_serial=False)
 
-                while True:
-                    time.sleep(0.01)
-                    result = reader.read_and_maybe_result()
-                    if result is None:
-                        continue
-                    post_sfr(result)
+                    while True:
+                        time.sleep(0.01)
+                        result = reader.read_and_maybe_result()
+                        if result is None:
+                            continue
+                        # logging.info("Got result!")
+                        post_sfr(result)
 
         except serial.SerialException as e:
             print(f"Error opening serial port: {e}. Trying again shortly.")
