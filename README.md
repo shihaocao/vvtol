@@ -1,5 +1,9 @@
 # VTOL
 
+## Hello!
+
+
+
 Start the grafana server:
 ```
 sudo systemctl start grafana-server
@@ -193,3 +197,22 @@ I also added: `scripts/run_dev.sh` which will compile the HOOTL build, and start
 
 ## 05/21
 It's getting a bit hard to remember how to launch things so I added a `launch_hootl.sh` script. Eventually I should replace this with a pytest. This should be enough to boot the essentials and start testing.
+
+
+## 06/16
+I think it's finally time that I start doing more hardware.
+I took a stab at pcb design.
+
+I decided to use KiCAD.
+
+In order to have schematics and footprints for my components I decided to use:
+https://github.com/XenGi/teensy.pretty
+https://github.com/XenGi/teensy_library
+
+I had a fumble where  I didn't really understand how to transfer schematics to the footprint files. The unblocker was realizing I can sync through exporting netlist and then reingesting that, but I bet there's another way.
+
+Watched this video to learn how to create a symbol
+https://www.youtube.com/watch?v=_H1MZLR-UZM
+
+So far I have some of the design:
+![Start of KiCAD](documentation/vvtol_pcb_design_2024-06-17_00-03.png "Basic VVTOL schematic and footprint layout")
