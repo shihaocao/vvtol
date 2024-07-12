@@ -216,3 +216,21 @@ https://www.youtube.com/watch?v=_H1MZLR-UZM
 
 So far I have some of the design:
 ![Start of KiCAD](documentation/vvtol_pcb_design_2024-06-17_00-03.png "Basic VVTOL schematic and footprint layout")
+
+## 06/23
+
+Today I learned how to use free routing, as well as make my own footprint for the BMP280 Stemma QT version (since it didn't exist).
+
+Still todo are: Set PCB Manufacturing settings, and maybe re-route things myself.
+
+![Auto Routing](documentation/vvtol_pcb_2024-06-23_12-50.png "Basic VVTOL schematic and footprint layout")
+
+## 07/0?
+
+I finished my PCB! I had some friends give me some good advice about how to design PCBs.
+
+Autoroute was not good enough by default. The biggest change I made was to move all the grounds to a ground
+plane on the back side. I initially didn't think I would be able to route all the signal and power on the front side, but I was able to after enough creative thinking. I also made sure to make the PCB traces thicker for power. Lastly, I cut holes around the outside of the PCB design to act as tie down points. Not quite sure how I will mount this to the drone yet, but I am sure it will help. I am very proud of this design, even if it is only the first version.
+
+![First Design](documentation/vvtol_v1_pcb_design.png "First Finished PCB Design")
+
