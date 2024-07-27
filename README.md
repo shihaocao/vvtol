@@ -234,3 +234,11 @@ plane on the back side. I initially didn't think I would be able to route all th
 
 ![First Design](documentation/vvtol_v1_pcb_design.png "First Finished PCB Design")
 
+## 07/14
+
+Today I spent a good amount of time running through 3b1b's + Ben Eater's quaternion interactive videos.
+I think I am still working on the full intuition on, what happens to everything everywhere when you multiply by some arbitrary quaternion.
+
+But I really do start to see the two perpendicular circles rotating in sync, and I'm starting to see how "most" of the time you want a quat with 1 magnitude in order to represent a 3d rotation.
+
+![Quaternions](documentation/understanding_quaternions.png "Understanding Quats with 3b1b and Ben Eater")
