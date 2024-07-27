@@ -65,6 +65,7 @@ def post_sfr(sfr: StateFieldRegistry):
 
     points.append(vec_measurement(sfr.imu_gyr_vec, 'imu_gyr_vec', time_point))
     points.append(vec_measurement(sfr.imu_acc_vec_f, 'imu_acc_vec_f', time_point))
+    points.append(vec_measurement(sfr.global_coords, 'global_coords', time_point))
 
     write_api.write(bucket=bucket, org=org, record=points)
 

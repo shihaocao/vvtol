@@ -39,10 +39,12 @@ message StateFieldRegistry {
     SFVector4f imu_euler_vec = 13;
     SFVector4f imu_quat = 14;
 
-    float fin_py_cmd = 15;
-    float fin_ny_cmd = 16;
-    float fin_px_cmd = 17;
-    float fin_nx_cmd = 18;
+    SFVector3f global_coords = 15;
 
-    float lower_motor_cmd = 19;
+    float fin_py_cmd = 16;
+    float fin_ny_cmd = 17;
+    float fin_px_cmd = 18;
+    float fin_nx_cmd = 19;
+
+    float lower_motor_cmd = 20;
 }

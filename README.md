@@ -242,3 +242,11 @@ I think I am still working on the full intuition on, what happens to everything 
 But I really do start to see the two perpendicular circles rotating in sync, and I'm starting to see how "most" of the time you want a quat with 1 magnitude in order to represent a 3d rotation.
 
 ![Quaternions](documentation/understanding_quaternions.png "Understanding Quats with 3b1b and Ben Eater")
+
+## 07/27
+
+Today I really want to get started on doing some GNC stuff for real. I think the core things I need to make this happen are: Automatic Grafana plumbing so I can see everything real time, and play around with the data. To do this, I will commit a sin and use code gen, but I think this is fine. I am combatting the complexity by moving all the "meat" of the code gen to `sfr_gen.py`.
+
+I want `sfr_gen.py` because I am tired of adding one state field and having to update a million files.
+
+Secondly I don't have any hardware on me so I might as well build out my HOOTL for real. To do this I am adding a `simulator_injector` task. I plan to inject state here as well as propagate state.

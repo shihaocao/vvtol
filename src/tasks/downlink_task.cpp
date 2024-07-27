@@ -23,6 +23,8 @@
 NamedPipeManager npm("/tmp/vvtol_downlink");
 #endif
 
+#include <lin.hpp>
+
 DownlinkTask::DownlinkTask(StateFields &sfr) : sfr_(sfr)
 {
 }
@@ -60,6 +62,30 @@ bool encode_float_array(pb_ostream_t *stream, const pb_field_t *field, void *con
 
     return true; // Encoding successful
 }
+
+bool encode_lin_float_array(pb_ostream_t *stream, const pb_field_t *field, void *const *arg)
+{
+    // Retrieve the array passed as 'arg'
+    const lin::Vector3f *array_p = static_cast<lin::Vector3f *>(*arg);
+    const lin::Vector3f &array = *array_p;
+    // Write each float element to the stream
+    for (int i = 0; i < 3; i++)
+    {
+        const float element = array[i];
+        if (!pb_encode_tag_for_field(stream, field))
+        {
+            return false; // Encoding failure: unable to write the tag
+        }
+
+        if (!pb_encode_fixed32(stream, &element))
+        {
+            return false; // Encoding failure: unable to write the float value
+        }
+    }
+
+    return true; // Encoding successful
+}
+
 static bool decode_float_array(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     return false;
@@ -69,6 +95,13 @@ static void link_downlink_sfr(SFVector3f &field, bool &has_field, Vector3f *sfr_
 {
     field.elements.arg = sfr_field_addr;
     field.elements.funcs.encode = encode_float_array;
+    has_field = true;
+}
+
+static void lin_link_downlink_sfr(SFVector3f &field, bool &has_field, lin::Vector3f *sfr_field_addr)
+{
+    field.elements.arg = sfr_field_addr;
+    field.elements.funcs.encode = encode_lin_float_array;
     has_field = true;
 }
 
@@ -87,6 +120,15 @@ void DownlinkTask::execute()
     link_downlink_sfr(state_field_registry.imu_acc_vec_f,
                       state_field_registry.has_imu_acc_vec_f,
                       &sfr_.imu_acc_vec_f);
+    /*[[[cog
+    import cog
+    import psrc.sfr_gen.sfr_gen as sfr_gen
+    sfr_gen.downlink_generate_all_output()
+    ]]]*/
+    lin_link_downlink_sfr(state_field_registry.global_coords,
+                          state_field_registry.has_global_coords,
+                          &sfr_.global_coords);
+    //[[[end]]]
 
     AirProto air_proto;
 

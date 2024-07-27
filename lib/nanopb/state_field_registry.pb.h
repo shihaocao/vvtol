@@ -49,6 +49,8 @@ typedef struct _StateFieldRegistry {
     SFVector4f imu_euler_vec;
     bool has_imu_quat;
     SFVector4f imu_quat;
+    bool has_global_coords;
+    SFVector3f global_coords;
     float fin_py_cmd;
     float fin_ny_cmd;
     float fin_px_cmd;
@@ -81,10 +83,10 @@ extern "C" {
 /* Initializer values for message structs */
 #define SFVector3f_init_default                  {{{NULL}, NULL}}
 #define SFVector4f_init_default                  {{{NULL}, NULL}}
-#define StateFieldRegistry_init_default          {0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector4f_init_default, 0, 0, 0, 0, 0}
+#define StateFieldRegistry_init_default          {0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector4f_init_default, false, SFVector3f_init_default, 0, 0, 0, 0, 0}
 #define SFVector3f_init_zero                     {{{NULL}, NULL}}
 #define SFVector4f_init_zero                     {{{NULL}, NULL}}
-#define StateFieldRegistry_init_zero             {0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector4f_init_zero, 0, 0, 0, 0, 0}
+#define StateFieldRegistry_init_zero             {0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector4f_init_zero, false, SFVector3f_init_zero, 0, 0, 0, 0, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define SFVector3f_elements_tag                  1
@@ -103,11 +105,12 @@ extern "C" {
 #define StateFieldRegistry_imu_gyr_vec_tag       12
 #define StateFieldRegistry_imu_euler_vec_tag     13
 #define StateFieldRegistry_imu_quat_tag          14
-#define StateFieldRegistry_fin_py_cmd_tag        15
-#define StateFieldRegistry_fin_ny_cmd_tag        16
-#define StateFieldRegistry_fin_px_cmd_tag        17
-#define StateFieldRegistry_fin_nx_cmd_tag        18
-#define StateFieldRegistry_lower_motor_cmd_tag   19
+#define StateFieldRegistry_global_coords_tag     15
+#define StateFieldRegistry_fin_py_cmd_tag        16
+#define StateFieldRegistry_fin_ny_cmd_tag        17
+#define StateFieldRegistry_fin_px_cmd_tag        18
+#define StateFieldRegistry_fin_nx_cmd_tag        19
+#define StateFieldRegistry_lower_motor_cmd_tag   20
 
 /* Struct field encoding specification for nanopb */
 #define SFVector3f_FIELDLIST(X, a) \
@@ -135,11 +138,12 @@ X(a, STATIC,   OPTIONAL, MESSAGE,  imu_acc_vec_f,    11) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_gyr_vec,      12) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_euler_vec,    13) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_quat,         14) \
-X(a, STATIC,   SINGULAR, FLOAT,    fin_py_cmd,       15) \
-X(a, STATIC,   SINGULAR, FLOAT,    fin_ny_cmd,       16) \
-X(a, STATIC,   SINGULAR, FLOAT,    fin_px_cmd,       17) \
-X(a, STATIC,   SINGULAR, FLOAT,    fin_nx_cmd,       18) \
-X(a, STATIC,   SINGULAR, FLOAT,    lower_motor_cmd,  19)
+X(a, STATIC,   OPTIONAL, MESSAGE,  global_coords,    15) \
+X(a, STATIC,   SINGULAR, FLOAT,    fin_py_cmd,       16) \
+X(a, STATIC,   SINGULAR, FLOAT,    fin_ny_cmd,       17) \
+X(a, STATIC,   SINGULAR, FLOAT,    fin_px_cmd,       18) \
+X(a, STATIC,   SINGULAR, FLOAT,    fin_nx_cmd,       19) \
+X(a, STATIC,   SINGULAR, FLOAT,    lower_motor_cmd,  20)
 #define StateFieldRegistry_CALLBACK NULL
 #define StateFieldRegistry_DEFAULT NULL
 #define StateFieldRegistry_imu_linear_acc_vec_f_MSGTYPE SFVector3f
@@ -147,6 +151,7 @@ X(a, STATIC,   SINGULAR, FLOAT,    lower_motor_cmd,  19)
 #define StateFieldRegistry_imu_gyr_vec_MSGTYPE SFVector3f
 #define StateFieldRegistry_imu_euler_vec_MSGTYPE SFVector4f
 #define StateFieldRegistry_imu_quat_MSGTYPE SFVector4f
+#define StateFieldRegistry_global_coords_MSGTYPE SFVector3f
 
 extern const pb_msgdesc_t SFVector3f_msg;
 extern const pb_msgdesc_t SFVector4f_msg;

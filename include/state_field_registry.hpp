@@ -4,6 +4,8 @@
 
 #include <type_defs.hpp>
 
+#include <lin.hpp>
+
 // Design idea: do not nest structs inside structs, just pass around a flat SFR
 // all control logic should read from the SFR
 // logic inside control tasks should pull references from the SFR
@@ -35,6 +37,10 @@ struct StateFields
     Vector3f imu_gyr_vec{};
     Vector4f imu_euler_vec{};
     Vector4d imu_quat{};
+
+    // attitude estimator
+    // global coordinates
+    lin::Vector3f global_coords;
 
     float fin_py_cmd;
     float fin_ny_cmd;

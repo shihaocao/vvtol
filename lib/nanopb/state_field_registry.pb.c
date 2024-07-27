@@ -12,7 +12,7 @@ PB_BIND(SFVector3f, SFVector3f, AUTO)
 PB_BIND(SFVector4f, SFVector4f, AUTO)
 
 
-PB_BIND(StateFieldRegistry, StateFieldRegistry, AUTO)
+PB_BIND(StateFieldRegistry, StateFieldRegistry, 2)
 
 
 

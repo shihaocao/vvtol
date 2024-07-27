@@ -8,7 +8,8 @@
 MainLoop::MainLoop(StateFields &sfr) : sfr_(sfr),
                                        task_list_(
                                            ImuMonitor(sfr_),
-                                           AttitudeEstimator(sfr_),
+                                           SimulatorInject(sfr_),
+                                           StateEstimator(sfr_),
                                            MainControlSM(sfr_),
                                            BlinkLedTask(sfr_),
                                            DownlinkTask(sfr_),

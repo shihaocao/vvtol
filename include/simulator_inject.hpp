@@ -10,14 +10,14 @@
 
 #include <lin.hpp>
 
-class AttitudeEstimator : public Task<AttitudeEstimator>
+class SimulatorInject : public Task<SimulatorInject>
 {
     StateFields &sfr_;
 
 public:
-    std::string name = "attitude_estimator";
+    std::string name = "state_estimator";
 
-    AttitudeEstimator(StateFields &sfr);
+    SimulatorInject(StateFields &sfr);
 
     void setup();
 

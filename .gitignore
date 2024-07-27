@@ -11,3 +11,4 @@ MODULE.bazel.lock
 venv**
 
 secrets**
+**egg-info**

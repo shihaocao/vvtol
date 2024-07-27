@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n%lib/nanopb/state_field_registry.proto\"\"\n\nSFVector3f\x12\x14\n\x08\x65lements\x18\x01 \x03(\x02\x42\x02\x10\x01\"\"\n\nSFVector4f\x12\x14\n\x08\x65lements\x18\x01 \x03(\x02\x42\x02\x10\x01\"\xff\x04\n\x12StateFieldRegistry\x12$\n\x1ctime_t_average_cycle_time_us\x18\x01 \x01(\x02\x12%\n\x1dtime_t_control_cycle_limit_us\x18\x02 \x01(\x05\x12 \n\x18time_t_last_cycle_end_us\x18\x03 \x01(\r\x12\x1c\n\x14last_transition_ccno\x18\x04 \x01(\x04\x12\x1d\n\x15mcl_control_cycle_num\x18\x05 \x01(\x04\x12#\n\x08mc_state\x18\x06 \x01(\x0e\x32\x11.MainControlState\x12*\n\x0ftarget_mc_state\x18\x07 \x01(\x0e\x32\x11.MainControlState\x12#\n\tgnc_state\x18\x08 \x01(\x0e\x32\x10.GncControlState\x12*\n\x10target_gnc_state\x18\t \x01(\x0e\x32\x10.GncControlState\x12)\n\x14imu_linear_acc_vec_f\x18\n \x01(\x0b\x32\x0b.SFVector3f\x12\"\n\rimu_acc_vec_f\x18\x0b \x01(\x0b\x32\x0b.SFVector3f\x12 \n\x0bimu_gyr_vec\x18\x0c \x01(\x0b\x32\x0b.SFVector3f\x12\"\n\rimu_euler_vec\x18\r \x01(\x0b\x32\x0b.SFVector4f\x12\x1d\n\x08imu_quat\x18\x0e \x01(\x0b\x32\x0b.SFVector4f\x12\x12\n\nfin_py_cmd\x18\x0f \x01(\x02\x12\x12\n\nfin_ny_cmd\x18\x10 \x01(\x02\x12\x12\n\nfin_px_cmd\x18\x11 \x01(\x02\x12\x12\n\nfin_nx_cmd\x18\x12 \x01(\x02\x12\x17\n\x0flower_motor_cmd\x18\x13 \x01(\x02* \n\x10MainControlState\x12\x0c\n\x08MC_EMPTY\x10\x00* \n\x0fGncControlState\x12\r\n\tGNC_EMPTY\x10\x00\x62\x06proto3')
+  serialized_pb=_b('\n%lib/nanopb/state_field_registry.proto\"\"\n\nSFVector3f\x12\x14\n\x08\x65lements\x18\x01 \x03(\x02\x42\x02\x10\x01\"\"\n\nSFVector4f\x12\x14\n\x08\x65lements\x18\x01 \x03(\x02\x42\x02\x10\x01\"\xa3\x05\n\x12StateFieldRegistry\x12$\n\x1ctime_t_average_cycle_time_us\x18\x01 \x01(\x02\x12%\n\x1dtime_t_control_cycle_limit_us\x18\x02 \x01(\x05\x12 \n\x18time_t_last_cycle_end_us\x18\x03 \x01(\r\x12\x1c\n\x14last_transition_ccno\x18\x04 \x01(\x04\x12\x1d\n\x15mcl_control_cycle_num\x18\x05 \x01(\x04\x12#\n\x08mc_state\x18\x06 \x01(\x0e\x32\x11.MainControlState\x12*\n\x0ftarget_mc_state\x18\x07 \x01(\x0e\x32\x11.MainControlState\x12#\n\tgnc_state\x18\x08 \x01(\x0e\x32\x10.GncControlState\x12*\n\x10target_gnc_state\x18\t \x01(\x0e\x32\x10.GncControlState\x12)\n\x14imu_linear_acc_vec_f\x18\n \x01(\x0b\x32\x0b.SFVector3f\x12\"\n\rimu_acc_vec_f\x18\x0b \x01(\x0b\x32\x0b.SFVector3f\x12 \n\x0bimu_gyr_vec\x18\x0c \x01(\x0b\x32\x0b.SFVector3f\x12\"\n\rimu_euler_vec\x18\r \x01(\x0b\x32\x0b.SFVector4f\x12\x1d\n\x08imu_quat\x18\x0e \x01(\x0b\x32\x0b.SFVector4f\x12\"\n\rglobal_coords\x18\x0f \x01(\x0b\x32\x0b.SFVector3f\x12\x12\n\nfin_py_cmd\x18\x10 \x01(\x02\x12\x12\n\nfin_ny_cmd\x18\x11 \x01(\x02\x12\x12\n\nfin_px_cmd\x18\x12 \x01(\x02\x12\x12\n\nfin_nx_cmd\x18\x13 \x01(\x02\x12\x17\n\x0flower_motor_cmd\x18\x14 \x01(\x02* \n\x10MainControlState\x12\x0c\n\x08MC_EMPTY\x10\x00* \n\x0fGncControlState\x12\r\n\tGNC_EMPTY\x10\x00\x62\x06proto3')
 )
 
 _MAINCONTROLSTATE = _descriptor.EnumDescriptor(
@@ -36,8 +36,8 @@ _MAINCONTROLSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=755,
-  serialized_end=787,
+  serialized_start=791,
+  serialized_end=823,
 )
 _sym_db.RegisterEnumDescriptor(_MAINCONTROLSTATE)
 
@@ -55,8 +55,8 @@ _GNCCONTROLSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=789,
-  serialized_end=821,
+  serialized_start=825,
+  serialized_end=857,
 )
 _sym_db.RegisterEnumDescriptor(_GNCCONTROLSTATE)
 
@@ -234,36 +234,43 @@ _STATEFIELDREGISTRY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='fin_py_cmd', full_name='StateFieldRegistry.fin_py_cmd', index=14,
-      number=15, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      name='global_coords', full_name='StateFieldRegistry.global_coords', index=14,
+      number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='fin_ny_cmd', full_name='StateFieldRegistry.fin_ny_cmd', index=15,
+      name='fin_py_cmd', full_name='StateFieldRegistry.fin_py_cmd', index=15,
       number=16, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='fin_px_cmd', full_name='StateFieldRegistry.fin_px_cmd', index=16,
+      name='fin_ny_cmd', full_name='StateFieldRegistry.fin_ny_cmd', index=16,
       number=17, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='fin_nx_cmd', full_name='StateFieldRegistry.fin_nx_cmd', index=17,
+      name='fin_px_cmd', full_name='StateFieldRegistry.fin_px_cmd', index=17,
       number=18, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='lower_motor_cmd', full_name='StateFieldRegistry.lower_motor_cmd', index=18,
+      name='fin_nx_cmd', full_name='StateFieldRegistry.fin_nx_cmd', index=18,
       number=19, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lower_motor_cmd', full_name='StateFieldRegistry.lower_motor_cmd', index=19,
+      number=20, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -281,7 +288,7 @@ _STATEFIELDREGISTRY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=114,
-  serialized_end=753,
+  serialized_end=789,
 )
 
 _STATEFIELDREGISTRY.fields_by_name['mc_state'].enum_type = _MAINCONTROLSTATE
@@ -293,6 +300,7 @@ _STATEFIELDREGISTRY.fields_by_name['imu_acc_vec_f'].message_type = _SFVECTOR3F
 _STATEFIELDREGISTRY.fields_by_name['imu_gyr_vec'].message_type = _SFVECTOR3F
 _STATEFIELDREGISTRY.fields_by_name['imu_euler_vec'].message_type = _SFVECTOR4F
 _STATEFIELDREGISTRY.fields_by_name['imu_quat'].message_type = _SFVECTOR4F
+_STATEFIELDREGISTRY.fields_by_name['global_coords'].message_type = _SFVECTOR3F
 DESCRIPTOR.message_types_by_name['SFVector3f'] = _SFVECTOR3F
 DESCRIPTOR.message_types_by_name['SFVector4f'] = _SFVECTOR4F
 DESCRIPTOR.message_types_by_name['StateFieldRegistry'] = _STATEFIELDREGISTRY
