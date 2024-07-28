@@ -131,9 +131,24 @@ void DownlinkTask::execute()
     state_field_registry.target_mc_state = sfr_.target_mc_state;
     state_field_registry.gnc_state = sfr_.gnc_state;
     state_field_registry.target_gnc_state = sfr_.target_gnc_state;
-    lin_link_downlink_sfr(state_field_registry.global_coords,
-                          state_field_registry.has_global_coords,
-                          &sfr_.global_coords);
+    lin_link_downlink_sfr(state_field_registry.gnc_global_linear_pos_f,
+                          state_field_registry.has_gnc_global_linear_pos_f,
+                          &sfr_.gnc_global_linear_pos_f);
+    lin_link_downlink_sfr(state_field_registry.gnc_global_linear_vel_f,
+                          state_field_registry.has_gnc_global_linear_vel_f,
+                          &sfr_.gnc_global_linear_vel_f);
+    lin_link_downlink_sfr(state_field_registry.gnc_global_linear_acc_f,
+                          state_field_registry.has_gnc_global_linear_acc_f,
+                          &sfr_.gnc_global_linear_acc_f);
+    lin_link_downlink_sfr(state_field_registry.sim_global_linear_pos_f,
+                          state_field_registry.has_sim_global_linear_pos_f,
+                          &sfr_.sim_global_linear_pos_f);
+    lin_link_downlink_sfr(state_field_registry.sim_global_linear_vel_f,
+                          state_field_registry.has_sim_global_linear_vel_f,
+                          &sfr_.sim_global_linear_vel_f);
+    lin_link_downlink_sfr(state_field_registry.sim_global_linear_acc_f,
+                          state_field_registry.has_sim_global_linear_acc_f,
+                          &sfr_.sim_global_linear_acc_f);
     //[[[end]]]
 
     AirProto air_proto;

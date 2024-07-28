@@ -13,6 +13,7 @@
 #include <pwm_control_task.hpp>
 #include <state_estimator.hpp>
 #include <simulator_inject.hpp>
+#include <gnc_controller.hpp>
 
 class MainLoop : public Task<MainLoop>
 {
@@ -24,6 +25,7 @@ class MainLoop : public Task<MainLoop>
                MainControlSM,
                BlinkLedTask,
                DownlinkTask,
+               GncController,
                PwmControlTask,
                TimeTask>
         task_list_;

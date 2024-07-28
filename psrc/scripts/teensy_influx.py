@@ -66,7 +66,12 @@ def post_sfr(sfr: StateFieldRegistry):
     import psrc.sfr_gen.sfr_gen as sfr_gen
     sfr_gen.py_generate_all()
     ]]]'''
-    points.append(vec_measurement(sfr.global_coords, 'global_coords', time_point))
+    points.append(vec_measurement(sfr.gnc_global_linear_pos_f, 'gnc_global_linear_pos_f', time_point))
+    points.append(vec_measurement(sfr.gnc_global_linear_vel_f, 'gnc_global_linear_vel_f', time_point))
+    points.append(vec_measurement(sfr.gnc_global_linear_acc_f, 'gnc_global_linear_acc_f', time_point))
+    points.append(vec_measurement(sfr.sim_global_linear_pos_f, 'sim_global_linear_pos_f', time_point))
+    points.append(vec_measurement(sfr.sim_global_linear_vel_f, 'sim_global_linear_vel_f', time_point))
+    points.append(vec_measurement(sfr.sim_global_linear_acc_f, 'sim_global_linear_acc_f', time_point))
     point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
     point.field("mcl_control_cycle_num", sfr.mcl_control_cycle_num)
     point.field("mc_state", sfr.mc_state)

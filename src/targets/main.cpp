@@ -8,7 +8,7 @@
 #include <csignal>
 #include <globals.hpp>
 
-StateFields sfr = StateFields{0};
+StateFields sfr = StateFields{};
 MainLoop main_loop = MainLoop(sfr);
 
 std::atomic<bool> keepRunning(true);

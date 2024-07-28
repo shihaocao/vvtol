@@ -19,6 +19,14 @@ sfr_to_proto = {
     SfrType.LIN_VECTOR3F_T: 'SFVector3f'
 }
 
+sfr_to_header = {
+    SfrType.FLOAT_T: 'float',
+    SfrType.U64_T: 'uint64_t',
+    SfrType.MC_STATE_T: 'MainControl::State',
+    SfrType.GNC_STATE_T: 'GncControl::State',
+    SfrType.LIN_VECTOR3F_T: 'lin::Vector3f'
+}
+
 @dataclass
 class SfrItem():
     type: SfrType
@@ -61,7 +69,32 @@ SINGLE_ITEM_LIST = [
 VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'global_coords',
+        'gnc_global_linear_pos_f',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'gnc_global_linear_vel_f',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'gnc_global_linear_acc_f',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'sim_global_linear_pos_f',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'sim_global_linear_vel_f',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'sim_global_linear_acc_f',
         'lin_link_downlink_sfr'
     )
 ]
@@ -78,6 +111,13 @@ def downlink_generate_output(item: SfrItem):
 def downlink_generate_all_output():
     for item in ITEM_LIST:
         downlink_generate_output(item)
+
+def header_gen(item: SfrItem):
+    cog.outl(f'{sfr_to_header[item.type]} {item.name}{{}};')
+
+def header_gen_all():
+    for item in ITEM_LIST:
+        header_gen(item)
 
 def proto_generate(item: SfrItem, x: int):
     cog.outl(f'{sfr_to_proto[item.type]} {item.name} = {x};')

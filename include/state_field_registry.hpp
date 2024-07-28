@@ -18,19 +18,17 @@
 // enforce namspacing via prefixes
 struct StateFields
 {
-    float time_t_average_cycle_time_us = -1;
     int time_t_control_cycle_limit_ms = 100;
     int time_t_control_cycle_limit_us = time_t_control_cycle_limit_ms * 1000;
 
     uint32_t time_t_last_cycle_end_us = 0;
     uint64_t last_transition_ccno = 0;
-    uint64_t mcl_control_cycle_num = 0;
 
-    MainControl::State mc_state = MainControl::EMPTY;
-    MainControl::State target_mc_state = MainControl::EMPTY;
+    // MainControl::State mc_state = MainControl::EMPTY;
+    // MainControl::State target_mc_state = MainControl::EMPTY;
 
-    GncControl::State gnc_state = GncControl::State::EMPTY;
-    GncControl::State target_gnc_state = GncControl::State::EMPTY;
+    // GncControl::State gnc_state = GncControl::State::EMPTY;
+    // GncControl::State target_gnc_state = GncControl::State::EMPTY;
 
     Vector3f imu_linear_acc_vec_f{};
     Vector3f imu_acc_vec_f{};
@@ -38,9 +36,24 @@ struct StateFields
     Vector4f imu_euler_vec{};
     Vector4d imu_quat{};
 
-    // attitude estimator
-    // global coordinates
-    lin::Vector3f global_coords;
+    /*[[[cog
+    import cog
+    import psrc.sfr_gen.sfr_gen as sfr_gen
+    sfr_gen.header_gen_all()
+    ]]]*/
+    float time_t_average_cycle_time_us{};
+    uint64_t mcl_control_cycle_num{};
+    MainControl::State mc_state{};
+    MainControl::State target_mc_state{};
+    GncControl::State gnc_state{};
+    GncControl::State target_gnc_state{};
+    lin::Vector3f gnc_global_linear_pos_f{};
+    lin::Vector3f gnc_global_linear_vel_f{};
+    lin::Vector3f gnc_global_linear_acc_f{};
+    lin::Vector3f sim_global_linear_pos_f{};
+    lin::Vector3f sim_global_linear_vel_f{};
+    lin::Vector3f sim_global_linear_acc_f{};
+    //[[[end]]]
 
     float fin_py_cmd;
     float fin_ny_cmd;
