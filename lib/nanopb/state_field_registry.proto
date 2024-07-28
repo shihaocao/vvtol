@@ -41,9 +41,13 @@ message StateFieldRegistry {
     SFVector3f gnc_global_linear_pos_f = 29;
     SFVector3f gnc_global_linear_vel_f = 30;
     SFVector3f gnc_global_linear_acc_f = 31;
-    SFVector3f sim_global_linear_pos_f = 32;
-    SFVector3f sim_global_linear_vel_f = 33;
-    SFVector3f sim_global_linear_acc_f = 34;
+    SFVector3f gnc_global_quat = 32;
+    SFVector3f gnc_euler_angles = 33;
+    SFVector3f sim_global_linear_pos_f = 34;
+    SFVector3f sim_global_linear_vel_f = 35;
+    SFVector3f sim_global_linear_acc_f = 36;
+    SFVector3f sim_global_quat = 37;
+    SFVector3f sim_euler_angles = 38;
     //[[[end]]]
 
 }

@@ -24,6 +24,7 @@ NamedPipeManager npm("/tmp/vvtol_downlink");
 #endif
 
 #include <lin.hpp>
+#include <downlink_encoders.tpp>
 
 DownlinkTask::DownlinkTask(StateFields &sfr) : sfr_(sfr)
 {
@@ -63,29 +64,6 @@ bool encode_float_array(pb_ostream_t *stream, const pb_field_t *field, void *con
     return true; // Encoding successful
 }
 
-bool encode_lin_float_array(pb_ostream_t *stream, const pb_field_t *field, void *const *arg)
-{
-    // Retrieve the array passed as 'arg'
-    const lin::Vector3f *array_p = static_cast<lin::Vector3f *>(*arg);
-    const lin::Vector3f &array = *array_p;
-    // Write each float element to the stream
-    for (int i = 0; i < 3; i++)
-    {
-        const float element = array[i];
-        if (!pb_encode_tag_for_field(stream, field))
-        {
-            return false; // Encoding failure: unable to write the tag
-        }
-
-        if (!pb_encode_fixed32(stream, &element))
-        {
-            return false; // Encoding failure: unable to write the float value
-        }
-    }
-
-    return true; // Encoding successful
-}
-
 static bool decode_float_array(pb_istream_t *stream, const pb_field_t *field, void **arg)
 {
     return false;
@@ -95,13 +73,6 @@ static void link_downlink_sfr(SFVector3f &field, bool &has_field, Vector3f *sfr_
 {
     field.elements.arg = sfr_field_addr;
     field.elements.funcs.encode = encode_float_array;
-    has_field = true;
-}
-
-static void lin_link_downlink_sfr(SFVector3f &field, bool &has_field, lin::Vector3f *sfr_field_addr)
-{
-    field.elements.arg = sfr_field_addr;
-    field.elements.funcs.encode = encode_lin_float_array;
     has_field = true;
 }
 
@@ -146,6 +117,12 @@ void DownlinkTask::execute()
     lin_link_downlink_sfr(state_field_registry.gnc_global_linear_acc_f,
                           state_field_registry.has_gnc_global_linear_acc_f,
                           &sfr_.gnc_global_linear_acc_f);
+    lin_link_downlink_sfr(state_field_registry.gnc_global_quat,
+                          state_field_registry.has_gnc_global_quat,
+                          &sfr_.gnc_global_quat);
+    lin_link_downlink_sfr(state_field_registry.gnc_euler_angles,
+                          state_field_registry.has_gnc_euler_angles,
+                          &sfr_.gnc_euler_angles);
     lin_link_downlink_sfr(state_field_registry.sim_global_linear_pos_f,
                           state_field_registry.has_sim_global_linear_pos_f,
                           &sfr_.sim_global_linear_pos_f);
@@ -155,6 +132,12 @@ void DownlinkTask::execute()
     lin_link_downlink_sfr(state_field_registry.sim_global_linear_acc_f,
                           state_field_registry.has_sim_global_linear_acc_f,
                           &sfr_.sim_global_linear_acc_f);
+    lin_link_downlink_sfr(state_field_registry.sim_global_quat,
+                          state_field_registry.has_sim_global_quat,
+                          &sfr_.sim_global_quat);
+    lin_link_downlink_sfr(state_field_registry.sim_euler_angles,
+                          state_field_registry.has_sim_euler_angles,
+                          &sfr_.sim_euler_angles);
     //[[[end]]]
 
     AirProto air_proto;

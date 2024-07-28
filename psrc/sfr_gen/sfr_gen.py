@@ -10,12 +10,14 @@ class SfrType(Enum):
     MC_STATE_T = 4
     GNC_STATE_T = 5
     LIN_VECTOR3F_T = 6
+    LIN_VECTOR4F_T = 6
 
 sfr_to_proto = {
     SfrType.FLOAT_T: 'float',
     SfrType.U64_T: 'uint64',
     SfrType.MC_STATE_T: 'int32',
     SfrType.GNC_STATE_T: 'int32',
+    SfrType.LIN_VECTOR4F_T: 'SFVector4f',
     SfrType.LIN_VECTOR3F_T: 'SFVector3f'
 }
 
@@ -24,6 +26,7 @@ sfr_to_header = {
     SfrType.U64_T: 'uint64_t',
     SfrType.MC_STATE_T: 'MainControl::State',
     SfrType.GNC_STATE_T: 'GncControl::State',
+    SfrType.LIN_VECTOR4F_T: 'lin::Vector4f',
     SfrType.LIN_VECTOR3F_T: 'lin::Vector3f'
 }
 
@@ -93,6 +96,16 @@ VEC_ITEM_LIST = [
         'lin_link_downlink_sfr'
     ),
     SfrItem(
+        SfrType.LIN_VECTOR4F_T,
+        'gnc_global_quat',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'gnc_euler_angles',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'sim_global_linear_pos_f',
         'lin_link_downlink_sfr'
@@ -105,6 +118,16 @@ VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'sim_global_linear_acc_f',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR4F_T,
+        'sim_global_quat',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'sim_euler_angles',
         'lin_link_downlink_sfr'
     )
 ]

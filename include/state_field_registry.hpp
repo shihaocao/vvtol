@@ -54,9 +54,13 @@ struct StateFields
     lin::Vector3f gnc_global_linear_pos_f{};
     lin::Vector3f gnc_global_linear_vel_f{};
     lin::Vector3f gnc_global_linear_acc_f{};
+    lin::Vector3f gnc_global_quat{};
+    lin::Vector3f gnc_euler_angles{};
     lin::Vector3f sim_global_linear_pos_f{};
     lin::Vector3f sim_global_linear_vel_f{};
     lin::Vector3f sim_global_linear_acc_f{};
+    lin::Vector3f sim_global_quat{};
+    lin::Vector3f sim_euler_angles{};
     //[[[end]]]
 
     float fin_py_cmd;
