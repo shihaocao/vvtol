@@ -1,1 +1,0 @@
-mavgen.py --lang=Python --wire-protocol=2.0 -o psrc/mavgen/sfr_mavlink.py include/mav/sfr.xml

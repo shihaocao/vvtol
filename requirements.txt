@@ -1,5 +1,4 @@
 protobuf==3.20.*
-pymavlink
 pyserial
 python-dotenv
 cogapp
