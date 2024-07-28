@@ -5,6 +5,7 @@
 #include <type_defs.hpp>
 
 #include <lin.hpp>
+#include <vvtol_constants.hpp>
 
 // Design idea: do not nest structs inside structs, just pass around a flat SFR
 // all control logic should read from the SFR
@@ -20,6 +21,7 @@ struct StateFields
 {
     int time_t_control_cycle_limit_ms = 100;
     int time_t_control_cycle_limit_us = time_t_control_cycle_limit_ms * 1000;
+    float delta_t_s = time_t_control_cycle_limit_ms * S_IN_MS;
 
     uint32_t time_t_last_cycle_end_us = 0;
     uint64_t last_transition_ccno = 0;
@@ -47,6 +49,8 @@ struct StateFields
     MainControl::State target_mc_state{};
     GncControl::State gnc_state{};
     GncControl::State target_gnc_state{};
+    lin::Vector3f gnc_global_target_error_f{};
+    lin::Vector3f gnc_global_target_pos_f{};
     lin::Vector3f gnc_global_linear_pos_f{};
     lin::Vector3f gnc_global_linear_vel_f{};
     lin::Vector3f gnc_global_linear_acc_f{};

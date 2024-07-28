@@ -23,5 +23,6 @@ public:
 
     void execute();
 
-    lin::Vector4f body_quat_;
+    lin::Vector3f previous_pos_error_;
+    lin::Vector3f integral_;
 };

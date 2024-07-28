@@ -69,6 +69,16 @@ SINGLE_ITEM_LIST = [
 VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
+        'gnc_global_target_error_f',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'gnc_global_target_pos_f',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
         'gnc_global_linear_pos_f',
         'lin_link_downlink_sfr'
     ),

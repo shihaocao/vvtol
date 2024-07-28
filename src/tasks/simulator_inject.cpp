@@ -17,7 +17,7 @@ SimulatorInject::SimulatorInject(StateFields &sfr) : sfr_(sfr)
 
 void SimulatorInject::setup()
 {
-    sfr_.sim_global_linear_pos_f = lin::Vector3f{0.0, 1.0, 2.0};
+    sfr_.sim_global_linear_pos_f = lin::Vector3f{0.0, 0.0, 0.0};
     // sfr_.time_t_control_cycle_limit_ms = 100;
 }
 
@@ -25,10 +25,13 @@ void SimulatorInject::execute()
 {
 
     lin::Vector3f random_buffetting_acc = lin::gaussians<lin::Vector3f>(lin_rand, 3, 1);
-    sfr_.sim_global_linear_acc_f = random_buffetting_acc;
+    sfr_.sim_global_linear_acc_f = random_buffetting_acc + sfr_.gnc_global_linear_acc_f;
 
     const float delta_t_s = float(sfr_.time_t_control_cycle_limit_ms) * S_IN_MS;
     sfr_.sim_global_linear_vel_f = sfr_.sim_global_linear_vel_f + sfr_.sim_global_linear_acc_f * delta_t_s;
-    std::cout << "Delta: " << delta_t_s << " " << sfr_.sim_global_linear_vel_f[0] << " " << sfr_.sim_global_linear_vel_f[1] << std::endl;
+    // std::cout << "Delta: " << delta_t_s << " " << sfr_.sim_global_linear_vel_f[0] << " " << sfr_.sim_global_linear_vel_f[1] << std::endl;
     sfr_.sim_global_linear_pos_f = sfr_.sim_global_linear_pos_f + sfr_.sim_global_linear_vel_f * delta_t_s;
+
+    // directly inject state
+    sfr_.gnc_global_linear_pos_f = sfr_.sim_global_linear_pos_f;
 }
