@@ -18,7 +18,7 @@
 // enforce namspacing via prefixes
 struct StateFields
 {
-    float time_t_average_cucle_time_us = -1;
+    float time_t_average_cycle_time_us = -1;
     int time_t_control_cycle_limit_ms = 100;
     int time_t_control_cycle_limit_us = time_t_control_cycle_limit_ms * 1000;
 

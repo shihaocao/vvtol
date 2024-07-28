@@ -57,15 +57,28 @@ def post_sfr(sfr: StateFieldRegistry):
     time_point = time.time_ns()
 
     # Create a point with the vehicle ID
+    # point.field("mcl_control_cycle_number", sfr.mcl_control_cycle_num)
+    # point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
+
     point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
-    point.field("mcl_control_cycle_number", sfr.mcl_control_cycle_num)
+
+    '''[[[cog
+    import psrc.sfr_gen.sfr_gen as sfr_gen
+    sfr_gen.py_generate_all()
+    ]]]'''
+    points.append(vec_measurement(sfr.global_coords, 'global_coords', time_point))
     point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
+    point.field("mcl_control_cycle_num", sfr.mcl_control_cycle_num)
+    point.field("mc_state", sfr.mc_state)
+    point.field("target_mc_state", sfr.target_mc_state)
+    point.field("gnc_state", sfr.gnc_state)
+    point.field("target_gnc_state", sfr.target_gnc_state)
+    #[[[end]]]
     point.time(time_point)  # Use current time in nanoseconds
     points.append(point)
 
     points.append(vec_measurement(sfr.imu_gyr_vec, 'imu_gyr_vec', time_point))
     points.append(vec_measurement(sfr.imu_acc_vec_f, 'imu_acc_vec_f', time_point))
-    points.append(vec_measurement(sfr.global_coords, 'global_coords', time_point))
 
     write_api.write(bucket=bucket, org=org, record=points)
 

@@ -125,6 +125,12 @@ void DownlinkTask::execute()
     import psrc.sfr_gen.sfr_gen as sfr_gen
     sfr_gen.downlink_generate_all_output()
     ]]]*/
+    state_field_registry.time_t_average_cycle_time_us = sfr_.time_t_average_cycle_time_us;
+    state_field_registry.mcl_control_cycle_num = sfr_.mcl_control_cycle_num;
+    state_field_registry.mc_state = sfr_.mc_state;
+    state_field_registry.target_mc_state = sfr_.target_mc_state;
+    state_field_registry.gnc_state = sfr_.gnc_state;
+    state_field_registry.target_gnc_state = sfr_.target_gnc_state;
     lin_link_downlink_sfr(state_field_registry.global_coords,
                           state_field_registry.has_global_coords,
                           &sfr_.global_coords);

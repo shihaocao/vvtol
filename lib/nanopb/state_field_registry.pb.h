@@ -9,17 +9,6 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
-/* Enum definitions */
-/* Assuming the definition of MainControl::State enum */
-typedef enum _MainControlState {
-    MainControlState_MC_EMPTY = 0 /* Protobuf enums must start with 0 */
-} MainControlState;
-
-/* Assuming the definition of GncControl::State enum */
-typedef enum _GncControlState {
-    GncControlState_GNC_EMPTY = 0 /* Again, start with 0 */
-} GncControlState;
-
 /* Struct definitions */
 typedef struct _SFVector3f {
     pb_callback_t elements;
@@ -30,15 +19,9 @@ typedef struct _SFVector4f {
 } SFVector4f;
 
 typedef struct _StateFieldRegistry {
-    float time_t_average_cycle_time_us;
     int32_t time_t_control_cycle_limit_us;
     uint32_t time_t_last_cycle_end_us;
     uint64_t last_transition_ccno;
-    uint64_t mcl_control_cycle_num;
-    MainControlState mc_state;
-    MainControlState target_mc_state;
-    GncControlState gnc_state;
-    GncControlState target_gnc_state;
     bool has_imu_linear_acc_vec_f;
     SFVector3f imu_linear_acc_vec_f;
     bool has_imu_acc_vec_f;
@@ -49,13 +32,23 @@ typedef struct _StateFieldRegistry {
     SFVector4f imu_euler_vec;
     bool has_imu_quat;
     SFVector4f imu_quat;
-    bool has_global_coords;
-    SFVector3f global_coords;
     float fin_py_cmd;
     float fin_ny_cmd;
     float fin_px_cmd;
     float fin_nx_cmd;
     float lower_motor_cmd;
+    /* [[[cog
+import psrc.sfr_gen.sfr_gen as sfr_gen
+sfr_gen.proto_generate_all()
+]]] */
+    float time_t_average_cycle_time_us;
+    uint64_t mcl_control_cycle_num;
+    int32_t mc_state;
+    int32_t target_mc_state;
+    int32_t gnc_state;
+    int32_t target_gnc_state;
+    bool has_global_coords;
+    SFVector3f global_coords; /* [[[end]]] */
 } StateFieldRegistry;
 
 
@@ -63,54 +56,37 @@ typedef struct _StateFieldRegistry {
 extern "C" {
 #endif
 
-/* Helper constants for enums */
-#define _MainControlState_MIN MainControlState_MC_EMPTY
-#define _MainControlState_MAX MainControlState_MC_EMPTY
-#define _MainControlState_ARRAYSIZE ((MainControlState)(MainControlState_MC_EMPTY+1))
-
-#define _GncControlState_MIN GncControlState_GNC_EMPTY
-#define _GncControlState_MAX GncControlState_GNC_EMPTY
-#define _GncControlState_ARRAYSIZE ((GncControlState)(GncControlState_GNC_EMPTY+1))
-
-
-
-#define StateFieldRegistry_mc_state_ENUMTYPE MainControlState
-#define StateFieldRegistry_target_mc_state_ENUMTYPE MainControlState
-#define StateFieldRegistry_gnc_state_ENUMTYPE GncControlState
-#define StateFieldRegistry_target_gnc_state_ENUMTYPE GncControlState
-
-
 /* Initializer values for message structs */
 #define SFVector3f_init_default                  {{{NULL}, NULL}}
 #define SFVector4f_init_default                  {{{NULL}, NULL}}
-#define StateFieldRegistry_init_default          {0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector4f_init_default, false, SFVector3f_init_default, 0, 0, 0, 0, 0}
+#define StateFieldRegistry_init_default          {0, 0, 0, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector4f_init_default, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_default}
 #define SFVector3f_init_zero                     {{{NULL}, NULL}}
 #define SFVector4f_init_zero                     {{{NULL}, NULL}}
-#define StateFieldRegistry_init_zero             {0, 0, 0, 0, 0, _MainControlState_MIN, _MainControlState_MIN, _GncControlState_MIN, _GncControlState_MIN, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector4f_init_zero, false, SFVector3f_init_zero, 0, 0, 0, 0, 0}
+#define StateFieldRegistry_init_zero             {0, 0, 0, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector4f_init_zero, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_zero}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define SFVector3f_elements_tag                  1
 #define SFVector4f_elements_tag                  1
-#define StateFieldRegistry_time_t_average_cycle_time_us_tag 1
 #define StateFieldRegistry_time_t_control_cycle_limit_us_tag 2
 #define StateFieldRegistry_time_t_last_cycle_end_us_tag 3
 #define StateFieldRegistry_last_transition_ccno_tag 4
-#define StateFieldRegistry_mcl_control_cycle_num_tag 5
-#define StateFieldRegistry_mc_state_tag          6
-#define StateFieldRegistry_target_mc_state_tag   7
-#define StateFieldRegistry_gnc_state_tag         8
-#define StateFieldRegistry_target_gnc_state_tag  9
 #define StateFieldRegistry_imu_linear_acc_vec_f_tag 10
 #define StateFieldRegistry_imu_acc_vec_f_tag     11
 #define StateFieldRegistry_imu_gyr_vec_tag       12
 #define StateFieldRegistry_imu_euler_vec_tag     13
 #define StateFieldRegistry_imu_quat_tag          14
-#define StateFieldRegistry_global_coords_tag     15
 #define StateFieldRegistry_fin_py_cmd_tag        16
 #define StateFieldRegistry_fin_ny_cmd_tag        17
 #define StateFieldRegistry_fin_px_cmd_tag        18
 #define StateFieldRegistry_fin_nx_cmd_tag        19
 #define StateFieldRegistry_lower_motor_cmd_tag   20
+#define StateFieldRegistry_time_t_average_cycle_time_us_tag 21
+#define StateFieldRegistry_mcl_control_cycle_num_tag 22
+#define StateFieldRegistry_mc_state_tag          23
+#define StateFieldRegistry_target_mc_state_tag   24
+#define StateFieldRegistry_gnc_state_tag         25
+#define StateFieldRegistry_target_gnc_state_tag  26
+#define StateFieldRegistry_global_coords_tag     27
 
 /* Struct field encoding specification for nanopb */
 #define SFVector3f_FIELDLIST(X, a) \
@@ -124,26 +100,26 @@ X(a, CALLBACK, REPEATED, FLOAT,    elements,          1)
 #define SFVector4f_DEFAULT NULL
 
 #define StateFieldRegistry_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, FLOAT,    time_t_average_cycle_time_us,   1) \
 X(a, STATIC,   SINGULAR, INT32,    time_t_control_cycle_limit_us,   2) \
 X(a, STATIC,   SINGULAR, UINT32,   time_t_last_cycle_end_us,   3) \
 X(a, STATIC,   SINGULAR, UINT64,   last_transition_ccno,   4) \
-X(a, STATIC,   SINGULAR, UINT64,   mcl_control_cycle_num,   5) \
-X(a, STATIC,   SINGULAR, UENUM,    mc_state,          6) \
-X(a, STATIC,   SINGULAR, UENUM,    target_mc_state,   7) \
-X(a, STATIC,   SINGULAR, UENUM,    gnc_state,         8) \
-X(a, STATIC,   SINGULAR, UENUM,    target_gnc_state,   9) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_linear_acc_vec_f,  10) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_acc_vec_f,    11) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_gyr_vec,      12) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_euler_vec,    13) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_quat,         14) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  global_coords,    15) \
 X(a, STATIC,   SINGULAR, FLOAT,    fin_py_cmd,       16) \
 X(a, STATIC,   SINGULAR, FLOAT,    fin_ny_cmd,       17) \
 X(a, STATIC,   SINGULAR, FLOAT,    fin_px_cmd,       18) \
 X(a, STATIC,   SINGULAR, FLOAT,    fin_nx_cmd,       19) \
-X(a, STATIC,   SINGULAR, FLOAT,    lower_motor_cmd,  20)
+X(a, STATIC,   SINGULAR, FLOAT,    lower_motor_cmd,  20) \
+X(a, STATIC,   SINGULAR, FLOAT,    time_t_average_cycle_time_us,  21) \
+X(a, STATIC,   SINGULAR, UINT64,   mcl_control_cycle_num,  22) \
+X(a, STATIC,   SINGULAR, INT32,    mc_state,         23) \
+X(a, STATIC,   SINGULAR, INT32,    target_mc_state,  24) \
+X(a, STATIC,   SINGULAR, INT32,    gnc_state,        25) \
+X(a, STATIC,   SINGULAR, INT32,    target_gnc_state,  26) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  global_coords,    27)
 #define StateFieldRegistry_CALLBACK NULL
 #define StateFieldRegistry_DEFAULT NULL
 #define StateFieldRegistry_imu_linear_acc_vec_f_MSGTYPE SFVector3f

@@ -1,3 +1,3 @@
 . scripts/pb_build.sh
-. cog.sh
+. scripts/cog.sh
 pio run -e dev
