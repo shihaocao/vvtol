@@ -250,3 +250,12 @@ Today I really want to get started on doing some GNC stuff for real. I think the
 I want `sfr_gen.py` because I am tired of adding one state field and having to update a million files.
 
 Secondly I don't have any hardware on me so I might as well build out my HOOTL for real. To do this I am adding a `simulator_injector` task. I plan to inject state here as well as propagate state.
+
+## 07/28
+
+I put in an initial control loop, and it targets the target coordinates "ok", I spoke with Govind, and I think my first initial target should be a set of cascading PID control loops. I think I want to do Pos Error -> Attitude Error -> Attitude Rate Error as my cascading loop.
+
+Here you can see a photo of my initial control loops in action:
+![PID Loops](documentation/initial_pid_loop.png "Initial PID Loop")
+
+Next I am trying to work on visualizing my orientation in real time, I think python three.js via Jupyter notebook is the move.

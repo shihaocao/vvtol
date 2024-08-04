@@ -1,6 +1,14 @@
-protobuf==3.20.*
 pyserial
 python-dotenv
 cogapp
 setuptools
+pygame
+numpy
+scipy
+PyOpenGl
+pythreejs
+jupyter
+platformio
+influxdb_client
+protobuf==3.20.*
 -e ./psrc
