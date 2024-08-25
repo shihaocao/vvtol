@@ -1,0 +1,1 @@
+this jupyter notebook was useful but very quickly I ran into issues, I decided I needed a full three.js
