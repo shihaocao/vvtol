@@ -11,4 +11,5 @@ jupyter
 platformio
 influxdb_client
 protobuf==3.20.*
+nanopb
 -e ./psrc

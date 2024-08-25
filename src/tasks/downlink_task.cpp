@@ -102,6 +102,9 @@ void DownlinkTask::execute()
     state_field_registry.target_mc_state = sfr_.target_mc_state;
     state_field_registry.gnc_state = sfr_.gnc_state;
     state_field_registry.target_gnc_state = sfr_.target_gnc_state;
+    lin_link_downlink_sfr(state_field_registry.imu_linear_acc_vec,
+                          state_field_registry.has_imu_linear_acc_vec,
+                          &sfr_.imu_linear_acc_vec);
     lin_link_downlink_sfr(state_field_registry.gnc_global_target_error_f,
                           state_field_registry.has_gnc_global_target_error_f,
                           &sfr_.gnc_global_target_error_f);

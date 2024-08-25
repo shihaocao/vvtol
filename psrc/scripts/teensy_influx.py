@@ -66,6 +66,7 @@ def post_sfr(sfr: StateFieldRegistry):
     import psrc.sfr_gen.sfr_gen as sfr_gen
     sfr_gen.py_generate_all()
     ]]]'''
+    points.append(vec_measurement(sfr.imu_linear_acc_vec, 'imu_linear_acc_vec', time_point))
     points.append(vec_measurement(sfr.gnc_global_target_error_f, 'gnc_global_target_error_f', time_point))
     points.append(vec_measurement(sfr.gnc_global_target_pos_f, 'gnc_global_target_pos_f', time_point))
     points.append(vec_measurement(sfr.gnc_global_linear_pos_f, 'gnc_global_linear_pos_f', time_point))

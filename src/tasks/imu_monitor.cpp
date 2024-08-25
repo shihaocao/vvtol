@@ -15,7 +15,11 @@
 #endif
 
 #ifndef NATIVE
+#ifndef T40
 Adafruit_BNO055 bno_imu = Adafruit_BNO055(55, 0x28, &Wire2);
+#else
+Adafruit_BNO055 bno_imu = Adafruit_BNO055(55, 0x28, &Wire1);
+#endif
 #endif
 
 ImuMonitor::ImuMonitor(StateFields &sfr) : sfr_(sfr)

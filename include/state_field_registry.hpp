@@ -19,7 +19,7 @@
 // enforce namspacing via prefixes
 struct StateFields
 {
-    int time_t_control_cycle_limit_ms = 100;
+    int time_t_control_cycle_limit_ms = CONTROL_CYCLE_MS;
     int time_t_control_cycle_limit_us = time_t_control_cycle_limit_ms * 1000;
     float delta_t_s = time_t_control_cycle_limit_ms * S_IN_MS;
 
@@ -32,7 +32,7 @@ struct StateFields
     // GncControl::State gnc_state = GncControl::State::EMPTY;
     // GncControl::State target_gnc_state = GncControl::State::EMPTY;
 
-    Vector3f imu_linear_acc_vec_f{};
+    // Vector3f imu_linear_acc_vec_f{};
     Vector3f imu_acc_vec_f{};
     Vector3f imu_gyr_vec{};
     Vector4f imu_euler_vec{};
@@ -49,6 +49,7 @@ struct StateFields
     MainControl::State target_mc_state{};
     GncControl::State gnc_state{};
     GncControl::State target_gnc_state{};
+    lin::Vector3f imu_linear_acc_vec{};
     lin::Vector3f gnc_global_target_error_f{};
     lin::Vector3f gnc_global_target_pos_f{};
     lin::Vector3f gnc_global_linear_pos_f{};

@@ -32,6 +32,10 @@ void SimulatorInject::execute()
     // std::cout << "Delta: " << delta_t_s << " " << sfr_.sim_global_linear_vel_f[0] << " " << sfr_.sim_global_linear_vel_f[1] << std::endl;
     sfr_.sim_global_linear_pos_f = sfr_.sim_global_linear_pos_f + sfr_.sim_global_linear_vel_f * delta_t_s;
 
-    // directly inject state
-    sfr_.gnc_global_linear_pos_f = sfr_.sim_global_linear_pos_f;
+    // Model noise
+    lin::Vector3f random_noise_acc = lin::gaussians<lin::Vector3f>(lin_rand, 3, 1);
+
+    // directly inject state into sensor readings
+    sfr_.imu_linear_acc_vec = sfr_.sim_global_linear_acc_f + random_noise_acc;
+    // sfr_.gnc_global_linear_pos_f = sfr_.sim_global_linear_pos_f;
 }

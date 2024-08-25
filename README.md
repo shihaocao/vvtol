@@ -259,3 +259,7 @@ Here you can see a photo of my initial control loops in action:
 ![PID Loops](documentation/initial_pid_loop.png "Initial PID Loop")
 
 Next I am trying to work on visualizing my orientation in real time, I think python three.js via Jupyter notebook is the move.
+
+## 08/11
+
+Working on my project on the plane right now, but it looks like I deleted my venv at a certain point, and re-pip installed into a new venv, but it looks like my `pb_build.sh` script requires a python nanopb package, which I don't have installed since I didn't update my requirements.txt so then when I re pip installed I didn't get nanopb. Sad.

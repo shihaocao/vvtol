@@ -19,4 +19,6 @@ void StateEstimator::setup()
 
 void StateEstimator::execute()
 {
+    sfr_.gnc_global_linear_vel_f = sfr_.gnc_global_linear_vel_f + sfr_.imu_linear_acc_vec * sfr_.delta_t_s;
+    sfr_.gnc_global_linear_pos_f = sfr_.gnc_global_linear_pos_f + sfr_.gnc_global_linear_vel_f * sfr_.delta_t_s;
 }
