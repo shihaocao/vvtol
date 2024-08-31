@@ -4,7 +4,7 @@ import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { PanelDataErrorView } from '@grafana/runtime';
-import { setupThreeJS } from './useThreeJS'; // Correct import from a local TypeScript file
+import { setupThreeJS } from './useThreeJS';
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -40,7 +40,20 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     if (canvasRef.current) {
       setupThreeJS(canvasRef.current, width, height, theme.colors.primary.main);
     }
-  }, [width, height, theme.colors.primary.main]);
+
+    // Log data fields
+    console.log('Data series:', data.series);
+    data.series.forEach((series, index) => {
+      console.log(`Series ${index}:`);
+      console.log('- Name:', series.name);
+      console.log('- Fields:', series.fields.map(field => ({
+        name: field.name,
+        type: field.type,
+        values: field.values.toArray(),
+      })));
+    });
+
+  }, [data, width, height, theme.colors.primary.main]);
 
   if (data.series.length === 0) {
     return <PanelDataErrorView fieldConfig={fieldConfig} panelId={id} data={data} needsStringField />;
@@ -57,12 +70,6 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
       )}
     >
       <canvas ref={canvasRef} className={styles.canvas} width={width} height={height}></canvas>
-      {/* <div className={styles.textBox}>
-        {options.showSeriesCount && (
-          <div data-testid="simple-panel-series-counter">Number of series: {data.series.length}</div>
-        )}
-        <div>Text option value: {options.text}</div>
-      </div> */}
     </div>
   );
 };
