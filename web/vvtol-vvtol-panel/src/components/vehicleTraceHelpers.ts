@@ -17,8 +17,10 @@ export function drawVehicleTrace(scene: THREE.Scene, coordinates: Coordinate[]):
     const t = index / (coordinates.length - 1);
 
     // Convert start and end colors to HSL
-    const startHSL = startColor.getHSL({});
-    const endHSL = endColor.getHSL({});
+    const startHSL = { h: 0, s: 0, l: 0 };
+    const endHSL = { h: 0, s: 0, l: 0 };
+    startColor.getHSL(startHSL);
+    endColor.getHSL(endHSL);
 
     // Interpolate across HSL
     const interpolatedHue = startHSL.h + t * (endHSL.h - startHSL.h);
