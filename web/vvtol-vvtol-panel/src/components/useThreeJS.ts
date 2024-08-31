@@ -12,7 +12,7 @@ export const setupThreeJS = (
   scene.background = new THREE.Color(0x000000); // Black background
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-  camera.position.z = 5;
+  camera.position.set(3, 3, 3);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(width, height);

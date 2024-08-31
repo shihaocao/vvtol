@@ -263,3 +263,22 @@ Next I am trying to work on visualizing my orientation in real time, I think pyt
 ## 08/11
 
 Working on my project on the plane right now, but it looks like I deleted my venv at a certain point, and re-pip installed into a new venv, but it looks like my `pb_build.sh` script requires a python nanopb package, which I don't have installed since I didn't update my requirements.txt so then when I re pip installed I didn't get nanopb. Sad.
+
+## 08/25
+
+I learned a bit of threejs and created this render:
+![Threejs](documentation/vvtol_threejs_render.png "Threejs Render")
+
+I initiall tried writing things in python (jupyternotebook) but very quickly realized that without it being data driven from the grafana, it would be substantially less useful. Also, you can't render text in pythonthreejs, so that sucks.
+
+ThreeJS seems really powerful and very easy to get started with, the difficult part will now be to get it hooked into a grafana plugin. That is proving a bit difficult.
+
+https://grafana.com/developers/plugin-tools/
+
+## 08/30
+
+I got it to run inside grafana! It really wasn't that bad, just had to start from the example, and just add things one by one.
+
+![Threejs Render as panel plugin](documentation/vvtol_3js_inside_grafana.png "Threejs Render as panel plugin")
+
+Now the challenge will be to pull real data.

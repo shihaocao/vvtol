@@ -57,12 +57,12 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
       )}
     >
       <canvas ref={canvasRef} className={styles.canvas} width={width} height={height}></canvas>
-      <div className={styles.textBox}>
+      {/* <div className={styles.textBox}>
         {options.showSeriesCount && (
           <div data-testid="simple-panel-series-counter">Number of series: {data.series.length}</div>
         )}
         <div>Text option value: {options.text}</div>
-      </div>
+      </div> */}
     </div>
   );
 };
