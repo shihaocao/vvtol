@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createAxes } from './axesHelpers'; // Import the createAxes function
+import { drawVehicleTrace, generateCoordinates } from './vehicleTraceHelpers'; // Import the vehicle trace functions
 
 export const setupThreeJS = (
   canvas: HTMLCanvasElement,
@@ -12,7 +13,7 @@ export const setupThreeJS = (
   scene.background = new THREE.Color(0x000000); // Black background
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-  camera.position.set(3, 3, 3);
+  camera.position.z = 5;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(width, height);
@@ -42,6 +43,14 @@ export const setupThreeJS = (
     length: 20,
     graduationStep: 2,
   });
+
+  // Generate coordinates and draw vehicle trace
+  const startCoord = { x: 0, y: 0, z: 0 };
+  const endCoord = { x: 1, y: 9, z: 9 };
+  const n_points = 10;
+
+  const coordinates = generateCoordinates(startCoord, endCoord, n_points);
+  drawVehicleTrace(scene, coordinates);
 
   // Animation loop
   const animate = (): void => {
