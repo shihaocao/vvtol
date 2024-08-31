@@ -5,6 +5,7 @@ import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { PanelDataErrorView } from '@grafana/runtime';
 import { setupThreeJS } from './useThreeJS';
+import { generateCoordinatesFromData, drawVehicleTrace, generateCoordinates } from './vehicleTraceHelpers';
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -37,22 +38,15 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (canvasRef.current) {
-      setupThreeJS(canvasRef.current, width, height, theme.colors.primary.main);
+    if (canvasRef.current && data.series.length > 0) {
+      const scene = setupThreeJS(canvasRef.current, width, height, theme.colors.primary.main);
+      
+      // Generate coordinates from the data
+      // const coordinates = generateCoordinatesFromData(data.series, 50); // Adjust the number of sample points as needed
+      const coordinates = generateCoordinates({x: 1, y: 2, z: 3}, {x: 4, y: 6, z: 6}, 5);
+      // Draw the vehicle trace
+      drawVehicleTrace(scene, coordinates);
     }
-
-    // Log data fields
-    console.log('Data series:', data.series);
-    data.series.forEach((series, index) => {
-      console.log(`Series ${index}:`);
-      console.log('- Name:', series.name);
-      console.log('- Fields:', series.fields.map(field => ({
-        name: field.name,
-        type: field.type,
-        values: field.values.toArray(),
-      })));
-    });
-
   }, [data, width, height, theme.colors.primary.main]);
 
   if (data.series.length === 0) {

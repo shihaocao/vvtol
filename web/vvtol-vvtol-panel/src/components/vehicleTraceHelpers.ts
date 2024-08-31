@@ -1,10 +1,71 @@
 import * as THREE from 'three';
 
+
 interface Coordinate {
-  x: number;
-  y: number;
-  z: number;
+    x: number;
+    y: number;
+    z: number;
 }
+  
+interface DataPoint {
+    time: number;
+    x: number | null;
+    y: number | null;
+    z: number | null;
+}
+
+export function generateCoordinatesFromData(data: any[], numSamplePoints: number): Coordinate[] {
+    // Step 1: Process the raw data
+    const processedData: DataPoint[] = [];
+    const timeSet = new Set<number>();
+
+    data.forEach(series => {
+        const field = series.fields.find((f: any) => f.name === '_value');
+        const timeField = series.fields.find((f: any) => f.name === '_time');
+        const valueType = series.fields.find((f: any) => f.name === '_field').values.toArray()[0];
+
+        field.values.toArray().forEach((value: number, index: number) => {
+        const time = new Date(timeField.values.toArray()[index]).getTime();
+        timeSet.add(time);
+
+        let existingPoint = processedData.find(p => p.time === time);
+        if (!existingPoint) {
+            existingPoint = { time, x: null, y: null, z: null };
+            processedData.push(existingPoint);
+        }
+
+        existingPoint[valueType as keyof Coordinate] = value;
+        });
+    });
+
+    // Step 2: Sort the processed data by time
+    processedData.sort((a, b) => a.time - b.time);
+
+    // Step 3: Interpolate missing values
+    processedData.forEach((point, index) => {
+        if (index === 0) {return;}
+        const prevPoint = processedData[index - 1];
+        ['x', 'y', 'z'].forEach(coord => {
+        if (point[coord as keyof Coordinate] === null) {
+            point[coord as keyof Coordinate] = prevPoint[coord as keyof Coordinate];
+        }
+        });
+    });
+
+    // Step 4: Sample the data
+    const coordinates: Coordinate[] = [];
+    const step = Math.max(1, Math.floor(processedData.length / numSamplePoints));
+
+    for (let i = 0; i < processedData.length && coordinates.length < numSamplePoints; i += step) {
+        const point = processedData[i];
+        if (point.x !== null && point.y !== null && point.z !== null) {
+        coordinates.push({ x: point.x, y: point.y, z: point.z });
+        }
+    }
+
+    return coordinates;
+}
+  
 
 // Function to draw vehicle trace with pastel colors
 export function drawVehicleTrace(scene: THREE.Scene, coordinates: Coordinate[]): void {
