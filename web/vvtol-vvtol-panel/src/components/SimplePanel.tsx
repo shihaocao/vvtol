@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
@@ -25,12 +25,43 @@ const getStyles = () => {
       left: 0;
       padding: 10px;
     `,
+    canvas: css`
+      display: block;
+    `,
   };
 };
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current });
+      renderer.setSize(width, height);
+
+      // Create a sphere
+      const geometry = new THREE.SphereGeometry(1, 32, 32);
+      const material = new THREE.MeshBasicMaterial({ color: theme.colors.primary.main});
+      const sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+
+      // Position camera and sphere
+      camera.position.z = 5;
+
+      // Animation loop
+      const animate = () => {
+        requestAnimationFrame(animate);
+        sphere.rotation.x += 0.01;
+        sphere.rotation.y += 0.01;
+        renderer.render(scene, camera);
+      };
+      animate();
+    }
+  }, [width, height, theme.colors.primary.main]);
 
   if (data.series.length === 0) {
     return <PanelDataErrorView fieldConfig={fieldConfig} panelId={id} data={data} needsStringField />;
@@ -46,18 +77,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
         `
       )}
     >
-      <svg
-        className={styles.svg}
-        width={width}
-        height={height}
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
-      >
-        <g>
-          <circle data-testid="simple-panel-circle" style={{ fill: theme.colors.primary.main }} r={120} />
-        </g>
-      </svg>
+      <canvas ref={canvasRef} className={styles.canvas} width={width} height={height}></canvas>
       <div className={styles.textBox}>
         {options.showSeriesCount && (
           <div data-testid="simple-panel-series-counter">Number of series: {data.series.length}</div>
