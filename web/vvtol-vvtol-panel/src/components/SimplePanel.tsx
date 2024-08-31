@@ -4,7 +4,7 @@ import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { PanelDataErrorView } from '@grafana/runtime';
-import * as THREE from 'three';
+import { setupThreeJS } from './useThreeJS'; // Correct import from a local TypeScript file
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -38,28 +38,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
 
   useEffect(() => {
     if (canvasRef.current) {
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current });
-      renderer.setSize(width, height);
-
-      // Create a sphere
-      const geometry = new THREE.SphereGeometry(1, 32, 32);
-      const material = new THREE.MeshBasicMaterial({ color: theme.colors.primary.main});
-      const sphere = new THREE.Mesh(geometry, material);
-      scene.add(sphere);
-
-      // Position camera and sphere
-      camera.position.z = 5;
-
-      // Animation loop
-      const animate = () => {
-        requestAnimationFrame(animate);
-        sphere.rotation.x += 0.01;
-        sphere.rotation.y += 0.01;
-        renderer.render(scene, camera);
-      };
-      animate();
+      setupThreeJS(canvasRef.current, width, height, theme.colors.primary.main);
     }
   }, [width, height, theme.colors.primary.main]);
 
