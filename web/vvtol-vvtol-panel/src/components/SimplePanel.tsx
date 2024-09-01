@@ -5,7 +5,9 @@ import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { PanelDataErrorView } from '@grafana/runtime';
 import { setupThreeJS } from './useThreeJS';
-import { generateCoordinatesFromData, drawVehicleTrace, generateCoordinates } from './vehicleTraceHelpers';
+// import { generateCoordinatesFromData, drawVehicleTrace, generateCoordinates } from './vehicleTraceHelpers';
+
+import { generateCoordinates, drawVehicleTrace } from './vehicleTraceHelpers';
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -43,7 +45,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
       
       // Generate coordinates from the data
       // const coordinates = generateCoordinatesFromData(data.series, 50); // Adjust the number of sample points as needed
-      const coordinates = generateCoordinates({x: 1, y: 2, z: 3}, {x: 4, y: 6, z: 6}, 5);
+      const coordinates = generateCoordinates({x: 1, y: 2, z: 3}, {x: 4, y: 5, z: 6}, 10);
       // Draw the vehicle trace
       drawVehicleTrace(scene, coordinates);
     }

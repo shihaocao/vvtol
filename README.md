@@ -282,3 +282,9 @@ I got it to run inside grafana! It really wasn't that bad, just had to start fro
 ![Threejs Render as panel plugin](documentation/vvtol_3js_inside_grafana.png "Threejs Render as panel plugin")
 
 Now the challenge will be to pull real data.
+
+## 09/01
+
+Wow that was probably one of the most frustrating debugging experiences ever. Grafana doesn't seem to reload your plugin even when you copy the files locally unless you update the `package.json` version number. The worst part is that it would _sometimes_ work without updating it. I think this happened whenever I rebooted my computer, thus clearing some plugin cache somewhere. The two hardest things in programming truly are caching and variable naming.
+
+You can see the evidence of this pain in `scripts/install-panel.sh`.
