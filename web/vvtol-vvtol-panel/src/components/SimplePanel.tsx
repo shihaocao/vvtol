@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+// SimplePanel.tsx
+import React, { useEffect, useRef, useState } from 'react';
 import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
 import { PanelDataErrorView } from '@grafana/runtime';
+import * as THREE from 'three';
 import { setupThreeJS } from './useThreeJS';
-import { generateCoordinatesFromData, drawVehicleTrace, generateCoordinates } from './vehicleTraceHelpers';
-
-// import { generateCoordinates, drawVehicleTrace } from './vehicleTraceHelpers';
+import { generateCoordinatesFromData, drawVehicleTrace } from './vehicleTraceHelpers';
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -16,17 +16,6 @@ const getStyles = () => {
     wrapper: css`
       font-family: Open Sans;
       position: relative;
-    `,
-    svg: css`
-      position: absolute;
-      top: 0;
-      left: 0;
-    `,
-    textBox: css`
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      padding: 10px;
     `,
     canvas: css`
       display: block;
@@ -38,18 +27,29 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const vehicleTraceRef = useRef<THREE.Object3D | null>(null);
+
+  const [isSceneSetup, setIsSceneSetup] = useState(false);
 
   useEffect(() => {
-    if (canvasRef.current && data.series.length > 0) {
-      const scene = setupThreeJS(canvasRef.current, width, height, theme.colors.primary.main);
-      
-      // Generate coordinates from the data
-      const coordinates = generateCoordinatesFromData(data.series, 10); // Adjust the number of sample points as needed
-      // const coordinates = generateCoordinates({x: 1, y: 2, z: 3}, {x: 4, y: 5, z: 6}, 10);
-      // Draw the vehicle trace
-      drawVehicleTrace(scene, coordinates);
+    if (canvasRef.current && !isSceneSetup) {
+      sceneRef.current = setupThreeJS(canvasRef.current, width, height, theme.colors.primary.main);
+      setIsSceneSetup(true);
     }
-  }, [data, width, height, theme.colors.primary.main]);
+  }, [width, height, theme.colors.primary.main, isSceneSetup]);
+
+  useEffect(() => {
+    if (isSceneSetup && sceneRef.current && data.series.length > 0) {
+      const coordinates = generateCoordinatesFromData(data.series, 10);
+      
+      if (vehicleTraceRef.current) {
+        sceneRef.current.remove(vehicleTraceRef.current);
+      }
+      
+      vehicleTraceRef.current = drawVehicleTrace(sceneRef.current, coordinates);
+    }
+  }, [data, isSceneSetup]);
 
   if (data.series.length === 0) {
     return <PanelDataErrorView fieldConfig={fieldConfig} panelId={id} data={data} needsStringField />;
