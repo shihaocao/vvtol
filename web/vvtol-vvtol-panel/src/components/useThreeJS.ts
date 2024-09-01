@@ -32,10 +32,10 @@ export const setupThreeJS = (
   scene.add(pointLight);
 
   // Create a sphere
-  const geometry = new THREE.SphereGeometry(1, 32, 32);
-  const material = new THREE.MeshPhongMaterial({ color: primaryColor }); // Use MeshPhongMaterial to respond to lighting
-  const sphere = new THREE.Mesh(geometry, material);
-  scene.add(sphere);
+  // const geometry = new THREE.SphereGeometry(1, 32, 32);
+  // const material = new THREE.MeshPhongMaterial({ color: primaryColor }); // Use MeshPhongMaterial to respond to lighting
+  // const sphere = new THREE.Mesh(geometry, material);
+  // scene.add(sphere);
 
   // Create Axes with specified options
   createAxes(scene, {
@@ -46,8 +46,8 @@ export const setupThreeJS = (
   // Animation loop
   const animate = (): void => {
     requestAnimationFrame(animate);
-    sphere.rotation.x += 0.01;
-    sphere.rotation.y += 0.01;
+    // sphere.rotation.x += 0.01;
+    // sphere.rotation.y += 0.01;
     controls.update(); // Update controls
     renderer.render(scene, camera);
   };
