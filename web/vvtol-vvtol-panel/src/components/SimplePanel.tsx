@@ -22,6 +22,11 @@ const getStyles = () => {
   };
 };
 
+function calculateCoordinateCount(timeRange) {
+  const intervalInSeconds = timeRange.to.unix() - timeRange.from.unix();
+  return Math.floor(intervalInSeconds);
+}
+
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
@@ -45,8 +50,11 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
       // Clear old trace objects
       traceGroupRef.current.clear();
 
+      // Calculate the number of coordinates based on the time range
+      const coordinateCount = calculateCoordinateCount(data.timeRange);
+
       // Generate new trace objects
-      const coordinates = generateCoordinatesFromData(data.series, 10);
+      const coordinates = generateCoordinatesFromData(data.series, coordinateCount);
       const newTraceObjects = createVehicleTraceObjects(coordinates);
       
       // Add new trace objects to the group

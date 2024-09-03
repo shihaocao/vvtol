@@ -91,9 +91,10 @@ function generateColor(index: number, totalPoints: number): THREE.Color {
 }
 
 function generateTetrahedronGeometry(coord: Coordinate): number[] {
-    const topHeight = 0.5;
-    const baseHeight = -0.5;
-    const baseRadius = 0.3;
+    const hDim = 0.25
+    const topHeight = hDim;
+    const baseHeight = -hDim;
+    const baseRadius = hDim / 3;
 
     // Top vertex
     const v0 = new THREE.Vector3(coord.x, coord.y + topHeight, coord.z);
