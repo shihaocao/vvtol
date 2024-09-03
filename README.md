@@ -288,3 +288,9 @@ Now the challenge will be to pull real data.
 Wow that was probably one of the most frustrating debugging experiences ever. Grafana doesn't seem to reload your plugin even when you copy the files locally unless you update the `package.json` version number. The worst part is that it would _sometimes_ work without updating it. I think this happened whenever I rebooted my computer, thus clearing some plugin cache somewhere. The two hardest things in programming truly are caching and variable naming.
 
 You can see the evidence of this pain in `scripts/install-panel.sh`.
+
+---
+
+I got the data plumbed! I have done the "clearing the old polygons part yet".
+
+![Threejs Render as panel plugin with data](documentation/vvtol_3js_rendering_inside_grafana.png "Threejs Render as panel plugin with data")
