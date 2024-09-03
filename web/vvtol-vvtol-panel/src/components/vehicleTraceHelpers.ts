@@ -72,40 +72,92 @@ export function generateCoordinatesFromData(data: any[], numSamplePoints: number
     return coordinates;
 }
 
+function generateColor(index: number, totalPoints: number): THREE.Color {
+    const startColor = new THREE.Color(0xFFB3B3);
+    const endColor = new THREE.Color(0xD1B3FF);
+    
+    const startHSL = { h: 0, s: 0, l: 0 };
+    const endHSL = { h: 0, s: 0, l: 0 };
+    startColor.getHSL(startHSL);
+    endColor.getHSL(endHSL);
+
+    const t = index / (totalPoints - 1);
+    
+    const interpolatedHue = startHSL.h + t * (endHSL.h - startHSL.h);
+    const interpolatedSaturation = startHSL.s + t * (endHSL.s - startHSL.s);
+    const interpolatedLightness = startHSL.l + t * (endHSL.l - startHSL.l);
+    
+    return new THREE.Color().setHSL(interpolatedHue, interpolatedSaturation, interpolatedLightness);
+}
+
+function generateTetrahedronGeometry(coord: Coordinate): number[] {
+    const topHeight = 0.5;
+    const baseHeight = -0.5;
+    const baseRadius = 0.3;
+
+    // Top vertex
+    const v0 = new THREE.Vector3(coord.x, coord.y + topHeight, coord.z);
+
+    // Base vertices
+    const v1 = new THREE.Vector3(
+        coord.x + baseRadius * Math.cos(0),
+        coord.y + baseHeight,
+        coord.z + baseRadius * Math.sin(0)
+    );
+    const v2 = new THREE.Vector3(
+        coord.x + baseRadius * Math.cos(2 * Math.PI / 3),
+        coord.y + baseHeight,
+        coord.z + baseRadius * Math.sin(2 * Math.PI / 3)
+    );
+    const v3 = new THREE.Vector3(
+        coord.x + baseRadius * Math.cos(4 * Math.PI / 3),
+        coord.y + baseHeight,
+        coord.z + baseRadius * Math.sin(4 * Math.PI / 3)
+    );
+
+    return [
+        // Edges from top to base
+        v0.x, v0.y, v0.z, v1.x, v1.y, v1.z,
+        v0.x, v0.y, v0.z, v2.x, v2.y, v2.z,
+        v0.x, v0.y, v0.z, v3.x, v3.y, v3.z,
+        // Base edges
+        v1.x, v1.y, v1.z, v2.x, v2.y, v2.z,
+        v2.x, v2.y, v2.z, v3.x, v3.y, v3.z,
+        v3.x, v3.y, v3.z, v1.x, v1.y, v1.z
+    ];
+}
+
 export function createVehicleTraceObjects(coordinates: Coordinate[]): THREE.Object3D[] {
     if (!Array.isArray(coordinates)) {
         console.error('Invalid coordinates:', coordinates);
         return [];
     }
     
-    const startColor = new THREE.Color(0xFFB3B3);
-    const endColor = new THREE.Color(0xD1B3FF);
-    
-    return coordinates.map((coord, index) => {
-        const t = index / (coordinates.length - 1);
+    const geometry = new THREE.BufferGeometry();
+    const vertices: number[] = [];
+    const colors: number[] = [];
+
+    coordinates.forEach((coord, index) => {
+        const color = generateColor(index, coordinates.length);
+        const tetrahedronVertices = generateTetrahedronGeometry(coord);
         
-        const startHSL = { h: 0, s: 0, l: 0 };
-        const endHSL = { h: 0, s: 0, l: 0 };
-        startColor.getHSL(startHSL);
-        endColor.getHSL(endHSL);
-        
-        const interpolatedHue = startHSL.h + t * (endHSL.h - startHSL.h);
-        const interpolatedSaturation = startHSL.s + t * (endHSL.s - startHSL.s);
-        const interpolatedLightness = startHSL.l + t * (endHSL.l - startHSL.l);
-        
-        const color = new THREE.Color().setHSL(interpolatedHue, interpolatedSaturation, interpolatedLightness);
-        
-        const tetraGeometry = new THREE.TetrahedronGeometry(1);
-        const tetraMaterial = new THREE.MeshPhongMaterial({
-            color: color,
-            emissive: color.clone().multiplyScalar(0.3),
-            shininess: 100,
-            specular: new THREE.Color(0xFFFFFF)
-        });
-        const tetrahedron = new THREE.Mesh(tetraGeometry, tetraMaterial);
-        
-        tetrahedron.position.set(coord.x, coord.y, coord.z);
-        
-        return tetrahedron;
+        vertices.push(...tetrahedronVertices);
+
+        // Add colors for each vertex (2 vertices per edge, 6 edges)
+        for (let i = 0; i < 12; i++) {
+            colors.push(color.r, color.g, color.b);
+        }
     });
+
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+    const material = new THREE.LineBasicMaterial({
+        vertexColors: true,
+        linewidth: 1
+    });
+
+    const lineSegments = new THREE.LineSegments(geometry, material);
+
+    return [lineSegments];
 }
