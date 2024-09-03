@@ -72,16 +72,16 @@ export function generateCoordinatesFromData(data: any[], numSamplePoints: number
     return coordinates;
 }
 
-export function drawVehicleTrace(scene: THREE.Scene, coordinates: Coordinate[]): THREE.Scene {
-    if (!scene || !Array.isArray(coordinates)) {
-        console.error('Invalid scene or coordinates:', { scene, coordinates });
-        return scene;
+export function createVehicleTraceObjects(coordinates: Coordinate[]): THREE.Object3D[] {
+    if (!Array.isArray(coordinates)) {
+        console.error('Invalid coordinates:', coordinates);
+        return [];
     }
     
     const startColor = new THREE.Color(0xFFB3B3);
     const endColor = new THREE.Color(0xD1B3FF);
     
-    coordinates.forEach((coord, index) => {
+    return coordinates.map((coord, index) => {
         const t = index / (coordinates.length - 1);
         
         const startHSL = { h: 0, s: 0, l: 0 };
@@ -106,8 +106,6 @@ export function drawVehicleTrace(scene: THREE.Scene, coordinates: Coordinate[]):
         
         tetrahedron.position.set(coord.x, coord.y, coord.z);
         
-        scene.add(tetrahedron);
+        return tetrahedron;
     });
-
-    return scene;
 }

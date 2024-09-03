@@ -1,4 +1,3 @@
-// SimplePanel.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
@@ -7,7 +6,7 @@ import { useStyles2, useTheme2 } from '@grafana/ui';
 import { PanelDataErrorView } from '@grafana/runtime';
 import * as THREE from 'three';
 import { setupThreeJS } from './useThreeJS';
-import { generateCoordinatesFromData, drawVehicleTrace } from './vehicleTraceHelpers';
+import { generateCoordinatesFromData, createVehicleTraceObjects } from './vehicleTraceHelpers';
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -28,26 +27,30 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
   const styles = useStyles2(getStyles);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
-  const vehicleTraceRef = useRef<THREE.Object3D | null>(null);
+  const traceGroupRef = useRef<THREE.Group | null>(null);
 
   const [isSceneSetup, setIsSceneSetup] = useState(false);
 
   useEffect(() => {
     if (canvasRef.current && !isSceneSetup) {
       sceneRef.current = setupThreeJS(canvasRef.current, width, height, theme.colors.primary.main);
+      traceGroupRef.current = new THREE.Group();
+      sceneRef.current.add(traceGroupRef.current);
       setIsSceneSetup(true);
     }
   }, [width, height, theme.colors.primary.main, isSceneSetup]);
 
   useEffect(() => {
-    if (isSceneSetup && sceneRef.current && data.series.length > 0) {
+    if (isSceneSetup && sceneRef.current && traceGroupRef.current && data.series.length > 0) {
+      // Clear old trace objects
+      traceGroupRef.current.clear();
+
+      // Generate new trace objects
       const coordinates = generateCoordinatesFromData(data.series, 10);
+      const newTraceObjects = createVehicleTraceObjects(coordinates);
       
-      if (vehicleTraceRef.current) {
-        sceneRef.current.remove(vehicleTraceRef.current);
-      }
-      
-      vehicleTraceRef.current = drawVehicleTrace(sceneRef.current, coordinates);
+      // Add new trace objects to the group
+      newTraceObjects.forEach(obj => traceGroupRef.current?.add(obj));
     }
   }, [data, isSceneSetup]);
 
