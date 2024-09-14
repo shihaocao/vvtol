@@ -113,8 +113,8 @@ class AirProtoReader:
         result = self.decoder.insert_bytes(data)
 
         if isinstance(result, StateFieldRegistry):
-            logging.debug("Decoded message:")
-            logging.debug(result)
+            logging.info("Decoded message:")
+            logging.info(result)
             return result
         
         return None
@@ -139,29 +139,33 @@ def main():
         port = "/dev/ttyACM0"
         baud_rate = 9600
 
-    print("RUNNING! LETS GOOO")
+    logging.info("RUNNING! LETS GOOO")
+
+    def do_reading(reader: AirProtoReader):
+        while True:
+            time.sleep(0.01)
+            result = reader.read_and_maybe_result()
+            if result is None:
+                continue
+
+            post_sfr(result)
+
     while True:
         try:
             if args.radio or not args.native:
                 ser = serial.Serial(port, baud_rate, timeout=0)  # `timeout=None` for blocking mode; set to 0 for non-blocking mode
                 reader = AirProtoReader(ser)
+                do_reading(reader)
             else:
                 with open(pipe_path, 'rb', buffering=0) as fifo:
                     reader = AirProtoReader(fifo, is_serial=False)
-
-                    while True:
-                        time.sleep(0.01)
-                        result = reader.read_and_maybe_result()
-                        if result is None:
-                            continue
-                        # logging.info("Got result!")
-                        post_sfr(result)
+                    do_reading(reader)
 
         except serial.SerialException as e:
-            print(f"Error opening serial port: {e}. Trying again shortly.")
+            logging.error(f"Error opening serial port: {e}. Trying again shortly.")
             time.sleep(0.5)
         except OSError as e:
-            print(f"Error opening named pipe: {e}. Trying again shortly.")
+            logging.error(f"Error opening named pipe: {e}. Trying again shortly.")
             time.sleep(0.5)
         finally:
             if 'ser' in locals() and ser.is_open:

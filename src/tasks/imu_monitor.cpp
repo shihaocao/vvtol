@@ -91,7 +91,7 @@ void ImuMonitor::execute()
   bno_imu.getEvent(&grav_vec, Adafruit_BNO055::VECTOR_GRAVITY);
   bno_imu.getEvent(&mag_vec, Adafruit_BNO055::VECTOR_MAGNETOMETER);
 
-  sfr_.imu_linear_acc_vec_f = {
+  sfr_.imu_linear_acc_vec = {
       linear_acc_vec.acceleration.x,
       linear_acc_vec.acceleration.y,
       linear_acc_vec.acceleration.z};
