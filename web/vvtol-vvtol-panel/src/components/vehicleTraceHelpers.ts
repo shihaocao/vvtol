@@ -54,15 +54,15 @@ export function generateCoordinatesFromData(data: any[], numSamplePoints: number
     const processedPositionData: DataPoint[] = [];
     const processedOrientationData: DataPoint[] = [];
 
-    // Process position series (x, y, z)
-    processSeries(data[0], processedPositionData); // posx
-    processSeries(data[1], processedPositionData); // posy
-    processSeries(data[2], processedPositionData); // posz
-
     // Process orientation series (roll, pitch, yaw)
-    processSeries(data[3], processedOrientationData); // rollx
-    processSeries(data[4], processedOrientationData); // pitchy
-    processSeries(data[5], processedOrientationData); // yawz
+    processSeries(data[0], processedOrientationData); // rollx
+    processSeries(data[1], processedOrientationData); // pitchy
+    processSeries(data[2], processedOrientationData); // yawz
+
+    // Process position series (x, y, z)
+    processSeries(data[3], processedPositionData); // posx
+    processSeries(data[4], processedPositionData); // posy
+    processSeries(data[5], processedPositionData); // posz
     
     // Sort both data lists by time
     processedPositionData.sort((a, b) => a.time - b.time);
@@ -173,30 +173,45 @@ function generateColor(index: number, totalPoints: number): THREE.Color {
 }
 
 function generateTetrahedronGeometry(coord: ComplexCoordinate): number[] {
-    const hDim = 1.0
+    const hDim = 1.0;
     const topHeight = hDim;
     const baseHeight = -hDim;
     const baseRadius = hDim / 3;
 
-    // Top vertex
-    const v0 = new THREE.Vector3(coord.x, coord.y + topHeight, coord.z);
+    // Top vertex (before applying orientation)
+    let v0 = new THREE.Vector3(coord.x, coord.y + topHeight, coord.z);
 
-    // Base vertices
-    const v1 = new THREE.Vector3(
+    // Base vertices (before applying orientation)
+    let v1 = new THREE.Vector3(
         coord.x + baseRadius * Math.cos(0),
         coord.y + baseHeight,
         coord.z + baseRadius * Math.sin(0)
     );
-    const v2 = new THREE.Vector3(
+    let v2 = new THREE.Vector3(
         coord.x + baseRadius * Math.cos(2 * Math.PI / 3),
         coord.y + baseHeight,
         coord.z + baseRadius * Math.sin(2 * Math.PI / 3)
     );
-    const v3 = new THREE.Vector3(
+    let v3 = new THREE.Vector3(
         coord.x + baseRadius * Math.cos(4 * Math.PI / 3),
         coord.y + baseHeight,
         coord.z + baseRadius * Math.sin(4 * Math.PI / 3)
     );
+
+    // Convert roll, pitch, yaw from degrees to radians
+    const rollInRadians = coord.roll * (Math.PI / 180);
+    const pitchInRadians = coord.pitch * (Math.PI / 180);
+    const yawInRadians = coord.yaw * (Math.PI / 180);
+
+    // Apply rotation based on roll, pitch, yaw (in radians)
+    const quaternion = new THREE.Quaternion();
+    quaternion.setFromEuler(new THREE.Euler(pitchInRadians, yawInRadians, rollInRadians, 'XYZ'));
+
+    // Apply rotation to the vertices
+    v0.applyQuaternion(quaternion);
+    v1.applyQuaternion(quaternion);
+    v2.applyQuaternion(quaternion);
+    v3.applyQuaternion(quaternion);
 
     return [
         // Edges from top to base
@@ -209,6 +224,7 @@ function generateTetrahedronGeometry(coord: ComplexCoordinate): number[] {
         v3.x, v3.y, v3.z, v1.x, v1.y, v1.z
     ];
 }
+
 
 export function createVehicleTraceObjects(coordinates: ComplexCoordinate[]): THREE.Object3D[] {
     if (!Array.isArray(coordinates)) {
