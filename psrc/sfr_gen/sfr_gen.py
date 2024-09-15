@@ -72,7 +72,17 @@ SINGLE_ITEM_LIST = [
 VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'imu_linear_acc_vec',
+        'imu_linear_acc',
+        'lin_link_downlink_sfr',
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'imu_acc',
+        'lin_link_downlink_sfr',
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'imu_gyr_acc',
         'lin_link_downlink_sfr',
     ),
     SfrItem(

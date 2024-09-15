@@ -66,7 +66,9 @@ def post_sfr(sfr: StateFieldRegistry):
     import psrc.sfr_gen.sfr_gen as sfr_gen
     sfr_gen.py_generate_all()
     ]]]'''
-    points.append(vec_measurement(sfr.imu_linear_acc_vec, 'imu_linear_acc_vec', time_point))
+    points.append(vec_measurement(sfr.imu_linear_acc, 'imu_linear_acc', time_point))
+    points.append(vec_measurement(sfr.imu_acc, 'imu_acc', time_point))
+    points.append(vec_measurement(sfr.imu_gyr_acc, 'imu_gyr_acc', time_point))
     points.append(vec_measurement(sfr.gnc_global_target_error_f, 'gnc_global_target_error_f', time_point))
     points.append(vec_measurement(sfr.gnc_global_target_pos_f, 'gnc_global_target_pos_f', time_point))
     points.append(vec_measurement(sfr.gnc_global_linear_pos_f, 'gnc_global_linear_pos_f', time_point))
@@ -143,7 +145,7 @@ def main():
 
     def do_reading(reader: AirProtoReader):
         while True:
-            time.sleep(0.01)
+            time.sleep(0.1)
             result = reader.read_and_maybe_result()
             if result is None:
                 continue

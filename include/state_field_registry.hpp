@@ -33,8 +33,7 @@ struct StateFields
     // GncControl::State target_gnc_state = GncControl::State::EMPTY;
 
     // Vector3f imu_linear_acc_vec_f{};
-    Vector3f imu_acc_vec_f{};
-    Vector3f imu_gyr_vec{};
+    // Vector3f imu_acc_vec_f{};
     Vector4f imu_euler_vec{};
     Vector4d imu_quat{};
 
@@ -49,7 +48,9 @@ struct StateFields
     MainControl::State target_mc_state{};
     GncControl::State gnc_state{};
     GncControl::State target_gnc_state{};
-    lin::Vector3f imu_linear_acc_vec{};
+    lin::Vector3f imu_linear_acc{};
+    lin::Vector3f imu_acc{};
+    lin::Vector3f imu_gyr_acc{};
     lin::Vector3f gnc_global_target_error_f{};
     lin::Vector3f gnc_global_target_pos_f{};
     lin::Vector3f gnc_global_linear_pos_f{};

@@ -21,7 +21,7 @@ void SimulatorInject::setup()
     // sfr_.time_t_control_cycle_limit_ms = 100;
 }
 
-void SimulatorInject::execute()
+void SimulatorInject::execute_sim()
 {
 
     lin::Vector3f random_buffetting_acc = lin::gaussians<lin::Vector3f>(lin_rand, 3, 1);
@@ -36,6 +36,13 @@ void SimulatorInject::execute()
     lin::Vector3f random_noise_acc = lin::gaussians<lin::Vector3f>(lin_rand, 3, 1);
 
     // directly inject state into sensor readings
-    sfr_.imu_linear_acc_vec = sfr_.sim_global_linear_acc_f + random_noise_acc;
+    sfr_.imu_linear_acc = sfr_.sim_global_linear_acc_f + random_noise_acc;
     // sfr_.gnc_global_linear_pos_f = sfr_.sim_global_linear_pos_f;
+}
+
+void SimulatorInject::execute()
+{
+#ifdef NATIVE
+    execute_sim();
+#endif
 }

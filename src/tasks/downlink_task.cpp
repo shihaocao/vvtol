@@ -81,16 +81,8 @@ void DownlinkTask::execute()
     StateFieldRegistry state_field_registry = StateFieldRegistry_init_zero;
     state_field_registry.mcl_control_cycle_num = sfr_.mcl_control_cycle_num;
     // state_field_registry.imu_gyr_vec = sfr_.imu_gyr_vec;
-    state_field_registry.time_t_average_cycle_time_us = sfr_.imu_gyr_vec[0];
+    // state_field_registry.time_t_average_cycle_time_us = sfr_.imu_gyr_vec[0];
 
-    // std::array<float, 3> foo = {1, 2, 3};
-    state_field_registry.imu_gyr_vec.elements.arg = &sfr_.imu_gyr_vec;
-    state_field_registry.imu_gyr_vec.elements.funcs.encode = &encode_float_array;
-    state_field_registry.has_imu_gyr_vec = true;
-
-    link_downlink_sfr(state_field_registry.imu_acc_vec_f,
-                      state_field_registry.has_imu_acc_vec_f,
-                      &sfr_.imu_acc_vec_f);
     /*[[[cog
     import cog
     import psrc.sfr_gen.sfr_gen as sfr_gen
@@ -102,9 +94,15 @@ void DownlinkTask::execute()
     state_field_registry.target_mc_state = sfr_.target_mc_state;
     state_field_registry.gnc_state = sfr_.gnc_state;
     state_field_registry.target_gnc_state = sfr_.target_gnc_state;
-    lin_link_downlink_sfr(state_field_registry.imu_linear_acc_vec,
-                          state_field_registry.has_imu_linear_acc_vec,
-                          &sfr_.imu_linear_acc_vec);
+    lin_link_downlink_sfr(state_field_registry.imu_linear_acc,
+                          state_field_registry.has_imu_linear_acc,
+                          &sfr_.imu_linear_acc);
+    lin_link_downlink_sfr(state_field_registry.imu_acc,
+                          state_field_registry.has_imu_acc,
+                          &sfr_.imu_acc);
+    lin_link_downlink_sfr(state_field_registry.imu_gyr_acc,
+                          state_field_registry.has_imu_gyr_acc,
+                          &sfr_.imu_gyr_acc);
     lin_link_downlink_sfr(state_field_registry.gnc_global_target_error_f,
                           state_field_registry.has_gnc_global_target_error_f,
                           &sfr_.gnc_global_target_error_f);

@@ -15,11 +15,14 @@ class SimulatorInject : public Task<SimulatorInject>
     StateFields &sfr_;
 
 public:
-    std::string name = "state_estimator";
+    std::string name = "simulator_inject";
 
     SimulatorInject(StateFields &sfr);
 
     void setup();
+
+    // Actually do sim things and overwrite values.
+    void execute_sim();
 
     void execute();
 
