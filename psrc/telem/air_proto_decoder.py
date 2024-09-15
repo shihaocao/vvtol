@@ -37,6 +37,7 @@ class AirProtoDecoder:
                 # self.expected_payload_length = self.payload_length - 3
                 self.expected_payload_length = self.payload_length
                 self.state = AirProtoDecoderState.WAITING_FOR_PAYLOAD
+                # logging.info(f"Expecting a payload length of: {self.expected_payload_length}")
             elif self.state == AirProtoDecoderState.WAITING_FOR_PAYLOAD:
                 if len(self.decoding_buffer) >= self.expected_payload_length:
                     payload = self.decoding_buffer[:self.expected_payload_length]
@@ -49,7 +50,7 @@ class AirProtoDecoder:
                         return state_field_registry
                     except:
                         logging.error("Failed to parse. Dropping and resetting.")
-                        self._reset_state()
+                        self._hard_reset_state()
                         return self.state
                 else:
                     break
@@ -59,3 +60,13 @@ class AirProtoDecoder:
         self.state = AirProtoDecoderState.WAITING_FOR_MAGIC_BYTE
         self.payload_length = 0
         self.expected_payload_length = 0
+
+    def _hard_reset_state(self):
+        '''
+        Call this if you get an error, we need to purge the buffer
+        since it could be bad material too.
+
+        It is not fool proof, but it may reduce the likelyhood we get stuck on the bad byte.
+        '''
+        self._reset_state()
+        self.decoding_buffer = []
