@@ -43,7 +43,7 @@ struct StateFields
     sfr_gen.header_gen_all()
     ]]]*/
     float time_t_average_cycle_time_us{};
-    uint64_t mcl_control_cycle_num{};
+    uint32_t mcl_control_cycle_num{};
     MainControl::State mc_state{};
     MainControl::State target_mc_state{};
     GncControl::State gnc_state{};

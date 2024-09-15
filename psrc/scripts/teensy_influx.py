@@ -20,7 +20,6 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv('secrets/influx_secrets.env')
 
-
 import os
 import sys
 
@@ -42,30 +41,26 @@ write_api = write_client.write_api(write_options=SYNCHRONOUS)
 # Vehicle ID
 vehicle_id = "123ABC"
 
+# Batch settings
+batch_size = 20  # Set the batch size to 100
+point_batch = []  # A list to accumulate data points
+
+
 def vec_measurement(field: Any, field_name: str, time_point: int) -> Point:
-    p = point = Point("vector_measurement") \
+    point = Point("vector_measurement") \
         .tag("sensor", field_name) \
         .field("x", field.elements[0]) \
         .field("y", field.elements[1]) \
         .field("z", field.elements[2]) \
         .time(time_point)
-    return p
+    return point
+
 
 def post_sfr(sfr: StateFieldRegistry):
-
+    global point_batch
     points = []
     time_point = time.time_ns()
 
-    # Create a point with the vehicle ID
-    # point.field("mcl_control_cycle_number", sfr.mcl_control_cycle_num)
-    # point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
-
-    point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
-
-    '''[[[cog
-    import psrc.sfr_gen.sfr_gen as sfr_gen
-    sfr_gen.py_generate_all()
-    ]]]'''
     if len(sfr.imu_linear_acc.elements) > 0:
         points.append(vec_measurement(sfr.imu_linear_acc, 'imu_linear_acc', time_point))
     if len(sfr.imu_acc.elements) > 0:
@@ -96,17 +91,34 @@ def post_sfr(sfr: StateFieldRegistry):
         points.append(vec_measurement(sfr.sim_global_quat, 'sim_global_quat', time_point))
     if len(sfr.sim_euler_angles.elements) > 0:
         points.append(vec_measurement(sfr.sim_euler_angles, 'sim_euler_angles', time_point))
+
+    point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
     point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
     point.field("mcl_control_cycle_num", sfr.mcl_control_cycle_num)
     point.field("mc_state", sfr.mc_state)
     point.field("target_mc_state", sfr.target_mc_state)
     point.field("gnc_state", sfr.gnc_state)
     point.field("target_gnc_state", sfr.target_gnc_state)
-    #[[[end]]]
     point.time(time_point)  # Use current time in nanoseconds
     points.append(point)
 
-    write_api.write(bucket=bucket, org=org, record=points)
+    point_batch.extend(points)
+
+    # Write points if batch size is reached
+    if len(point_batch) >= batch_size:
+        logging.info(f"Writing batch of {len(point_batch)} points")
+        write_api.write(bucket=bucket, org=org, record=point_batch)
+        point_batch.clear()
+
+
+# Optional: Write any remaining points before program ends
+def flush_batch():
+    global point_batch
+    if point_batch:
+        logging.info(f"Flushing final batch of {len(point_batch)} points")
+        write_api.write(bucket=bucket, org=org, record=point_batch)
+        point_batch.clear()
+
 
 class AirProtoReader:
 
@@ -133,8 +145,9 @@ class AirProtoReader:
             if self.log_counter % self.log_interval == 0:
                 logging.info(f"Decode successful on counter_val {self.log_counter}")
             return result
-        
+
         return None
+
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -142,6 +155,7 @@ def get_args():
     parser.add_argument('--radio', action='store_true')
     parser.add_argument('--native', action='store_true')
     return parser.parse_args()
+
 
 def main():
     args = get_args()
@@ -160,7 +174,7 @@ def main():
 
     def do_reading(reader: AirProtoReader):
         while True:
-            time.sleep(0.1)
+            time.sleep(0.001)
             result = reader.read_and_maybe_result()
             if result is None:
                 continue
@@ -180,13 +194,16 @@ def main():
 
         except serial.SerialException as e:
             logging.error(f"Error opening serial port: {e}. Trying again shortly.")
-            time.sleep(0.5)
+            time.sleep(0.001)
         except OSError as e:
             logging.error(f"Error opening named pipe: {e}. Trying again shortly.")
-            time.sleep(0.5)
+            time.sleep(0.001)
         finally:
             if 'ser' in locals() and ser.is_open:
                 ser.close()
+
+    flush_batch()  # Ensure any remaining data is written before exit
+
 
 if __name__ == "__main__":
     main()

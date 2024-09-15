@@ -5,7 +5,7 @@ import cog
 class SfrType(Enum):
     FLOAT_T = 0
     # I32_T = 1
-    # U32_T = 2
+    U32_T = 2
     U64_T = 3
     MC_STATE_T = 4
     GNC_STATE_T = 5
@@ -14,6 +14,7 @@ class SfrType(Enum):
 
 sfr_to_proto = {
     SfrType.FLOAT_T: 'float',
+    SfrType.U32_T: 'uint32',
     SfrType.U64_T: 'uint64',
     SfrType.MC_STATE_T: 'int32',
     SfrType.GNC_STATE_T: 'int32',
@@ -23,6 +24,7 @@ sfr_to_proto = {
 
 sfr_to_header = {
     SfrType.FLOAT_T: 'float',
+    SfrType.U32_T: 'uint32_t',
     SfrType.U64_T: 'uint64_t',
     SfrType.MC_STATE_T: 'MainControl::State',
     SfrType.GNC_STATE_T: 'GncControl::State',
@@ -44,7 +46,7 @@ SINGLE_ITEM_LIST = [
         None
     ),
     SfrItem(
-        SfrType.U64_T,
+        SfrType.U32_T,
         'mcl_control_cycle_num',
         None
     ),

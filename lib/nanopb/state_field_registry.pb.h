@@ -42,7 +42,7 @@ import psrc.sfr_gen.sfr_gen as sfr_gen
 sfr_gen.proto_generate_all()
 ]]] */
     float time_t_average_cycle_time_us;
-    uint64_t mcl_control_cycle_num;
+    uint32_t mcl_control_cycle_num;
     int32_t mc_state;
     int32_t target_mc_state;
     int32_t gnc_state;
@@ -156,7 +156,7 @@ X(a, STATIC,   SINGULAR, FLOAT,    fin_px_cmd,       18) \
 X(a, STATIC,   SINGULAR, FLOAT,    fin_nx_cmd,       19) \
 X(a, STATIC,   SINGULAR, FLOAT,    lower_motor_cmd,  20) \
 X(a, STATIC,   SINGULAR, FLOAT,    time_t_average_cycle_time_us,  21) \
-X(a, STATIC,   SINGULAR, UINT64,   mcl_control_cycle_num,  22) \
+X(a, STATIC,   SINGULAR, UINT32,   mcl_control_cycle_num,  22) \
 X(a, STATIC,   SINGULAR, INT32,    mc_state,         23) \
 X(a, STATIC,   SINGULAR, INT32,    target_mc_state,  24) \
 X(a, STATIC,   SINGULAR, INT32,    gnc_state,        25) \

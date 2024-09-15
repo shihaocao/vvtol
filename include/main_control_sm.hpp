@@ -18,9 +18,16 @@ class MainControlSM : public Task<MainControlSM>
 public:
     std::string name = "main_control_sm";
 
+    uint32_t last_hc_millis_ = 0;
+
     MainControlSM(StateFields &sfr);
 
     void setup();
+
+    void intermittently_health_check();
+    void health_check();
+
+    void armed_control();
 
     MainControl::State autonomous_control();
 

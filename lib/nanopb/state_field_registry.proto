@@ -31,7 +31,7 @@ message StateFieldRegistry {
     sfr_gen.proto_generate_all()
     ]]]*/
     float time_t_average_cycle_time_us = 21;
-    uint64 mcl_control_cycle_num = 22;
+    uint32 mcl_control_cycle_num = 22;
     int32 mc_state = 23;
     int32 target_mc_state = 24;
     int32 gnc_state = 25;

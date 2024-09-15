@@ -1,5 +1,6 @@
 import struct
 from lib.nanopb.state_field_registry_pb2 import StateFieldRegistry
+import logging
 
 class AirProtoDecoderState:
     WAITING_FOR_MAGIC_BYTE = 0
@@ -42,9 +43,14 @@ class AirProtoDecoder:
                     # print(f"Got payload len {len(payload)}")
                     del self.decoding_buffer[:self.expected_payload_length]
                     state_field_registry = StateFieldRegistry()
-                    state_field_registry.ParseFromString(bytes(payload))
-                    self._reset_state()
-                    return state_field_registry
+                    try:
+                        state_field_registry.ParseFromString(bytes(payload))
+                        self._reset_state()
+                        return state_field_registry
+                    except:
+                        logging.error("Failed to parse. Dropping and resetting.")
+                        self._reset_state()
+                        return self.state
                 else:
                     break
         return self.state

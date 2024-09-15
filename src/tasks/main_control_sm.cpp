@@ -34,9 +34,9 @@ MainControlSM::MainControlSM(StateFields &sfr) : sfr_(sfr), empty_cvd_({})
         { return sfr.mcl_control_cycle_num - sfr.last_transition_ccno > 80; },
         [&]
         {
-            log_printf("Motor Init complete going to FLIGHT");
-            sfr.mc_state = MainControl::State::FLIGHT;
-            log_printf("Going to armed!");
+            log_printf("Motor Init complete going to ARMED");
+            sfr.mc_state = MainControl::State::ARMED;
+            log_printf("Going to ARMED!");
 
             // log() << global_stats.to_string() << '\n';
         });
@@ -63,19 +63,43 @@ MainControl::State MainControlSM::autonomous_control()
     return MainControl::State::ARMED;
 }
 
+void MainControlSM::intermittently_health_check()
+{
+    uint32_t now_millis = millis();
+    if (now_millis > last_hc_millis_ + HC_INTERVAL_MS)
+    {
+        last_hc_millis_ = now_millis;
+        health_check();
+    }
+}
+
+void MainControlSM::health_check()
+{
+    log_printf("On CCNO: %u", sfr_.mcl_control_cycle_num);
+}
+
+void MainControlSM::armed_control()
+{
+    return;
+}
+
 void MainControlSM::execute()
 {
-
+    intermittently_health_check();
     switch (sfr_.mc_state)
     {
     case MainControl::State::EMPTY:
         empty_cvd_.execute();
+        break;
     case MainControl::State::ABORT:
         // safe the vehicle
         sfr_.target_gnc_state = GncControl::State::DESCENT;
         break;
     case MainControl::State::HALT:
         sfr_.target_gnc_state = GncControl::State::HALT;
+        break;
+    case MainControl::State::ARMED:
+        armed_control();
         break;
     }
 }

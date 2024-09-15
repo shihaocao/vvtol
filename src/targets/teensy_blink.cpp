@@ -7,6 +7,8 @@ const int ledPin = 13; // Pin number for the LED on Teensy 4.1
 // Setup function runs once at startup
 void setup()
 {
+    Serial.begin(9600);
+
     // Initialize the LED pin as an output
     pinMode(ledPin, OUTPUT);
 }
@@ -22,4 +24,5 @@ void loop()
     digitalWrite(ledPin, LOW);
     // Wait for 1 second (1000 milliseconds)
     delay(1000);
+    Serial.println("Loop done.");
 }

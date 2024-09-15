@@ -317,3 +317,15 @@ I also made sure to restart influxd via `sudo systemctl restart influxd`.
 WOW. Together that really made a huge difference. 100% cpu utilization downto 80%. And now it looks like my Grafana dashboard doesn't lag anymore.
 
 Even when re-enabling a bunch of unused channels, I still have overhead available. That said, when CPU Usage does go up though, thats when my grafana query time seems to suffer.
+
+---
+
+Other things I changed to get better performance out of my telemetry stack. I had a bunch of sleeps under error conditions in python, I dropped those down to `0.001s` so that they aren't issues. Secondly, this keeps biting me in the butt, but don't run hardware things in the god damn vscode terminal. Something about it makes it so that it has an unreliable connection to the serial port? Maybe this is something to do with `syscall`s, or `platformio` meddling, but the performance and reliability of `teensy_influx.py` shot through the roof when I was running teensy influx in my terminal.
+
+But probably most hilariously I had a sleep statement that would only pull in new data every `0.1s` This made it so that as soon as I went above `10hz` all my data started lagging very quickly.
+
+Anyway, things are faster and there is no lag.
+
+I would recommend not refreshing any faster than `1s` in Grafana, and make sure to always run things in a normal terminal!
+
+Also here's a link to add more refresh rates in Grafana: `https://community.grafana.com/t/how-to-change-refresh-rate-from-5s-to-1s/39008/3`
