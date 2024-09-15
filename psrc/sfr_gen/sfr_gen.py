@@ -10,7 +10,7 @@ class SfrType(Enum):
     MC_STATE_T = 4
     GNC_STATE_T = 5
     LIN_VECTOR3F_T = 6
-    LIN_VECTOR4F_T = 6
+    LIN_VECTOR4F_T = 7
 
 sfr_to_proto = {
     SfrType.FLOAT_T: 'float',
@@ -90,6 +90,16 @@ VEC_ITEM_LIST = [
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
+        'imu_euler_vec',
+        'lin_link_downlink_sfr',
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR4F_T,
+        'imu_quat',
+        'lin_link_downlink_sfr',
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
         'gnc_global_target_error',
         'lin_link_downlink_sfr',
         disable_telem=True
@@ -113,6 +123,11 @@ VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'state_global_acc',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'state_euler_vec',
         'lin_link_downlink_sfr'
     ),
     SfrItem(

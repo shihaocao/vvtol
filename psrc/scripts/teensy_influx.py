@@ -61,12 +61,21 @@ def post_sfr(sfr: StateFieldRegistry):
     points = []
     time_point = time.time_ns()
 
+    point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
+    '''[[[cog
+    import psrc.sfr_gen.sfr_gen as sfr_gen
+    sfr_gen.py_generate_all()
+    ]]]'''
     if len(sfr.imu_linear_acc.elements) > 0:
         points.append(vec_measurement(sfr.imu_linear_acc, 'imu_linear_acc', time_point))
     if len(sfr.imu_acc.elements) > 0:
         points.append(vec_measurement(sfr.imu_acc, 'imu_acc', time_point))
     if len(sfr.imu_gyr_acc.elements) > 0:
         points.append(vec_measurement(sfr.imu_gyr_acc, 'imu_gyr_acc', time_point))
+    if len(sfr.imu_euler_vec.elements) > 0:
+        points.append(vec_measurement(sfr.imu_euler_vec, 'imu_euler_vec', time_point))
+    if len(sfr.imu_quat.elements) > 0:
+        points.append(vec_measurement(sfr.imu_quat, 'imu_quat', time_point))
     if len(sfr.gnc_global_target_error.elements) > 0:
         points.append(vec_measurement(sfr.gnc_global_target_error, 'gnc_global_target_error', time_point))
     if len(sfr.gnc_global_target_pos.elements) > 0:
@@ -77,6 +86,10 @@ def post_sfr(sfr: StateFieldRegistry):
         points.append(vec_measurement(sfr.state_global_vel, 'state_global_vel', time_point))
     if len(sfr.state_global_acc.elements) > 0:
         points.append(vec_measurement(sfr.state_global_acc, 'state_global_acc', time_point))
+    if len(sfr.state_euler_vec.elements) > 0:
+        points.append(vec_measurement(sfr.state_euler_vec, 'state_euler_vec', time_point))
+    if len(sfr.gnc_target_global_acc.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_target_global_acc, 'gnc_target_global_acc', time_point))
     if len(sfr.gnc_global_quat.elements) > 0:
         points.append(vec_measurement(sfr.gnc_global_quat, 'gnc_global_quat', time_point))
     if len(sfr.gnc_euler_angles.elements) > 0:
@@ -91,14 +104,14 @@ def post_sfr(sfr: StateFieldRegistry):
         points.append(vec_measurement(sfr.sim_global_quat, 'sim_global_quat', time_point))
     if len(sfr.sim_euler_angles.elements) > 0:
         points.append(vec_measurement(sfr.sim_euler_angles, 'sim_euler_angles', time_point))
-
-    point = Point("vehicle_position").tag("vehicle_id", vehicle_id)
     point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
     point.field("mcl_control_cycle_num", sfr.mcl_control_cycle_num)
     point.field("mc_state", sfr.mc_state)
     point.field("target_mc_state", sfr.target_mc_state)
     point.field("gnc_state", sfr.gnc_state)
     point.field("target_gnc_state", sfr.target_gnc_state)
+    #[[[end]]]
+
     point.time(time_point)  # Use current time in nanoseconds
     points.append(point)
 
