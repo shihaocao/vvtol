@@ -294,3 +294,26 @@ You can see the evidence of this pain in `scripts/install-panel.sh`.
 I got the data plumbed! I have done the "clearing the old polygons part yet".
 
 ![Threejs Render as panel plugin with data](documentation/vvtol_3js_rendering_inside_grafana.png "Threejs Render as panel plugin with data")
+
+## 09/14
+
+So I've been running things for a while now, but I'm not super happy with how slow things are. I'm taking two steps to address this temporarily.
+
+I've got a lot of telemetry bloat, so I'm turning channels off that I don't need. And secondly, I think I am going to try and clean out my
+influxdb, I wonder if things have gotten slow because a lot of old data has piled up. `influxd` is eating up so much of my performance locally.
+
+Okay I changed shard group retention to be shorter:
+`influx bucket update -i 11caa83bfa0edd33 --shard-group-duration 1h0m0s`
+
+I also had to do:
+`influx config create --config-name vvtol-config --host-url http://localhost:8086 --org vvtol --token foobar`
+
+from docs:
+`https://docs.influxdata.com/influxdb/v2/tools/influx-cli/#authenticate-with-a-username-and-password`
+
+
+I also made sure to restart influxd via `sudo systemctl restart influxd`.
+
+WOW. Together that really made a huge difference. 100% cpu utilization downto 80%. And now it looks like my Grafana dashboard doesn't lag anymore.
+
+Even when re-enabling a bunch of unused channels, I still have overhead available. That said, when CPU Usage does go up though, thats when my grafana query time seems to suffer.

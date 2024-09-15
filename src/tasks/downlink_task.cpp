@@ -103,12 +103,6 @@ void DownlinkTask::execute()
     lin_link_downlink_sfr(state_field_registry.imu_gyr_acc,
                           state_field_registry.has_imu_gyr_acc,
                           &sfr_.imu_gyr_acc);
-    lin_link_downlink_sfr(state_field_registry.gnc_global_target_error_f,
-                          state_field_registry.has_gnc_global_target_error_f,
-                          &sfr_.gnc_global_target_error_f);
-    lin_link_downlink_sfr(state_field_registry.gnc_global_target_pos_f,
-                          state_field_registry.has_gnc_global_target_pos_f,
-                          &sfr_.gnc_global_target_pos_f);
     lin_link_downlink_sfr(state_field_registry.gnc_global_linear_pos_f,
                           state_field_registry.has_gnc_global_linear_pos_f,
                           &sfr_.gnc_global_linear_pos_f);
@@ -124,21 +118,6 @@ void DownlinkTask::execute()
     lin_link_downlink_sfr(state_field_registry.gnc_euler_angles,
                           state_field_registry.has_gnc_euler_angles,
                           &sfr_.gnc_euler_angles);
-    lin_link_downlink_sfr(state_field_registry.sim_global_linear_pos_f,
-                          state_field_registry.has_sim_global_linear_pos_f,
-                          &sfr_.sim_global_linear_pos_f);
-    lin_link_downlink_sfr(state_field_registry.sim_global_linear_vel_f,
-                          state_field_registry.has_sim_global_linear_vel_f,
-                          &sfr_.sim_global_linear_vel_f);
-    lin_link_downlink_sfr(state_field_registry.sim_global_linear_acc_f,
-                          state_field_registry.has_sim_global_linear_acc_f,
-                          &sfr_.sim_global_linear_acc_f);
-    lin_link_downlink_sfr(state_field_registry.sim_global_quat,
-                          state_field_registry.has_sim_global_quat,
-                          &sfr_.sim_global_quat);
-    lin_link_downlink_sfr(state_field_registry.sim_euler_angles,
-                          state_field_registry.has_sim_euler_angles,
-                          &sfr_.sim_euler_angles);
     //[[[end]]]
 
     AirProto air_proto;

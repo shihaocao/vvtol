@@ -11,7 +11,8 @@ cleanup() {
 
 # Trap SIGINT, SIGTERM, and EXIT and call the cleanup function
 trap 'cleanup' SIGINT SIGTERM EXIT
-
+. scripts/cog.sh
+. scripts/pb_build.sh
 pio run -e teensy40 -t upload
 
 # Kill any existing teensy_influx.py processes

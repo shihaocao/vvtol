@@ -66,21 +66,36 @@ def post_sfr(sfr: StateFieldRegistry):
     import psrc.sfr_gen.sfr_gen as sfr_gen
     sfr_gen.py_generate_all()
     ]]]'''
-    points.append(vec_measurement(sfr.imu_linear_acc, 'imu_linear_acc', time_point))
-    points.append(vec_measurement(sfr.imu_acc, 'imu_acc', time_point))
-    points.append(vec_measurement(sfr.imu_gyr_acc, 'imu_gyr_acc', time_point))
-    points.append(vec_measurement(sfr.gnc_global_target_error_f, 'gnc_global_target_error_f', time_point))
-    points.append(vec_measurement(sfr.gnc_global_target_pos_f, 'gnc_global_target_pos_f', time_point))
-    points.append(vec_measurement(sfr.gnc_global_linear_pos_f, 'gnc_global_linear_pos_f', time_point))
-    points.append(vec_measurement(sfr.gnc_global_linear_vel_f, 'gnc_global_linear_vel_f', time_point))
-    points.append(vec_measurement(sfr.gnc_global_linear_acc_f, 'gnc_global_linear_acc_f', time_point))
-    points.append(vec_measurement(sfr.gnc_global_quat, 'gnc_global_quat', time_point))
-    points.append(vec_measurement(sfr.gnc_euler_angles, 'gnc_euler_angles', time_point))
-    points.append(vec_measurement(sfr.sim_global_linear_pos_f, 'sim_global_linear_pos_f', time_point))
-    points.append(vec_measurement(sfr.sim_global_linear_vel_f, 'sim_global_linear_vel_f', time_point))
-    points.append(vec_measurement(sfr.sim_global_linear_acc_f, 'sim_global_linear_acc_f', time_point))
-    points.append(vec_measurement(sfr.sim_global_quat, 'sim_global_quat', time_point))
-    points.append(vec_measurement(sfr.sim_euler_angles, 'sim_euler_angles', time_point))
+    if len(sfr.imu_linear_acc.elements) > 0:
+        points.append(vec_measurement(sfr.imu_linear_acc, 'imu_linear_acc', time_point))
+    if len(sfr.imu_acc.elements) > 0:
+        points.append(vec_measurement(sfr.imu_acc, 'imu_acc', time_point))
+    if len(sfr.imu_gyr_acc.elements) > 0:
+        points.append(vec_measurement(sfr.imu_gyr_acc, 'imu_gyr_acc', time_point))
+    if len(sfr.gnc_global_target_error_f.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_global_target_error_f, 'gnc_global_target_error_f', time_point))
+    if len(sfr.gnc_global_target_pos_f.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_global_target_pos_f, 'gnc_global_target_pos_f', time_point))
+    if len(sfr.gnc_global_linear_pos_f.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_global_linear_pos_f, 'gnc_global_linear_pos_f', time_point))
+    if len(sfr.gnc_global_linear_vel_f.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_global_linear_vel_f, 'gnc_global_linear_vel_f', time_point))
+    if len(sfr.gnc_global_linear_acc_f.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_global_linear_acc_f, 'gnc_global_linear_acc_f', time_point))
+    if len(sfr.gnc_global_quat.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_global_quat, 'gnc_global_quat', time_point))
+    if len(sfr.gnc_euler_angles.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_euler_angles, 'gnc_euler_angles', time_point))
+    if len(sfr.sim_global_linear_pos_f.elements) > 0:
+        points.append(vec_measurement(sfr.sim_global_linear_pos_f, 'sim_global_linear_pos_f', time_point))
+    if len(sfr.sim_global_linear_vel_f.elements) > 0:
+        points.append(vec_measurement(sfr.sim_global_linear_vel_f, 'sim_global_linear_vel_f', time_point))
+    if len(sfr.sim_global_linear_acc_f.elements) > 0:
+        points.append(vec_measurement(sfr.sim_global_linear_acc_f, 'sim_global_linear_acc_f', time_point))
+    if len(sfr.sim_global_quat.elements) > 0:
+        points.append(vec_measurement(sfr.sim_global_quat, 'sim_global_quat', time_point))
+    if len(sfr.sim_euler_angles.elements) > 0:
+        points.append(vec_measurement(sfr.sim_euler_angles, 'sim_euler_angles', time_point))
     point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
     point.field("mcl_control_cycle_num", sfr.mcl_control_cycle_num)
     point.field("mc_state", sfr.mc_state)
@@ -91,9 +106,6 @@ def post_sfr(sfr: StateFieldRegistry):
     point.time(time_point)  # Use current time in nanoseconds
     points.append(point)
 
-    points.append(vec_measurement(sfr.imu_gyr_vec, 'imu_gyr_vec', time_point))
-    points.append(vec_measurement(sfr.imu_acc_vec_f, 'imu_acc_vec_f', time_point))
-
     write_api.write(bucket=bucket, org=org, record=points)
 
 class AirProtoReader:
@@ -102,6 +114,8 @@ class AirProtoReader:
         self.source = source
         self.decoder = AirProtoDecoder()
         self.is_serial = is_serial
+        self.log_interval = 100
+        self.log_counter = 0
 
     def read_and_maybe_result(self):
         if self.is_serial:
@@ -115,8 +129,9 @@ class AirProtoReader:
         result = self.decoder.insert_bytes(data)
 
         if isinstance(result, StateFieldRegistry):
-            logging.info("Decoded message:")
-            logging.info(result)
+            self.log_counter += 1
+            if self.log_counter % self.log_interval == 0:
+                logging.info(f"Decode successful on counter_val {self.log_counter}")
             return result
         
         return None

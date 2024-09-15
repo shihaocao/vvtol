@@ -35,6 +35,7 @@ class SfrItem():
     type: SfrType
     name: str
     cpp_downlink_func_bind: str
+    disable_telem: bool = False
 
 SINGLE_ITEM_LIST = [
     SfrItem(
@@ -68,7 +69,7 @@ SINGLE_ITEM_LIST = [
         None
     ),
 ]
-
+DISABLE_SIM_TELEM = True
 VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
@@ -88,12 +89,14 @@ VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'gnc_global_target_error_f',
-        'lin_link_downlink_sfr'
+        'lin_link_downlink_sfr',
+        disable_telem=True
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'gnc_global_target_pos_f',
-        'lin_link_downlink_sfr'
+        'lin_link_downlink_sfr',
+        disable_telem=True
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
@@ -123,32 +126,41 @@ VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'sim_global_linear_pos_f',
-        'lin_link_downlink_sfr'
+        'lin_link_downlink_sfr',
+        disable_telem=DISABLE_SIM_TELEM
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'sim_global_linear_vel_f',
-        'lin_link_downlink_sfr'
+        'lin_link_downlink_sfr',
+        disable_telem=DISABLE_SIM_TELEM
+
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'sim_global_linear_acc_f',
-        'lin_link_downlink_sfr'
+        'lin_link_downlink_sfr',
+        disable_telem=DISABLE_SIM_TELEM
     ),
     SfrItem(
         SfrType.LIN_VECTOR4F_T,
         'sim_global_quat',
-        'lin_link_downlink_sfr'
+        'lin_link_downlink_sfr',
+        disable_telem=DISABLE_SIM_TELEM
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'sim_euler_angles',
-        'lin_link_downlink_sfr'
+        'lin_link_downlink_sfr',
+        disable_telem=DISABLE_SIM_TELEM
     )
 ]
 ITEM_LIST = SINGLE_ITEM_LIST + VEC_ITEM_LIST
 
 def downlink_generate_output(item: SfrItem):
+    if item.disable_telem:
+        return
+
     if item.cpp_downlink_func_bind is not None:
         cog.outl(f'{item.cpp_downlink_func_bind}(state_field_registry.{item.name},')
         cog.outl(f'                      state_field_registry.has_{item.name},')
@@ -176,13 +188,14 @@ def proto_generate_all():
         proto_generate(item, x)
         x += 1
 
-def py_genreate(item: SfrItem):
+def py_generate_vec(item: SfrItem):
     # if item.type == SfrType.LIN_VECTOR3F_T:
-    cog.outl(f'points.append(vec_measurement(sfr.{item.name}, \'{item.name}\', time_point))')
+    cog.outl(f'if len(sfr.{item.name}.elements) > 0:')
+    cog.outl(f'    points.append(vec_measurement(sfr.{item.name}, \'{item.name}\', time_point))')
 
 def py_generate_all():
     for item in VEC_ITEM_LIST:
-        py_genreate(item)
+        py_generate_vec(item)
     for item in SINGLE_ITEM_LIST:
         cog.outl(f'point.field("{item.name}", sfr.{item.name})')
         
