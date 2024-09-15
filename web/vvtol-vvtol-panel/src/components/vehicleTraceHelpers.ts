@@ -13,34 +13,6 @@ interface DataPoint {
     z: number | null;
 }
 
-
-function processSeries(series: any): DataPoint[] {
-    const timeField = series.fields.find((f: any) => f.name === 'Time');
-    const valueField = series.fields.find((f: any) => f.name === 'x' || f.name === 'y' || f.name === 'z');
-
-    if (!timeField || !valueField) {
-        console.warn(`Required fields not found in series. Available fields:`, series.fields.map((f: any) => f.name));
-        return [];
-    }
-
-    const fieldName = valueField.name;
-    const seriesData: DataPoint[] = [];
-
-    valueField.values.forEach((value: number, idx: number) => {
-        const time = new Date(timeField.values[idx]).getTime();
-
-        let existingPoint = seriesData.find(p => p.time === time);
-        if (!existingPoint) {
-            existingPoint = { time, x: null, y: null, z: null };
-            seriesData.push(existingPoint);
-        }
-
-        existingPoint[fieldName as keyof Coordinate] = value;
-    });
-
-    return seriesData;
-}
-
 function interpolateMissingValues(processedData: DataPoint[]): void {
     processedData.forEach((point, index) => {
         if (index === 0) return;  // Skip the first point
@@ -53,40 +25,134 @@ function interpolateMissingValues(processedData: DataPoint[]): void {
     });
 }
 
-function createCoordinatesFromDataPoints(processedData: DataPoint[], numSamplePoints: number): Coordinate[] {
-    const coordinates: Coordinate[] = [];
-    const step = Math.max(1, Math.floor(processedData.length / numSamplePoints));
+interface ComplexDataPoint {
+    time: number;
+    x: number | null;
+    y: number | null;
+    z: number | null;
+    roll: number | null;
+    pitch: number | null;
+    yaw: number | null;
+}
 
-    for (let i = 0; i < processedData.length && coordinates.length < numSamplePoints; i += step) {
-        const point = processedData[i];
-        if (point.x !== null && point.y !== null && point.z !== null) {
-            coordinates.push({ x: point.x, y: point.y, z: point.z });
+interface ComplexCoordinate {
+    x: number;
+    y: number;
+    z: number;
+    roll: number;
+    pitch: number;
+    yaw: number;
+}
+export function generateCoordinatesFromData(data: any[], numSamplePoints: number): ComplexCoordinate[] {
+    console.error('Received data:', data);
+    
+    if (data.length < 6) {
+        throw new Error('Expected six data series: three for position and three for orientation');
+    }
+
+    // Initialize empty lists for position and orientation DataPoints
+    const processedPositionData: DataPoint[] = [];
+    const processedOrientationData: DataPoint[] = [];
+
+    // Process position series (x, y, z)
+    processSeries(data[0], processedPositionData); // posx
+    processSeries(data[1], processedPositionData); // posy
+    processSeries(data[2], processedPositionData); // posz
+
+    // Process orientation series (roll, pitch, yaw)
+    processSeries(data[3], processedOrientationData); // rollx
+    processSeries(data[4], processedOrientationData); // pitchy
+    processSeries(data[5], processedOrientationData); // yawz
+    
+    // Sort both data lists by time
+    processedPositionData.sort((a, b) => a.time - b.time);
+    processedOrientationData.sort((a, b) => a.time - b.time);
+    
+    // Interpolate missing values
+    interpolateMissingValues(processedPositionData);
+    interpolateMissingValues(processedOrientationData);
+    
+    // Merge position and orientation data into ComplexDataPoints
+    const complexDataPoints: ComplexDataPoint[] = mergePositionAndOrientation(processedPositionData, processedOrientationData);
+    
+    // Downsample and convert to ComplexCoordinates
+    const complexCoordinates = createComplexCoordinatesFromDataPoints(complexDataPoints, numSamplePoints);
+    
+    console.log('Generated complex coordinates:', complexCoordinates);
+    return complexCoordinates;
+}
+
+// Updated processSeries function to add data to the provided DataPoint list
+function processSeries(series: any, dataPointsList: DataPoint[]): void {
+    const timeField = series.fields.find((f: any) => f.name === 'Time');
+    
+    if (!timeField) {
+        console.warn('Time field not found in series. Available fields:', series.fields.map((f: any) => f.name));
+        return;
+    }
+
+    const valueField = series.fields.find((f: any) => f.name === 'x' || f.name === 'y' || f.name === 'z');
+    
+    if (!valueField) {
+        console.warn('No x, y, or z field found in series.');
+        return;
+    }
+
+    valueField.values.forEach((value: number, idx: number) => {
+        const time = new Date(timeField.values[idx]).getTime();
+        let dataPoint = dataPointsList.find(p => p.time === time);
+        
+        if (!dataPoint) {
+            dataPoint = { time, x: null, y: null, z: null };
+            dataPointsList.push(dataPoint);
+        }
+
+        // Assign the correct field (x, y, or z) based on the valueField name
+        dataPoint[valueField.name as keyof Coordinate] = value;
+    });
+}
+
+function mergePositionAndOrientation(positionData: DataPoint[], orientationData: DataPoint[]): ComplexDataPoint[] {
+    const complexDataPoints: ComplexDataPoint[] = [];
+    
+    positionData.forEach((positionPoint, idx) => {
+        const orientationPoint = orientationData[idx];
+        
+        complexDataPoints.push({
+            time: positionPoint.time,
+            x: positionPoint.x,
+            y: positionPoint.y,
+            z: positionPoint.z,
+            roll: orientationPoint.x,  // roll packed into x
+            pitch: orientationPoint.y, // pitch packed into y
+            yaw: orientationPoint.z    // yaw packed into z
+        });
+    });
+    
+    return complexDataPoints;
+}
+
+function createComplexCoordinatesFromDataPoints(complexDataPoints: ComplexDataPoint[], numSamplePoints: number): ComplexCoordinate[] {
+    const complexCoordinates: ComplexCoordinate[] = [];
+    const step = Math.max(1, Math.floor(complexDataPoints.length / numSamplePoints));
+    
+    for (let i = 0; i < complexDataPoints.length && complexCoordinates.length < numSamplePoints; i += step) {
+        const point = complexDataPoints[i];
+        if (point.x !== null && point.y !== null && point.z !== null && point.roll !== null && point.pitch !== null && point.yaw !== null) {
+            complexCoordinates.push({
+                x: point.x,
+                y: point.y,
+                z: point.z,
+                roll: point.roll,
+                pitch: point.pitch,
+                yaw: point.yaw
+            });
         }
     }
 
-    return coordinates;
+    return complexCoordinates;
 }
 
-export function generateCoordinatesFromData(data: any[], numSamplePoints: number): Coordinate[] {
-    console.log('Received data:', data);
-    
-    const processedData: DataPoint[] = [];
-    
-    data.forEach((series, index) => {
-        console.log(`Processing series ${index}:`, series);
-        const seriesData = processSeries(series);
-        processedData.push(...seriesData);
-    });
-    
-    processedData.sort((a, b) => a.time - b.time);
-    
-    interpolateMissingValues(processedData);
-    
-    const coordinates = createCoordinatesFromDataPoints(processedData, numSamplePoints);
-    
-    console.log('Generated coordinates:', coordinates);
-    return coordinates;
-}
 
 function generateColor(index: number, totalPoints: number): THREE.Color {
     const startColor = new THREE.Color(0xFFB3B3);
@@ -106,7 +172,7 @@ function generateColor(index: number, totalPoints: number): THREE.Color {
     return new THREE.Color().setHSL(interpolatedHue, interpolatedSaturation, interpolatedLightness);
 }
 
-function generateTetrahedronGeometry(coord: Coordinate): number[] {
+function generateTetrahedronGeometry(coord: ComplexCoordinate): number[] {
     const hDim = 1.0
     const topHeight = hDim;
     const baseHeight = -hDim;
@@ -144,7 +210,7 @@ function generateTetrahedronGeometry(coord: Coordinate): number[] {
     ];
 }
 
-export function createVehicleTraceObjects(coordinates: Coordinate[]): THREE.Object3D[] {
+export function createVehicleTraceObjects(coordinates: ComplexCoordinate[]): THREE.Object3D[] {
     if (!Array.isArray(coordinates)) {
         console.error('Invalid coordinates:', coordinates);
         return [];

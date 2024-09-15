@@ -1,6 +1,6 @@
 {
   "name": "vvtol",
-  "version": "1.0.28",
+  "version": "1.0.33",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
     "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
