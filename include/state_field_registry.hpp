@@ -48,6 +48,8 @@ struct StateFields
     MainControl::State target_mc_state{};
     GncControl::State gnc_state{};
     GncControl::State target_gnc_state{};
+    uint32_t packed_imu_state{};
+    lin::Vector3f zero_vec{};
     lin::Vector3f imu_linear_acc{};
     lin::Vector3f imu_acc{};
     lin::Vector3f imu_gyr_acc{};

@@ -70,9 +70,19 @@ SINGLE_ITEM_LIST = [
         'target_gnc_state',
         None
     ),
+    SfrItem(
+        SfrType.U32_T,
+        'packed_imu_state',
+        None
+    )
 ]
 DISABLE_SIM_TELEM = True
 VEC_ITEM_LIST = [
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'zero_vec',
+        'lin_link_downlink_sfr',
+    ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
         'imu_linear_acc',
@@ -108,7 +118,7 @@ VEC_ITEM_LIST = [
         SfrType.LIN_VECTOR3F_T,
         'gnc_global_target_pos',
         'lin_link_downlink_sfr',
-        disable_telem=True
+        disable_telem=False
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,

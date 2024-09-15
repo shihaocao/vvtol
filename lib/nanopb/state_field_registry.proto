@@ -30,25 +30,27 @@ message StateFieldRegistry {
     int32 target_mc_state = 24;
     int32 gnc_state = 25;
     int32 target_gnc_state = 26;
-    SFVector3f imu_linear_acc = 27;
-    SFVector3f imu_acc = 28;
-    SFVector3f imu_gyr_acc = 29;
-    SFVector3f imu_euler_vec = 30;
-    SFVector4f imu_quat = 31;
-    SFVector3f gnc_global_target_error = 32;
-    SFVector3f gnc_global_target_pos = 33;
-    SFVector3f state_global_pos = 34;
-    SFVector3f state_global_vel = 35;
-    SFVector3f state_global_acc = 36;
-    SFVector3f state_euler_vec = 37;
-    SFVector3f gnc_target_global_acc = 38;
-    SFVector4f gnc_global_quat = 39;
-    SFVector3f gnc_euler_angles = 40;
-    SFVector3f sim_global_linear_pos = 41;
-    SFVector3f sim_global_linear_vel = 42;
-    SFVector3f sim_global_linear_acc = 43;
-    SFVector4f sim_global_quat = 44;
-    SFVector3f sim_euler_angles = 45;
+    uint32 packed_imu_state = 27;
+    SFVector3f zero_vec = 28;
+    SFVector3f imu_linear_acc = 29;
+    SFVector3f imu_acc = 30;
+    SFVector3f imu_gyr_acc = 31;
+    SFVector3f imu_euler_vec = 32;
+    SFVector4f imu_quat = 33;
+    SFVector3f gnc_global_target_error = 34;
+    SFVector3f gnc_global_target_pos = 35;
+    SFVector3f state_global_pos = 36;
+    SFVector3f state_global_vel = 37;
+    SFVector3f state_global_acc = 38;
+    SFVector3f state_euler_vec = 39;
+    SFVector3f gnc_target_global_acc = 40;
+    SFVector4f gnc_global_quat = 41;
+    SFVector3f gnc_euler_angles = 42;
+    SFVector3f sim_global_linear_pos = 43;
+    SFVector3f sim_global_linear_vel = 44;
+    SFVector3f sim_global_linear_acc = 45;
+    SFVector4f sim_global_quat = 46;
+    SFVector3f sim_euler_angles = 47;
     //[[[end]]]
 
 }

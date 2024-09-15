@@ -5,6 +5,7 @@ from math import sin, pi
 import random
 import copy
 from typing import *
+import struct
 
 import logging
 # Configure logging to display the timestamp and the log level
@@ -66,6 +67,8 @@ def post_sfr(sfr: StateFieldRegistry):
     import psrc.sfr_gen.sfr_gen as sfr_gen
     sfr_gen.py_generate_all()
     ]]]'''
+    if len(sfr.zero_vec.elements) > 0:
+        points.append(vec_measurement(sfr.zero_vec, 'zero_vec', time_point))
     if len(sfr.imu_linear_acc.elements) > 0:
         points.append(vec_measurement(sfr.imu_linear_acc, 'imu_linear_acc', time_point))
     if len(sfr.imu_acc.elements) > 0:
@@ -110,7 +113,14 @@ def post_sfr(sfr: StateFieldRegistry):
     point.field("target_mc_state", sfr.target_mc_state)
     point.field("gnc_state", sfr.gnc_state)
     point.field("target_gnc_state", sfr.target_gnc_state)
+    point.field("packed_imu_state", sfr.packed_imu_state)
     #[[[end]]]
+
+    imu_sys_state, imu_gyr_state, imu_acc_state, imu_mag_state = struct.pack('>I', sfr.packed_imu_state)
+    point.field("imu_sys_state", imu_sys_state)
+    point.field("imu_gyr_state", imu_gyr_state)
+    point.field("imu_acc_state", imu_acc_state)
+    point.field("imu_mag_state", imu_mag_state)
 
     point.time(time_point)  # Use current time in nanoseconds
     points.append(point)

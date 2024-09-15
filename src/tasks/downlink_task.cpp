@@ -94,6 +94,10 @@ void DownlinkTask::execute()
     state_field_registry.target_mc_state = sfr_.target_mc_state;
     state_field_registry.gnc_state = sfr_.gnc_state;
     state_field_registry.target_gnc_state = sfr_.target_gnc_state;
+    state_field_registry.packed_imu_state = sfr_.packed_imu_state;
+    lin_link_downlink_sfr(state_field_registry.zero_vec,
+                          state_field_registry.has_zero_vec,
+                          &sfr_.zero_vec);
     lin_link_downlink_sfr(state_field_registry.imu_linear_acc,
                           state_field_registry.has_imu_linear_acc,
                           &sfr_.imu_linear_acc);
@@ -109,6 +113,9 @@ void DownlinkTask::execute()
     lin_link_downlink_sfr(state_field_registry.imu_quat,
                           state_field_registry.has_imu_quat,
                           &sfr_.imu_quat);
+    lin_link_downlink_sfr(state_field_registry.gnc_global_target_pos,
+                          state_field_registry.has_gnc_global_target_pos,
+                          &sfr_.gnc_global_target_pos);
     lin_link_downlink_sfr(state_field_registry.state_global_pos,
                           state_field_registry.has_state_global_pos,
                           &sfr_.state_global_pos);

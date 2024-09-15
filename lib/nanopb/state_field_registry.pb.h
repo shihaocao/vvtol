@@ -37,6 +37,9 @@ sfr_gen.proto_generate_all()
     int32_t target_mc_state;
     int32_t gnc_state;
     int32_t target_gnc_state;
+    uint32_t packed_imu_state;
+    bool has_zero_vec;
+    SFVector3f zero_vec;
     bool has_imu_linear_acc;
     SFVector3f imu_linear_acc;
     bool has_imu_acc;
@@ -85,10 +88,10 @@ extern "C" {
 /* Initializer values for message structs */
 #define SFVector3f_init_default                  {{{NULL}, NULL}}
 #define SFVector4f_init_default                  {{{NULL}, NULL}}
-#define StateFieldRegistry_init_default          {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector3f_init_default}
+#define StateFieldRegistry_init_default          {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector3f_init_default}
 #define SFVector3f_init_zero                     {{{NULL}, NULL}}
 #define SFVector4f_init_zero                     {{{NULL}, NULL}}
-#define StateFieldRegistry_init_zero             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector3f_init_zero}
+#define StateFieldRegistry_init_zero             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector3f_init_zero}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define SFVector3f_elements_tag                  1
@@ -107,25 +110,27 @@ extern "C" {
 #define StateFieldRegistry_target_mc_state_tag   24
 #define StateFieldRegistry_gnc_state_tag         25
 #define StateFieldRegistry_target_gnc_state_tag  26
-#define StateFieldRegistry_imu_linear_acc_tag    27
-#define StateFieldRegistry_imu_acc_tag           28
-#define StateFieldRegistry_imu_gyr_acc_tag       29
-#define StateFieldRegistry_imu_euler_vec_tag     30
-#define StateFieldRegistry_imu_quat_tag          31
-#define StateFieldRegistry_gnc_global_target_error_tag 32
-#define StateFieldRegistry_gnc_global_target_pos_tag 33
-#define StateFieldRegistry_state_global_pos_tag  34
-#define StateFieldRegistry_state_global_vel_tag  35
-#define StateFieldRegistry_state_global_acc_tag  36
-#define StateFieldRegistry_state_euler_vec_tag   37
-#define StateFieldRegistry_gnc_target_global_acc_tag 38
-#define StateFieldRegistry_gnc_global_quat_tag   39
-#define StateFieldRegistry_gnc_euler_angles_tag  40
-#define StateFieldRegistry_sim_global_linear_pos_tag 41
-#define StateFieldRegistry_sim_global_linear_vel_tag 42
-#define StateFieldRegistry_sim_global_linear_acc_tag 43
-#define StateFieldRegistry_sim_global_quat_tag   44
-#define StateFieldRegistry_sim_euler_angles_tag  45
+#define StateFieldRegistry_packed_imu_state_tag  27
+#define StateFieldRegistry_zero_vec_tag          28
+#define StateFieldRegistry_imu_linear_acc_tag    29
+#define StateFieldRegistry_imu_acc_tag           30
+#define StateFieldRegistry_imu_gyr_acc_tag       31
+#define StateFieldRegistry_imu_euler_vec_tag     32
+#define StateFieldRegistry_imu_quat_tag          33
+#define StateFieldRegistry_gnc_global_target_error_tag 34
+#define StateFieldRegistry_gnc_global_target_pos_tag 35
+#define StateFieldRegistry_state_global_pos_tag  36
+#define StateFieldRegistry_state_global_vel_tag  37
+#define StateFieldRegistry_state_global_acc_tag  38
+#define StateFieldRegistry_state_euler_vec_tag   39
+#define StateFieldRegistry_gnc_target_global_acc_tag 40
+#define StateFieldRegistry_gnc_global_quat_tag   41
+#define StateFieldRegistry_gnc_euler_angles_tag  42
+#define StateFieldRegistry_sim_global_linear_pos_tag 43
+#define StateFieldRegistry_sim_global_linear_vel_tag 44
+#define StateFieldRegistry_sim_global_linear_acc_tag 45
+#define StateFieldRegistry_sim_global_quat_tag   46
+#define StateFieldRegistry_sim_euler_angles_tag  47
 
 /* Struct field encoding specification for nanopb */
 #define SFVector3f_FIELDLIST(X, a) \
@@ -153,27 +158,30 @@ X(a, STATIC,   SINGULAR, INT32,    mc_state,         23) \
 X(a, STATIC,   SINGULAR, INT32,    target_mc_state,  24) \
 X(a, STATIC,   SINGULAR, INT32,    gnc_state,        25) \
 X(a, STATIC,   SINGULAR, INT32,    target_gnc_state,  26) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  imu_linear_acc,   27) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  imu_acc,          28) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  imu_gyr_acc,      29) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  imu_euler_vec,    30) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  imu_quat,         31) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_target_error,  32) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_target_pos,  33) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_pos,  34) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_vel,  35) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_acc,  36) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  state_euler_vec,  37) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_target_global_acc,  38) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_quat,  39) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_euler_angles,  40) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_pos,  41) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_vel,  42) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_acc,  43) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_quat,  44) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_euler_angles,  45)
+X(a, STATIC,   SINGULAR, UINT32,   packed_imu_state,  27) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  zero_vec,         28) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  imu_linear_acc,   29) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  imu_acc,          30) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  imu_gyr_acc,      31) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  imu_euler_vec,    32) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  imu_quat,         33) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_target_error,  34) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_target_pos,  35) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_pos,  36) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_vel,  37) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_acc,  38) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  state_euler_vec,  39) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_target_global_acc,  40) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_quat,  41) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_euler_angles,  42) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_pos,  43) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_vel,  44) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_acc,  45) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_quat,  46) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_euler_angles,  47)
 #define StateFieldRegistry_CALLBACK NULL
 #define StateFieldRegistry_DEFAULT NULL
+#define StateFieldRegistry_zero_vec_MSGTYPE SFVector3f
 #define StateFieldRegistry_imu_linear_acc_MSGTYPE SFVector3f
 #define StateFieldRegistry_imu_acc_MSGTYPE SFVector3f
 #define StateFieldRegistry_imu_gyr_acc_MSGTYPE SFVector3f

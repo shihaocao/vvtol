@@ -63,7 +63,17 @@ void ImuMonitor::setup()
   log() << "Setup complete" << '\n';
   //   bno08x.enableReport(SH2_MAGNETIC_FIELD_CALIBRATED);
 #endif
+
+  sfr_.zero_vec = {0.0f, 0.0f, 0.0f};
 };
+
+int packBytes(unsigned char byte1, unsigned char byte2, unsigned char byte3, unsigned char byte4)
+{
+  return (byte1 << 24) |
+         (byte2 << 16) |
+         (byte3 << 8) |
+         (byte4);
+}
 
 void ImuMonitor::execute()
 {
@@ -111,6 +121,11 @@ void ImuMonitor::execute()
       euler_vec.orientation.y,
       euler_vec.orientation.z,
   };
+
+  unsigned char s, g, a, m;
+  bno_imu.getCalibration(&s, &g, &a, &m);
+  uint32_t packed_state = packBytes(s, g, a, m);
+  sfr_.packed_imu_state = packed_state;
 
   // poll for quatnernion
   imu::Quaternion local_quat = bno_imu.getQuat();
