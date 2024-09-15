@@ -51,16 +51,17 @@ struct StateFields
     lin::Vector3f imu_linear_acc{};
     lin::Vector3f imu_acc{};
     lin::Vector3f imu_gyr_acc{};
-    lin::Vector3f gnc_global_target_error_f{};
-    lin::Vector3f gnc_global_target_pos_f{};
-    lin::Vector3f gnc_global_linear_pos_f{};
-    lin::Vector3f gnc_global_linear_vel_f{};
-    lin::Vector3f gnc_global_linear_acc_f{};
+    lin::Vector3f gnc_global_target_error{};
+    lin::Vector3f gnc_global_target_pos{};
+    lin::Vector3f state_global_pos{};
+    lin::Vector3f state_global_vel{};
+    lin::Vector3f state_global_acc{};
+    lin::Vector3f gnc_target_global_acc{};
     lin::Vector3f gnc_global_quat{};
     lin::Vector3f gnc_euler_angles{};
-    lin::Vector3f sim_global_linear_pos_f{};
-    lin::Vector3f sim_global_linear_vel_f{};
-    lin::Vector3f sim_global_linear_acc_f{};
+    lin::Vector3f sim_global_linear_pos{};
+    lin::Vector3f sim_global_linear_vel{};
+    lin::Vector3f sim_global_linear_acc{};
     lin::Vector3f sim_global_quat{};
     lin::Vector3f sim_euler_angles{};
     //[[[end]]]

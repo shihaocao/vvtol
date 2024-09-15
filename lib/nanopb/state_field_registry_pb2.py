@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n%lib/nanopb/state_field_registry.proto\"\"\n\nSFVector3f\x12\x14\n\x08\x65lements\x18\x01 \x03(\x02\x42\x02\x10\x01\"\"\n\nSFVector4f\x12\x14\n\x08\x65lements\x18\x01 \x03(\x02\x42\x02\x10\x01\"\xa6\t\n\x12StateFieldRegistry\x12%\n\x1dtime_t_control_cycle_limit_us\x18\x02 \x01(\x05\x12 \n\x18time_t_last_cycle_end_us\x18\x03 \x01(\r\x12\x1c\n\x14last_transition_ccno\x18\x04 \x01(\x04\x12)\n\x14imu_linear_acc_vec_f\x18\n \x01(\x0b\x32\x0b.SFVector3f\x12\"\n\rimu_acc_vec_f\x18\x0b \x01(\x0b\x32\x0b.SFVector3f\x12 \n\x0bimu_gyr_vec\x18\x0c \x01(\x0b\x32\x0b.SFVector3f\x12\"\n\rimu_euler_vec\x18\r \x01(\x0b\x32\x0b.SFVector4f\x12\x1d\n\x08imu_quat\x18\x0e \x01(\x0b\x32\x0b.SFVector4f\x12\x12\n\nfin_py_cmd\x18\x10 \x01(\x02\x12\x12\n\nfin_ny_cmd\x18\x11 \x01(\x02\x12\x12\n\nfin_px_cmd\x18\x12 \x01(\x02\x12\x12\n\nfin_nx_cmd\x18\x13 \x01(\x02\x12\x17\n\x0flower_motor_cmd\x18\x14 \x01(\x02\x12$\n\x1ctime_t_average_cycle_time_us\x18\x15 \x01(\x02\x12\x1d\n\x15mcl_control_cycle_num\x18\x16 \x01(\r\x12\x10\n\x08mc_state\x18\x17 \x01(\x05\x12\x17\n\x0ftarget_mc_state\x18\x18 \x01(\x05\x12\x11\n\tgnc_state\x18\x19 \x01(\x05\x12\x18\n\x10target_gnc_state\x18\x1a \x01(\x05\x12#\n\x0eimu_linear_acc\x18\x1b \x01(\x0b\x32\x0b.SFVector3f\x12\x1c\n\x07imu_acc\x18\x1c \x01(\x0b\x32\x0b.SFVector3f\x12 \n\x0bimu_gyr_acc\x18\x1d \x01(\x0b\x32\x0b.SFVector3f\x12.\n\x19gnc_global_target_error_f\x18\x1e \x01(\x0b\x32\x0b.SFVector3f\x12,\n\x17gnc_global_target_pos_f\x18\x1f \x01(\x0b\x32\x0b.SFVector3f\x12,\n\x17gnc_global_linear_pos_f\x18  \x01(\x0b\x32\x0b.SFVector3f\x12,\n\x17gnc_global_linear_vel_f\x18! \x01(\x0b\x32\x0b.SFVector3f\x12,\n\x17gnc_global_linear_acc_f\x18\" \x01(\x0b\x32\x0b.SFVector3f\x12$\n\x0fgnc_global_quat\x18# \x01(\x0b\x32\x0b.SFVector3f\x12%\n\x10gnc_euler_angles\x18$ \x01(\x0b\x32\x0b.SFVector3f\x12,\n\x17sim_global_linear_pos_f\x18% \x01(\x0b\x32\x0b.SFVector3f\x12,\n\x17sim_global_linear_vel_f\x18& \x01(\x0b\x32\x0b.SFVector3f\x12,\n\x17sim_global_linear_acc_f\x18\' \x01(\x0b\x32\x0b.SFVector3f\x12$\n\x0fsim_global_quat\x18( \x01(\x0b\x32\x0b.SFVector3f\x12%\n\x10sim_euler_angles\x18) \x01(\x0b\x32\x0b.SFVector3fb\x06proto3')
+  serialized_pb=_b('\n%lib/nanopb/state_field_registry.proto\"\"\n\nSFVector3f\x12\x14\n\x08\x65lements\x18\x01 \x03(\x02\x42\x02\x10\x01\"\"\n\nSFVector4f\x12\x14\n\x08\x65lements\x18\x01 \x03(\x02\x42\x02\x10\x01\"\xb3\t\n\x12StateFieldRegistry\x12%\n\x1dtime_t_control_cycle_limit_us\x18\x02 \x01(\x05\x12 \n\x18time_t_last_cycle_end_us\x18\x03 \x01(\r\x12\x1c\n\x14last_transition_ccno\x18\x04 \x01(\x04\x12)\n\x14imu_linear_acc_vec_f\x18\n \x01(\x0b\x32\x0b.SFVector3f\x12\"\n\rimu_acc_vec_f\x18\x0b \x01(\x0b\x32\x0b.SFVector3f\x12 \n\x0bimu_gyr_vec\x18\x0c \x01(\x0b\x32\x0b.SFVector3f\x12\"\n\rimu_euler_vec\x18\r \x01(\x0b\x32\x0b.SFVector4f\x12\x1d\n\x08imu_quat\x18\x0e \x01(\x0b\x32\x0b.SFVector4f\x12\x12\n\nfin_py_cmd\x18\x10 \x01(\x02\x12\x12\n\nfin_ny_cmd\x18\x11 \x01(\x02\x12\x12\n\nfin_px_cmd\x18\x12 \x01(\x02\x12\x12\n\nfin_nx_cmd\x18\x13 \x01(\x02\x12\x17\n\x0flower_motor_cmd\x18\x14 \x01(\x02\x12$\n\x1ctime_t_average_cycle_time_us\x18\x15 \x01(\x02\x12\x1d\n\x15mcl_control_cycle_num\x18\x16 \x01(\r\x12\x10\n\x08mc_state\x18\x17 \x01(\x05\x12\x17\n\x0ftarget_mc_state\x18\x18 \x01(\x05\x12\x11\n\tgnc_state\x18\x19 \x01(\x05\x12\x18\n\x10target_gnc_state\x18\x1a \x01(\x05\x12#\n\x0eimu_linear_acc\x18\x1b \x01(\x0b\x32\x0b.SFVector3f\x12\x1c\n\x07imu_acc\x18\x1c \x01(\x0b\x32\x0b.SFVector3f\x12 \n\x0bimu_gyr_acc\x18\x1d \x01(\x0b\x32\x0b.SFVector3f\x12,\n\x17gnc_global_target_error\x18\x1e \x01(\x0b\x32\x0b.SFVector3f\x12*\n\x15gnc_global_target_pos\x18\x1f \x01(\x0b\x32\x0b.SFVector3f\x12%\n\x10state_global_pos\x18  \x01(\x0b\x32\x0b.SFVector3f\x12%\n\x10state_global_vel\x18! \x01(\x0b\x32\x0b.SFVector3f\x12%\n\x10state_global_acc\x18\" \x01(\x0b\x32\x0b.SFVector3f\x12*\n\x15gnc_target_global_acc\x18# \x01(\x0b\x32\x0b.SFVector3f\x12$\n\x0fgnc_global_quat\x18$ \x01(\x0b\x32\x0b.SFVector3f\x12%\n\x10gnc_euler_angles\x18% \x01(\x0b\x32\x0b.SFVector3f\x12*\n\x15sim_global_linear_pos\x18& \x01(\x0b\x32\x0b.SFVector3f\x12*\n\x15sim_global_linear_vel\x18\' \x01(\x0b\x32\x0b.SFVector3f\x12*\n\x15sim_global_linear_acc\x18( \x01(\x0b\x32\x0b.SFVector3f\x12$\n\x0fsim_global_quat\x18) \x01(\x0b\x32\x0b.SFVector3f\x12%\n\x10sim_euler_angles\x18* \x01(\x0b\x32\x0b.SFVector3fb\x06proto3')
 )
 
 
@@ -249,85 +249,92 @@ _STATEFIELDREGISTRY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gnc_global_target_error_f', full_name='StateFieldRegistry.gnc_global_target_error_f', index=22,
+      name='gnc_global_target_error', full_name='StateFieldRegistry.gnc_global_target_error', index=22,
       number=30, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gnc_global_target_pos_f', full_name='StateFieldRegistry.gnc_global_target_pos_f', index=23,
+      name='gnc_global_target_pos', full_name='StateFieldRegistry.gnc_global_target_pos', index=23,
       number=31, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gnc_global_linear_pos_f', full_name='StateFieldRegistry.gnc_global_linear_pos_f', index=24,
+      name='state_global_pos', full_name='StateFieldRegistry.state_global_pos', index=24,
       number=32, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gnc_global_linear_vel_f', full_name='StateFieldRegistry.gnc_global_linear_vel_f', index=25,
+      name='state_global_vel', full_name='StateFieldRegistry.state_global_vel', index=25,
       number=33, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gnc_global_linear_acc_f', full_name='StateFieldRegistry.gnc_global_linear_acc_f', index=26,
+      name='state_global_acc', full_name='StateFieldRegistry.state_global_acc', index=26,
       number=34, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gnc_global_quat', full_name='StateFieldRegistry.gnc_global_quat', index=27,
+      name='gnc_target_global_acc', full_name='StateFieldRegistry.gnc_target_global_acc', index=27,
       number=35, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gnc_euler_angles', full_name='StateFieldRegistry.gnc_euler_angles', index=28,
+      name='gnc_global_quat', full_name='StateFieldRegistry.gnc_global_quat', index=28,
       number=36, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sim_global_linear_pos_f', full_name='StateFieldRegistry.sim_global_linear_pos_f', index=29,
+      name='gnc_euler_angles', full_name='StateFieldRegistry.gnc_euler_angles', index=29,
       number=37, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sim_global_linear_vel_f', full_name='StateFieldRegistry.sim_global_linear_vel_f', index=30,
+      name='sim_global_linear_pos', full_name='StateFieldRegistry.sim_global_linear_pos', index=30,
       number=38, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sim_global_linear_acc_f', full_name='StateFieldRegistry.sim_global_linear_acc_f', index=31,
+      name='sim_global_linear_vel', full_name='StateFieldRegistry.sim_global_linear_vel', index=31,
       number=39, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sim_global_quat', full_name='StateFieldRegistry.sim_global_quat', index=32,
+      name='sim_global_linear_acc', full_name='StateFieldRegistry.sim_global_linear_acc', index=32,
       number=40, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sim_euler_angles', full_name='StateFieldRegistry.sim_euler_angles', index=33,
+      name='sim_global_quat', full_name='StateFieldRegistry.sim_global_quat', index=33,
       number=41, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sim_euler_angles', full_name='StateFieldRegistry.sim_euler_angles', index=34,
+      number=42, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -345,7 +352,7 @@ _STATEFIELDREGISTRY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=114,
-  serialized_end=1304,
+  serialized_end=1317,
 )
 
 _STATEFIELDREGISTRY.fields_by_name['imu_linear_acc_vec_f'].message_type = _SFVECTOR3F
@@ -356,16 +363,17 @@ _STATEFIELDREGISTRY.fields_by_name['imu_quat'].message_type = _SFVECTOR4F
 _STATEFIELDREGISTRY.fields_by_name['imu_linear_acc'].message_type = _SFVECTOR3F
 _STATEFIELDREGISTRY.fields_by_name['imu_acc'].message_type = _SFVECTOR3F
 _STATEFIELDREGISTRY.fields_by_name['imu_gyr_acc'].message_type = _SFVECTOR3F
-_STATEFIELDREGISTRY.fields_by_name['gnc_global_target_error_f'].message_type = _SFVECTOR3F
-_STATEFIELDREGISTRY.fields_by_name['gnc_global_target_pos_f'].message_type = _SFVECTOR3F
-_STATEFIELDREGISTRY.fields_by_name['gnc_global_linear_pos_f'].message_type = _SFVECTOR3F
-_STATEFIELDREGISTRY.fields_by_name['gnc_global_linear_vel_f'].message_type = _SFVECTOR3F
-_STATEFIELDREGISTRY.fields_by_name['gnc_global_linear_acc_f'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['gnc_global_target_error'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['gnc_global_target_pos'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['state_global_pos'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['state_global_vel'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['state_global_acc'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['gnc_target_global_acc'].message_type = _SFVECTOR3F
 _STATEFIELDREGISTRY.fields_by_name['gnc_global_quat'].message_type = _SFVECTOR3F
 _STATEFIELDREGISTRY.fields_by_name['gnc_euler_angles'].message_type = _SFVECTOR3F
-_STATEFIELDREGISTRY.fields_by_name['sim_global_linear_pos_f'].message_type = _SFVECTOR3F
-_STATEFIELDREGISTRY.fields_by_name['sim_global_linear_vel_f'].message_type = _SFVECTOR3F
-_STATEFIELDREGISTRY.fields_by_name['sim_global_linear_acc_f'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['sim_global_linear_pos'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['sim_global_linear_vel'].message_type = _SFVECTOR3F
+_STATEFIELDREGISTRY.fields_by_name['sim_global_linear_acc'].message_type = _SFVECTOR3F
 _STATEFIELDREGISTRY.fields_by_name['sim_global_quat'].message_type = _SFVECTOR3F
 _STATEFIELDREGISTRY.fields_by_name['sim_euler_angles'].message_type = _SFVECTOR3F
 DESCRIPTOR.message_types_by_name['SFVector3f'] = _SFVECTOR3F

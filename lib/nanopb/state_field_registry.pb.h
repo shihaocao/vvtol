@@ -53,26 +53,28 @@ sfr_gen.proto_generate_all()
     SFVector3f imu_acc;
     bool has_imu_gyr_acc;
     SFVector3f imu_gyr_acc;
-    bool has_gnc_global_target_error_f;
-    SFVector3f gnc_global_target_error_f;
-    bool has_gnc_global_target_pos_f;
-    SFVector3f gnc_global_target_pos_f;
-    bool has_gnc_global_linear_pos_f;
-    SFVector3f gnc_global_linear_pos_f;
-    bool has_gnc_global_linear_vel_f;
-    SFVector3f gnc_global_linear_vel_f;
-    bool has_gnc_global_linear_acc_f;
-    SFVector3f gnc_global_linear_acc_f;
+    bool has_gnc_global_target_error;
+    SFVector3f gnc_global_target_error;
+    bool has_gnc_global_target_pos;
+    SFVector3f gnc_global_target_pos;
+    bool has_state_global_pos;
+    SFVector3f state_global_pos;
+    bool has_state_global_vel;
+    SFVector3f state_global_vel;
+    bool has_state_global_acc;
+    SFVector3f state_global_acc;
+    bool has_gnc_target_global_acc;
+    SFVector3f gnc_target_global_acc;
     bool has_gnc_global_quat;
     SFVector3f gnc_global_quat;
     bool has_gnc_euler_angles;
     SFVector3f gnc_euler_angles;
-    bool has_sim_global_linear_pos_f;
-    SFVector3f sim_global_linear_pos_f;
-    bool has_sim_global_linear_vel_f;
-    SFVector3f sim_global_linear_vel_f;
-    bool has_sim_global_linear_acc_f;
-    SFVector3f sim_global_linear_acc_f;
+    bool has_sim_global_linear_pos;
+    SFVector3f sim_global_linear_pos;
+    bool has_sim_global_linear_vel;
+    SFVector3f sim_global_linear_vel;
+    bool has_sim_global_linear_acc;
+    SFVector3f sim_global_linear_acc;
     bool has_sim_global_quat;
     SFVector3f sim_global_quat;
     bool has_sim_euler_angles;
@@ -87,10 +89,10 @@ extern "C" {
 /* Initializer values for message structs */
 #define SFVector3f_init_default                  {{{NULL}, NULL}}
 #define SFVector4f_init_default                  {{{NULL}, NULL}}
-#define StateFieldRegistry_init_default          {0, 0, 0, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector4f_init_default, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default}
+#define StateFieldRegistry_init_default          {0, 0, 0, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector4f_init_default, false, SFVector4f_init_default, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default, false, SFVector3f_init_default}
 #define SFVector3f_init_zero                     {{{NULL}, NULL}}
 #define SFVector4f_init_zero                     {{{NULL}, NULL}}
-#define StateFieldRegistry_init_zero             {0, 0, 0, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector4f_init_zero, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero}
+#define StateFieldRegistry_init_zero             {0, 0, 0, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector4f_init_zero, false, SFVector4f_init_zero, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero, false, SFVector3f_init_zero}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define SFVector3f_elements_tag                  1
@@ -117,18 +119,19 @@ extern "C" {
 #define StateFieldRegistry_imu_linear_acc_tag    27
 #define StateFieldRegistry_imu_acc_tag           28
 #define StateFieldRegistry_imu_gyr_acc_tag       29
-#define StateFieldRegistry_gnc_global_target_error_f_tag 30
-#define StateFieldRegistry_gnc_global_target_pos_f_tag 31
-#define StateFieldRegistry_gnc_global_linear_pos_f_tag 32
-#define StateFieldRegistry_gnc_global_linear_vel_f_tag 33
-#define StateFieldRegistry_gnc_global_linear_acc_f_tag 34
-#define StateFieldRegistry_gnc_global_quat_tag   35
-#define StateFieldRegistry_gnc_euler_angles_tag  36
-#define StateFieldRegistry_sim_global_linear_pos_f_tag 37
-#define StateFieldRegistry_sim_global_linear_vel_f_tag 38
-#define StateFieldRegistry_sim_global_linear_acc_f_tag 39
-#define StateFieldRegistry_sim_global_quat_tag   40
-#define StateFieldRegistry_sim_euler_angles_tag  41
+#define StateFieldRegistry_gnc_global_target_error_tag 30
+#define StateFieldRegistry_gnc_global_target_pos_tag 31
+#define StateFieldRegistry_state_global_pos_tag  32
+#define StateFieldRegistry_state_global_vel_tag  33
+#define StateFieldRegistry_state_global_acc_tag  34
+#define StateFieldRegistry_gnc_target_global_acc_tag 35
+#define StateFieldRegistry_gnc_global_quat_tag   36
+#define StateFieldRegistry_gnc_euler_angles_tag  37
+#define StateFieldRegistry_sim_global_linear_pos_tag 38
+#define StateFieldRegistry_sim_global_linear_vel_tag 39
+#define StateFieldRegistry_sim_global_linear_acc_tag 40
+#define StateFieldRegistry_sim_global_quat_tag   41
+#define StateFieldRegistry_sim_euler_angles_tag  42
 
 /* Struct field encoding specification for nanopb */
 #define SFVector3f_FIELDLIST(X, a) \
@@ -164,18 +167,19 @@ X(a, STATIC,   SINGULAR, INT32,    target_gnc_state,  26) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_linear_acc,   27) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_acc,          28) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  imu_gyr_acc,      29) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_target_error_f,  30) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_target_pos_f,  31) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_linear_pos_f,  32) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_linear_vel_f,  33) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_linear_acc_f,  34) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_quat,  35) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_euler_angles,  36) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_pos_f,  37) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_vel_f,  38) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_acc_f,  39) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_quat,  40) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  sim_euler_angles,  41)
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_target_error,  30) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_target_pos,  31) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_pos,  32) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_vel,  33) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  state_global_acc,  34) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_target_global_acc,  35) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_global_quat,  36) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  gnc_euler_angles,  37) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_pos,  38) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_vel,  39) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_linear_acc,  40) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_global_quat,  41) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  sim_euler_angles,  42)
 #define StateFieldRegistry_CALLBACK NULL
 #define StateFieldRegistry_DEFAULT NULL
 #define StateFieldRegistry_imu_linear_acc_vec_f_MSGTYPE SFVector3f
@@ -186,16 +190,17 @@ X(a, STATIC,   OPTIONAL, MESSAGE,  sim_euler_angles,  41)
 #define StateFieldRegistry_imu_linear_acc_MSGTYPE SFVector3f
 #define StateFieldRegistry_imu_acc_MSGTYPE SFVector3f
 #define StateFieldRegistry_imu_gyr_acc_MSGTYPE SFVector3f
-#define StateFieldRegistry_gnc_global_target_error_f_MSGTYPE SFVector3f
-#define StateFieldRegistry_gnc_global_target_pos_f_MSGTYPE SFVector3f
-#define StateFieldRegistry_gnc_global_linear_pos_f_MSGTYPE SFVector3f
-#define StateFieldRegistry_gnc_global_linear_vel_f_MSGTYPE SFVector3f
-#define StateFieldRegistry_gnc_global_linear_acc_f_MSGTYPE SFVector3f
+#define StateFieldRegistry_gnc_global_target_error_MSGTYPE SFVector3f
+#define StateFieldRegistry_gnc_global_target_pos_MSGTYPE SFVector3f
+#define StateFieldRegistry_state_global_pos_MSGTYPE SFVector3f
+#define StateFieldRegistry_state_global_vel_MSGTYPE SFVector3f
+#define StateFieldRegistry_state_global_acc_MSGTYPE SFVector3f
+#define StateFieldRegistry_gnc_target_global_acc_MSGTYPE SFVector3f
 #define StateFieldRegistry_gnc_global_quat_MSGTYPE SFVector3f
 #define StateFieldRegistry_gnc_euler_angles_MSGTYPE SFVector3f
-#define StateFieldRegistry_sim_global_linear_pos_f_MSGTYPE SFVector3f
-#define StateFieldRegistry_sim_global_linear_vel_f_MSGTYPE SFVector3f
-#define StateFieldRegistry_sim_global_linear_acc_f_MSGTYPE SFVector3f
+#define StateFieldRegistry_sim_global_linear_pos_MSGTYPE SFVector3f
+#define StateFieldRegistry_sim_global_linear_vel_MSGTYPE SFVector3f
+#define StateFieldRegistry_sim_global_linear_acc_MSGTYPE SFVector3f
 #define StateFieldRegistry_sim_global_quat_MSGTYPE SFVector3f
 #define StateFieldRegistry_sim_euler_angles_MSGTYPE SFVector3f
 

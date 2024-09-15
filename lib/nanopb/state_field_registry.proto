@@ -39,18 +39,19 @@ message StateFieldRegistry {
     SFVector3f imu_linear_acc = 27;
     SFVector3f imu_acc = 28;
     SFVector3f imu_gyr_acc = 29;
-    SFVector3f gnc_global_target_error_f = 30;
-    SFVector3f gnc_global_target_pos_f = 31;
-    SFVector3f gnc_global_linear_pos_f = 32;
-    SFVector3f gnc_global_linear_vel_f = 33;
-    SFVector3f gnc_global_linear_acc_f = 34;
-    SFVector3f gnc_global_quat = 35;
-    SFVector3f gnc_euler_angles = 36;
-    SFVector3f sim_global_linear_pos_f = 37;
-    SFVector3f sim_global_linear_vel_f = 38;
-    SFVector3f sim_global_linear_acc_f = 39;
-    SFVector3f sim_global_quat = 40;
-    SFVector3f sim_euler_angles = 41;
+    SFVector3f gnc_global_target_error = 30;
+    SFVector3f gnc_global_target_pos = 31;
+    SFVector3f state_global_pos = 32;
+    SFVector3f state_global_vel = 33;
+    SFVector3f state_global_acc = 34;
+    SFVector3f gnc_target_global_acc = 35;
+    SFVector3f gnc_global_quat = 36;
+    SFVector3f gnc_euler_angles = 37;
+    SFVector3f sim_global_linear_pos = 38;
+    SFVector3f sim_global_linear_vel = 39;
+    SFVector3f sim_global_linear_acc = 40;
+    SFVector3f sim_global_quat = 41;
+    SFVector3f sim_euler_angles = 42;
     //[[[end]]]
 
 }

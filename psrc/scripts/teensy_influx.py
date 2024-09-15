@@ -67,26 +67,26 @@ def post_sfr(sfr: StateFieldRegistry):
         points.append(vec_measurement(sfr.imu_acc, 'imu_acc', time_point))
     if len(sfr.imu_gyr_acc.elements) > 0:
         points.append(vec_measurement(sfr.imu_gyr_acc, 'imu_gyr_acc', time_point))
-    if len(sfr.gnc_global_target_error_f.elements) > 0:
-        points.append(vec_measurement(sfr.gnc_global_target_error_f, 'gnc_global_target_error_f', time_point))
-    if len(sfr.gnc_global_target_pos_f.elements) > 0:
-        points.append(vec_measurement(sfr.gnc_global_target_pos_f, 'gnc_global_target_pos_f', time_point))
-    if len(sfr.gnc_global_linear_pos_f.elements) > 0:
-        points.append(vec_measurement(sfr.gnc_global_linear_pos_f, 'gnc_global_linear_pos_f', time_point))
-    if len(sfr.gnc_global_linear_vel_f.elements) > 0:
-        points.append(vec_measurement(sfr.gnc_global_linear_vel_f, 'gnc_global_linear_vel_f', time_point))
-    if len(sfr.gnc_global_linear_acc_f.elements) > 0:
-        points.append(vec_measurement(sfr.gnc_global_linear_acc_f, 'gnc_global_linear_acc_f', time_point))
+    if len(sfr.gnc_global_target_error.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_global_target_error, 'gnc_global_target_error', time_point))
+    if len(sfr.gnc_global_target_pos.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_global_target_pos, 'gnc_global_target_pos', time_point))
+    if len(sfr.state_global_pos.elements) > 0:
+        points.append(vec_measurement(sfr.state_global_pos, 'state_global_pos', time_point))
+    if len(sfr.state_global_vel.elements) > 0:
+        points.append(vec_measurement(sfr.state_global_vel, 'state_global_vel', time_point))
+    if len(sfr.state_global_acc.elements) > 0:
+        points.append(vec_measurement(sfr.state_global_acc, 'state_global_acc', time_point))
     if len(sfr.gnc_global_quat.elements) > 0:
         points.append(vec_measurement(sfr.gnc_global_quat, 'gnc_global_quat', time_point))
     if len(sfr.gnc_euler_angles.elements) > 0:
         points.append(vec_measurement(sfr.gnc_euler_angles, 'gnc_euler_angles', time_point))
-    if len(sfr.sim_global_linear_pos_f.elements) > 0:
-        points.append(vec_measurement(sfr.sim_global_linear_pos_f, 'sim_global_linear_pos_f', time_point))
-    if len(sfr.sim_global_linear_vel_f.elements) > 0:
-        points.append(vec_measurement(sfr.sim_global_linear_vel_f, 'sim_global_linear_vel_f', time_point))
-    if len(sfr.sim_global_linear_acc_f.elements) > 0:
-        points.append(vec_measurement(sfr.sim_global_linear_acc_f, 'sim_global_linear_acc_f', time_point))
+    if len(sfr.sim_global_linear_pos.elements) > 0:
+        points.append(vec_measurement(sfr.sim_global_linear_pos, 'sim_global_linear_pos', time_point))
+    if len(sfr.sim_global_linear_vel.elements) > 0:
+        points.append(vec_measurement(sfr.sim_global_linear_vel, 'sim_global_linear_vel', time_point))
+    if len(sfr.sim_global_linear_acc.elements) > 0:
+        points.append(vec_measurement(sfr.sim_global_linear_acc, 'sim_global_linear_acc', time_point))
     if len(sfr.sim_global_quat.elements) > 0:
         points.append(vec_measurement(sfr.sim_global_quat, 'sim_global_quat', time_point))
     if len(sfr.sim_euler_angles.elements) > 0:

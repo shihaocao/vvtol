@@ -90,29 +90,34 @@ VEC_ITEM_LIST = [
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'gnc_global_target_error_f',
+        'gnc_global_target_error',
         'lin_link_downlink_sfr',
         disable_telem=True
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'gnc_global_target_pos_f',
+        'gnc_global_target_pos',
         'lin_link_downlink_sfr',
         disable_telem=True
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'gnc_global_linear_pos_f',
+        'state_global_pos',
         'lin_link_downlink_sfr'
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'gnc_global_linear_vel_f',
+        'state_global_vel',
         'lin_link_downlink_sfr'
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'gnc_global_linear_acc_f',
+        'state_global_acc',
+        'lin_link_downlink_sfr'
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'gnc_target_global_acc',
         'lin_link_downlink_sfr'
     ),
     SfrItem(
@@ -127,20 +132,20 @@ VEC_ITEM_LIST = [
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'sim_global_linear_pos_f',
+        'sim_global_linear_pos',
         'lin_link_downlink_sfr',
         disable_telem=DISABLE_SIM_TELEM
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'sim_global_linear_vel_f',
+        'sim_global_linear_vel',
         'lin_link_downlink_sfr',
         disable_telem=DISABLE_SIM_TELEM
 
     ),
     SfrItem(
         SfrType.LIN_VECTOR3F_T,
-        'sim_global_linear_acc_f',
+        'sim_global_linear_acc',
         'lin_link_downlink_sfr',
         disable_telem=DISABLE_SIM_TELEM
     ),

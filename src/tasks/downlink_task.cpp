@@ -103,15 +103,18 @@ void DownlinkTask::execute()
     lin_link_downlink_sfr(state_field_registry.imu_gyr_acc,
                           state_field_registry.has_imu_gyr_acc,
                           &sfr_.imu_gyr_acc);
-    lin_link_downlink_sfr(state_field_registry.gnc_global_linear_pos_f,
-                          state_field_registry.has_gnc_global_linear_pos_f,
-                          &sfr_.gnc_global_linear_pos_f);
-    lin_link_downlink_sfr(state_field_registry.gnc_global_linear_vel_f,
-                          state_field_registry.has_gnc_global_linear_vel_f,
-                          &sfr_.gnc_global_linear_vel_f);
-    lin_link_downlink_sfr(state_field_registry.gnc_global_linear_acc_f,
-                          state_field_registry.has_gnc_global_linear_acc_f,
-                          &sfr_.gnc_global_linear_acc_f);
+    lin_link_downlink_sfr(state_field_registry.state_global_pos,
+                          state_field_registry.has_state_global_pos,
+                          &sfr_.state_global_pos);
+    lin_link_downlink_sfr(state_field_registry.state_global_vel,
+                          state_field_registry.has_state_global_vel,
+                          &sfr_.state_global_vel);
+    lin_link_downlink_sfr(state_field_registry.state_global_acc,
+                          state_field_registry.has_state_global_acc,
+                          &sfr_.state_global_acc);
+    lin_link_downlink_sfr(state_field_registry.gnc_target_global_acc,
+                          state_field_registry.has_gnc_target_global_acc,
+                          &sfr_.gnc_target_global_acc);
     lin_link_downlink_sfr(state_field_registry.gnc_global_quat,
                           state_field_registry.has_gnc_global_quat,
                           &sfr_.gnc_global_quat);
