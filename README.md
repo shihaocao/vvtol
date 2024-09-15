@@ -297,6 +297,12 @@ I got the data plumbed! I have done the "clearing the old polygons part yet".
 
 ## 09/14
 
+Today I soldered together my board that I got from JLCPCB, and put the MVP level of components on it. This is actually my second board I tried soldering, the first time I soldered things together, when I powered on, the teensy just got really hot so I must have soldered a short somewhere. I was too lazy to find it, so I just made another one. This time though I am methodically testing things after every thing a solder to make sure I rule out all the previous solder jobs as "not the problem" if things break.
+
+I needed the Teensy so that I have a computer to talk to, and the IMU so that I can have a real time data source to make sure the data logging looks good and low latency, and then a radio so that I can reserve the hardline serial for debug output, and keep the radio as just telemetry.
+
+![PCB IMU Radio](documentation/pcb_imu_radio.jpg)
+
 So I've been running things for a while now, but I'm not super happy with how slow things are. I'm taking two steps to address this temporarily.
 
 I've got a lot of telemetry bloat, so I'm turning channels off that I don't need. And secondly, I think I am going to try and clean out my
@@ -329,3 +335,7 @@ Anyway, things are faster and there is no lag.
 I would recommend not refreshing any faster than `1s` in Grafana, and make sure to always run things in a normal terminal!
 
 Also here's a link to add more refresh rates in Grafana: `https://community.grafana.com/t/how-to-change-refresh-rate-from-5s-to-1s/39008/3`
+
+Lol my code keeps crashing around CCNO 2000... surely I must have left some suspicious code somewhere that just landmines...
+
+![CCNO Crash at 2k](documentation/ccno_crashing_at_2000_lol.png)
