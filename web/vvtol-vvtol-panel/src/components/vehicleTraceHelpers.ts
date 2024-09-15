@@ -13,43 +13,37 @@ interface DataPoint {
     z: number | null;
 }
 
-export function generateCoordinatesFromData(data: any[], numSamplePoints: number): Coordinate[] {
-    console.log('Received data:', data);
-    
-    const processedData: DataPoint[] = [];
-    
-    data.forEach((series, index) => {
-        console.log(`Processing series ${index}:`, series);
-        
-        const timeField = series.fields.find((f: any) => f.name === 'Time');
-        const valueField = series.fields.find((f: any) => f.name === 'x' || f.name === 'y' || f.name === 'z');
-        
-        if (!timeField || !valueField) {
-            console.warn(`Required fields not found in series ${index}. Available fields:`, series.fields.map((f: any) => f.name));
-            return;
+
+function processSeries(series: any): DataPoint[] {
+    const timeField = series.fields.find((f: any) => f.name === 'Time');
+    const valueField = series.fields.find((f: any) => f.name === 'x' || f.name === 'y' || f.name === 'z');
+
+    if (!timeField || !valueField) {
+        console.warn(`Required fields not found in series. Available fields:`, series.fields.map((f: any) => f.name));
+        return [];
+    }
+
+    const fieldName = valueField.name;
+    const seriesData: DataPoint[] = [];
+
+    valueField.values.forEach((value: number, idx: number) => {
+        const time = new Date(timeField.values[idx]).getTime();
+
+        let existingPoint = seriesData.find(p => p.time === time);
+        if (!existingPoint) {
+            existingPoint = { time, x: null, y: null, z: null };
+            seriesData.push(existingPoint);
         }
-        
-        const fieldName = valueField.name;
-        console.log(`Processing field: ${fieldName}`);
-        
-        valueField.values.forEach((value: number, idx: number) => {
-            const time = new Date(timeField.values[idx]).getTime();
-            
-            let existingPoint = processedData.find(p => p.time === time);
-            if (!existingPoint) {
-                existingPoint = { time, x: null, y: null, z: null };
-                processedData.push(existingPoint);
-            }
-            
-            existingPoint[fieldName as keyof Coordinate] = value;
-        });
+
+        existingPoint[fieldName as keyof Coordinate] = value;
     });
-    
-    processedData.sort((a, b) => a.time - b.time);
-    
-    // Interpolate missing values
+
+    return seriesData;
+}
+
+function interpolateMissingValues(processedData: DataPoint[]): void {
     processedData.forEach((point, index) => {
-        if (index === 0) return;
+        if (index === 0) return;  // Skip the first point
         const prevPoint = processedData[index - 1];
         ['x', 'y', 'z'].forEach(coord => {
             if (point[coord as keyof Coordinate] === null) {
@@ -57,16 +51,38 @@ export function generateCoordinatesFromData(data: any[], numSamplePoints: number
             }
         });
     });
-    
+}
+
+function createCoordinatesFromDataPoints(processedData: DataPoint[], numSamplePoints: number): Coordinate[] {
     const coordinates: Coordinate[] = [];
     const step = Math.max(1, Math.floor(processedData.length / numSamplePoints));
-    
+
     for (let i = 0; i < processedData.length && coordinates.length < numSamplePoints; i += step) {
         const point = processedData[i];
         if (point.x !== null && point.y !== null && point.z !== null) {
             coordinates.push({ x: point.x, y: point.y, z: point.z });
         }
     }
+
+    return coordinates;
+}
+
+export function generateCoordinatesFromData(data: any[], numSamplePoints: number): Coordinate[] {
+    console.log('Received data:', data);
+    
+    const processedData: DataPoint[] = [];
+    
+    data.forEach((series, index) => {
+        console.log(`Processing series ${index}:`, series);
+        const seriesData = processSeries(series);
+        processedData.push(...seriesData);
+    });
+    
+    processedData.sort((a, b) => a.time - b.time);
+    
+    interpolateMissingValues(processedData);
+    
+    const coordinates = createCoordinatesFromDataPoints(processedData, numSamplePoints);
     
     console.log('Generated coordinates:', coordinates);
     return coordinates;
@@ -91,7 +107,7 @@ function generateColor(index: number, totalPoints: number): THREE.Color {
 }
 
 function generateTetrahedronGeometry(coord: Coordinate): number[] {
-    const hDim = 0.25
+    const hDim = 1.0
     const topHeight = hDim;
     const baseHeight = -hDim;
     const baseRadius = hDim / 3;
