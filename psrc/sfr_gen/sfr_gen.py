@@ -221,9 +221,14 @@ def proto_generate_all():
         x += 1
 
 def py_generate_vec(item: SfrItem):
-    # if item.type == SfrType.LIN_VECTOR3F_T:
-    cog.outl(f'if len(sfr.{item.name}.elements) > 0:')
-    cog.outl(f'    points.append(vec_measurement(sfr.{item.name}, \'{item.name}\', time_point))')
+    if item.type == SfrType.LIN_VECTOR3F_T:
+        cog.outl(f'if len(sfr.{item.name}.elements) > 0:')
+        cog.outl(f'    points.append(vec_measurement(sfr.{item.name}, \'{item.name}\', time_point))')
+    elif item.type == SfrType.LIN_VECTOR4F_T:
+        cog.outl(f'if len(sfr.{item.name}.elements) > 0:')
+        cog.outl(f'    points.append(quat_measurement(sfr.{item.name}, \'{item.name}\', time_point))')
+    else:
+        raise RuntimeError("unexpected type!")
 
 def py_generate_all():
     for item in VEC_ITEM_LIST:

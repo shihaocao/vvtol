@@ -64,18 +64,6 @@ bool encode_float_array(pb_ostream_t *stream, const pb_field_t *field, void *con
     return true; // Encoding successful
 }
 
-static bool decode_float_array(pb_istream_t *stream, const pb_field_t *field, void **arg)
-{
-    return false;
-}
-
-static void link_downlink_sfr(SFVector3f &field, bool &has_field, Vector3f *sfr_field_addr)
-{
-    field.elements.arg = sfr_field_addr;
-    field.elements.funcs.encode = encode_float_array;
-    has_field = true;
-}
-
 void DownlinkTask::execute()
 {
     StateFieldRegistry state_field_registry = StateFieldRegistry_init_zero;
@@ -142,6 +130,7 @@ void DownlinkTask::execute()
     AirProto air_proto;
 
     int status = air_proto.serialize_to_buffer(state_field_registry);
+    (void)status;
     // log() << "Ser status " << status << '\n';
     // log() << "Ser data:\n";
 #ifndef NATIVE

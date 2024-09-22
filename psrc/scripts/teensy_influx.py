@@ -47,6 +47,17 @@ batch_size = 20  # Set the batch size to 100
 point_batch = []  # A list to accumulate data points
 
 
+def quat_measurement(field: Any, field_name: str, time_point: int) -> Point:
+    point = Point("quat_measurement") \
+        .tag("sensor", field_name) \
+        .field("w", field.elements[0]) \
+        .field("x", field.elements[1]) \
+        .field("y", field.elements[2]) \
+        .field("z", field.elements[3]) \
+        .time(time_point)
+    return point
+
+
 def vec_measurement(field: Any, field_name: str, time_point: int) -> Point:
     point = Point("vector_measurement") \
         .tag("sensor", field_name) \
@@ -78,7 +89,7 @@ def post_sfr(sfr: StateFieldRegistry):
     if len(sfr.imu_euler_vec.elements) > 0:
         points.append(vec_measurement(sfr.imu_euler_vec, 'imu_euler_vec', time_point))
     if len(sfr.imu_quat.elements) > 0:
-        points.append(vec_measurement(sfr.imu_quat, 'imu_quat', time_point))
+        points.append(quat_measurement(sfr.imu_quat, 'imu_quat', time_point))
     if len(sfr.gnc_global_target_error.elements) > 0:
         points.append(vec_measurement(sfr.gnc_global_target_error, 'gnc_global_target_error', time_point))
     if len(sfr.gnc_global_target_pos.elements) > 0:
@@ -94,7 +105,7 @@ def post_sfr(sfr: StateFieldRegistry):
     if len(sfr.gnc_target_global_acc.elements) > 0:
         points.append(vec_measurement(sfr.gnc_target_global_acc, 'gnc_target_global_acc', time_point))
     if len(sfr.gnc_global_quat.elements) > 0:
-        points.append(vec_measurement(sfr.gnc_global_quat, 'gnc_global_quat', time_point))
+        points.append(quat_measurement(sfr.gnc_global_quat, 'gnc_global_quat', time_point))
     if len(sfr.gnc_euler_angles.elements) > 0:
         points.append(vec_measurement(sfr.gnc_euler_angles, 'gnc_euler_angles', time_point))
     if len(sfr.sim_global_linear_pos.elements) > 0:
@@ -104,7 +115,7 @@ def post_sfr(sfr: StateFieldRegistry):
     if len(sfr.sim_global_linear_acc.elements) > 0:
         points.append(vec_measurement(sfr.sim_global_linear_acc, 'sim_global_linear_acc', time_point))
     if len(sfr.sim_global_quat.elements) > 0:
-        points.append(vec_measurement(sfr.sim_global_quat, 'sim_global_quat', time_point))
+        points.append(quat_measurement(sfr.sim_global_quat, 'sim_global_quat', time_point))
     if len(sfr.sim_euler_angles.elements) > 0:
         points.append(vec_measurement(sfr.sim_euler_angles, 'sim_euler_angles', time_point))
     point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)

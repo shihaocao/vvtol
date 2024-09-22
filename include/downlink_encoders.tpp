@@ -7,7 +7,7 @@ bool encode_lin_float_array(pb_ostream_t *stream, const pb_field_t *field, void 
     const LinType *array_p = static_cast<LinType *>(*arg);
     const LinType &array = *array_p;
     // Write each float element to the stream
-    for (int i = 0; i < 3; i++)
+    for (uint32_t i = 0; i < array.size(); i++)
     {
         const float element = array[i];
         if (!pb_encode_tag_for_field(stream, field))
