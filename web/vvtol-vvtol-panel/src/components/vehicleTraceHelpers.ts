@@ -29,10 +29,10 @@ type ComplexCoordinate = {
     values: (number | null)[];  // Values array for [posX, posY, posZ, roll, pitch, yaw]
 };
 
-export function generateCoordinatesFromData(data: any[], numSamplePoints: number): ComplexDataPoint[] {
+export function generateCoordinatesFromData(data: any[], numSamplePoints: number): ComplexCoordinate[] {
     console.error('Received data:', data);
     
-    if (data.length < 6) {
+    if (data.length < 7) {
         throw new Error('Expected six data series: three for position and three for orientation');
     }
 
@@ -40,14 +40,15 @@ export function generateCoordinatesFromData(data: any[], numSamplePoints: number
     const processedOrientationData: DataPoint[] = [];
 
     // Process orientation series (assumed to be quaternions or angles)
-    processSeries(data[0], processedOrientationData, 3); // rollx
-    processSeries(data[1], processedOrientationData, 3); // pitchy
-    processSeries(data[2], processedOrientationData, 3); // yawz
+    process4Series(data[0], processedOrientationData); // w
+    process4Series(data[1], processedOrientationData); // x
+    process4Series(data[2], processedOrientationData); // y
+    process4Series(data[3], processedOrientationData); // z
 
     // Process position series (x, y, z)
-    processSeries(data[3], processedPositionData, 3); // posx
-    processSeries(data[4], processedPositionData, 3); // posy
-    processSeries(data[5], processedPositionData, 3); // posz
+    process3Series(data[4], processedPositionData); // posx
+    process3Series(data[5], processedPositionData); // posy
+    process3Series(data[6], processedPositionData); // posz
     
     // Sort both data lists by time
     processedPositionData.sort((a, b) => a.time - b.time);
@@ -63,11 +64,11 @@ export function generateCoordinatesFromData(data: any[], numSamplePoints: number
     // Downsample
     const complexCoordinates = createComplexCoordinatesFromDataPoints(complexDataPoints, numSamplePoints);
     
-    console.log('Generated complex coordinates:', complexCoordinates);
+    console.error('Generated complex coordinates:', complexCoordinates);
     return complexCoordinates;
 }
 
-function processSeries(series: any, dataPointsList: DataPoint[], expectedLength: number): void {
+function process3Series(series: any, dataPointsList: DataPoint[]): void {
     const timeField = series.fields.find((f: any) => f.name === 'Time');
     
     if (!timeField) {
@@ -75,30 +76,72 @@ function processSeries(series: any, dataPointsList: DataPoint[], expectedLength:
         return;
     }
 
-    const valueField = series.fields.find((f: any) => ['x', 'y', 'z'].includes(f.name));
+    // Define a mapping for 3-component vectors (position)
+    const fieldIndexMap: { [key: string]: number } = {
+        'x': 0,
+        'y': 1,
+        'z': 2
+    };
+
+    series.fields.forEach((field: any) => {
+        if (!['x', 'y', 'z'].includes(field.name)) return;
+
+        field.values.forEach((value: number, idx: number) => {
+            const time = new Date(timeField.values[idx]).getTime();
+            let dataPoint = dataPointsList.find(p => p.time === time);
+            
+            if (!dataPoint) {
+                dataPoint = { time, values: new Array(3).fill(null) };
+                dataPointsList.push(dataPoint);
+            }
+
+            // Use the dictionary to get the correct index for the field name
+            const coordIndex = fieldIndexMap[field.name];
+            dataPoint.values[coordIndex] = value;
+        });
+    });
+}
+
+function process4Series(series: any, dataPointsList: DataPoint[]): void {
+    const timeField = series.fields.find((f: any) => f.name === 'Time');
     
-    if (!valueField) {
-        console.warn('No x, y, or z field found in series.');
+    if (!timeField) {
+        console.warn('Time field not found in series. Available fields:', series.fields.map((f: any) => f.name));
         return;
     }
 
-    valueField.values.forEach((value: number, idx: number) => {
-        const time = new Date(timeField.values[idx]).getTime();
-        let dataPoint = dataPointsList.find(p => p.time === time);
-        
-        if (!dataPoint) {
-            dataPoint = { time, values: new Array(expectedLength).fill(null) };
-            dataPointsList.push(dataPoint);
-        }
+    // Define a mapping for 4-component quaternions (orientation)
+    const fieldIndexMap: { [key: string]: number } = {
+        'w': 0,
+        'x': 1,
+        'y': 2,
+        'z': 3
+    };
 
-        const coordIndex = valueField.name === 'x' ? 0 : valueField.name === 'y' ? 1 : 2;
-        dataPoint.values[coordIndex] = value;
+    series.fields.forEach((field: any) => {
+        if (!['w', 'x', 'y', 'z'].includes(field.name)) return;
+
+        field.values.forEach((value: number, idx: number) => {
+            const time = new Date(timeField.values[idx]).getTime();
+            let dataPoint = dataPointsList.find(p => p.time === time);
+            
+            if (!dataPoint) {
+                dataPoint = { time, values: new Array(4).fill(null) };
+                dataPointsList.push(dataPoint);
+            }
+
+            // Use the dictionary to get the correct index for the quaternion field
+            const coordIndex = fieldIndexMap[field.name];
+            dataPoint.values[coordIndex] = value;
+        });
     });
 }
 
 function mergePositionAndOrientation(positionData: DataPoint[], orientationData: DataPoint[]): ComplexDataPoint[] {
     const complexDataPoints: ComplexDataPoint[] = [];
-    
+    console.error('pos data:', positionData);
+    console.error('orien data:', orientationData);
+
     positionData.forEach((positionPoint, idx) => {
         const orientationPoint = orientationData[idx];
         
@@ -110,7 +153,8 @@ function mergePositionAndOrientation(positionData: DataPoint[], orientationData:
             ]
         });
     });
-    
+    console.error('Generated merged post and orientation:', complexDataPoints);
+
     return complexDataPoints;
 }
 
@@ -126,6 +170,8 @@ function createComplexCoordinatesFromDataPoints(complexDataPoints: ComplexDataPo
             });
         }
     }
+
+    console.error('Gemerated complex coords from data points', complexCoordinates);
 
     return complexCoordinates;
 }
@@ -155,13 +201,15 @@ function generateTetrahedronGeometry(coord: ComplexCoordinate): number[] {
     const baseHeight = -hDim;
     const baseRadius = hDim / 3;
 
-    // Extract position and orientation values from the array
-    const x = coord.values[0];
-    const y = coord.values[1];
-    const z = coord.values[2];
-    const roll = coord.values[3];
-    const pitch = coord.values[4];
-    const yaw = coord.values[5];
+    // Extract position and quaternion orientation values from the array
+    const x = coord.values[0]; // position x
+    const y = coord.values[1]; // position y
+    const z = coord.values[2]; // position z
+
+    const w = coord.values[3]; // quaternion w
+    const qx = coord.values[4]; // quaternion x
+    const qy = coord.values[5]; // quaternion y
+    const qz = coord.values[6]; // quaternion z
 
     // Local vertices in the object’s local space (no translation applied yet)
     let v0 = new THREE.Vector3(0, topHeight, 0);
@@ -169,14 +217,9 @@ function generateTetrahedronGeometry(coord: ComplexCoordinate): number[] {
     let v2 = new THREE.Vector3(baseRadius * Math.cos((2 * Math.PI) / 3), baseHeight, baseRadius * Math.sin((2 * Math.PI) / 3));
     let v3 = new THREE.Vector3(baseRadius * Math.cos((4 * Math.PI) / 3), baseHeight, baseRadius * Math.sin((4 * Math.PI) / 3));
 
-    // Convert roll, pitch, yaw from degrees to radians
-    const rollInRadians = roll * (Math.PI / 180);
-    const pitchInRadians = pitch * (Math.PI / 180);
-    const yawInRadians = yaw * (Math.PI / 180);
-
-    // Create quaternion from Euler angles (rotation first)
-    const quaternion = new THREE.Quaternion();
-    quaternion.setFromEuler(new THREE.Euler(pitchInRadians, yawInRadians, rollInRadians, 'XYZ'));
+    // Create quaternion from the given w, x, y, z (rotation first)
+    const quaternion = new THREE.Quaternion(qx, qy, qz, w);
+    quaternion.normalize();
 
     // Apply the rotation to the local vertices
     v0.applyQuaternion(quaternion);
