@@ -1,68 +1,53 @@
 import * as THREE from 'three';
 
-interface Coordinate {
-    x: number;
-    y: number;
-    z: number;
-}
+// Use array for flexible coordinate handling
+type Coordinate = number[];  // [0]: x, [1]: y, [2]: z or quaternion
 
-interface DataPoint {
+type DataPoint = {
     time: number;
-    x: number | null;
-    y: number | null;
-    z: number | null;
-}
+    values: (number | null)[];
+};
 
 function interpolateMissingValues(processedData: DataPoint[]): void {
     processedData.forEach((point, index) => {
         if (index === 0) return;  // Skip the first point
         const prevPoint = processedData[index - 1];
-        ['x', 'y', 'z'].forEach(coord => {
-            if (point[coord as keyof Coordinate] === null) {
-                point[coord as keyof Coordinate] = prevPoint[coord as keyof Coordinate];
+        point.values.forEach((value, coordIndex) => {
+            if (value === null) {
+                point.values[coordIndex] = prevPoint.values[coordIndex];
             }
         });
     });
 }
 
-interface ComplexDataPoint {
+type ComplexDataPoint = {
     time: number;
-    x: number | null;
-    y: number | null;
-    z: number | null;
-    roll: number | null;
-    pitch: number | null;
-    yaw: number | null;
-}
+    values: (number | null)[];  // Values array for [posX, posY, posZ, roll, pitch, yaw]
+};
 
-interface ComplexCoordinate {
-    x: number;
-    y: number;
-    z: number;
-    roll: number;
-    pitch: number;
-    yaw: number;
-}
-export function generateCoordinatesFromData(data: any[], numSamplePoints: number): ComplexCoordinate[] {
+type ComplexCoordinate = {
+    values: (number | null)[];  // Values array for [posX, posY, posZ, roll, pitch, yaw]
+};
+
+export function generateCoordinatesFromData(data: any[], numSamplePoints: number): ComplexDataPoint[] {
     console.error('Received data:', data);
     
     if (data.length < 6) {
         throw new Error('Expected six data series: three for position and three for orientation');
     }
 
-    // Initialize empty lists for position and orientation DataPoints
     const processedPositionData: DataPoint[] = [];
     const processedOrientationData: DataPoint[] = [];
 
-    // Process orientation series (roll, pitch, yaw)
-    processSeries(data[0], processedOrientationData); // rollx
-    processSeries(data[1], processedOrientationData); // pitchy
-    processSeries(data[2], processedOrientationData); // yawz
+    // Process orientation series (assumed to be quaternions or angles)
+    processSeries(data[0], processedOrientationData, 3); // rollx
+    processSeries(data[1], processedOrientationData, 3); // pitchy
+    processSeries(data[2], processedOrientationData, 3); // yawz
 
     // Process position series (x, y, z)
-    processSeries(data[3], processedPositionData); // posx
-    processSeries(data[4], processedPositionData); // posy
-    processSeries(data[5], processedPositionData); // posz
+    processSeries(data[3], processedPositionData, 3); // posx
+    processSeries(data[4], processedPositionData, 3); // posy
+    processSeries(data[5], processedPositionData, 3); // posz
     
     // Sort both data lists by time
     processedPositionData.sort((a, b) => a.time - b.time);
@@ -75,15 +60,14 @@ export function generateCoordinatesFromData(data: any[], numSamplePoints: number
     // Merge position and orientation data into ComplexDataPoints
     const complexDataPoints: ComplexDataPoint[] = mergePositionAndOrientation(processedPositionData, processedOrientationData);
     
-    // Downsample and convert to ComplexCoordinates
+    // Downsample
     const complexCoordinates = createComplexCoordinatesFromDataPoints(complexDataPoints, numSamplePoints);
     
     console.log('Generated complex coordinates:', complexCoordinates);
     return complexCoordinates;
 }
 
-// Updated processSeries function to add data to the provided DataPoint list
-function processSeries(series: any, dataPointsList: DataPoint[]): void {
+function processSeries(series: any, dataPointsList: DataPoint[], expectedLength: number): void {
     const timeField = series.fields.find((f: any) => f.name === 'Time');
     
     if (!timeField) {
@@ -91,7 +75,7 @@ function processSeries(series: any, dataPointsList: DataPoint[]): void {
         return;
     }
 
-    const valueField = series.fields.find((f: any) => f.name === 'x' || f.name === 'y' || f.name === 'z');
+    const valueField = series.fields.find((f: any) => ['x', 'y', 'z'].includes(f.name));
     
     if (!valueField) {
         console.warn('No x, y, or z field found in series.');
@@ -103,12 +87,12 @@ function processSeries(series: any, dataPointsList: DataPoint[]): void {
         let dataPoint = dataPointsList.find(p => p.time === time);
         
         if (!dataPoint) {
-            dataPoint = { time, x: null, y: null, z: null };
+            dataPoint = { time, values: new Array(expectedLength).fill(null) };
             dataPointsList.push(dataPoint);
         }
 
-        // Assign the correct field (x, y, or z) based on the valueField name
-        dataPoint[valueField.name as keyof Coordinate] = value;
+        const coordIndex = valueField.name === 'x' ? 0 : valueField.name === 'y' ? 1 : 2;
+        dataPoint.values[coordIndex] = value;
     });
 }
 
@@ -120,12 +104,10 @@ function mergePositionAndOrientation(positionData: DataPoint[], orientationData:
         
         complexDataPoints.push({
             time: positionPoint.time,
-            x: positionPoint.x,
-            y: positionPoint.y,
-            z: positionPoint.z,
-            roll: orientationPoint.x,  // roll packed into x
-            pitch: orientationPoint.y, // pitch packed into y
-            yaw: orientationPoint.z    // yaw packed into z
+            values: [
+                ...(positionPoint.values as number[]),    // Position [x, y, z]
+                ...(orientationPoint.values as number[])  // Orientation [roll, pitch, yaw] or quaternion
+            ]
         });
     });
     
@@ -138,14 +120,9 @@ function createComplexCoordinatesFromDataPoints(complexDataPoints: ComplexDataPo
     
     for (let i = 0; i < complexDataPoints.length && complexCoordinates.length < numSamplePoints; i += step) {
         const point = complexDataPoints[i];
-        if (point.x !== null && point.y !== null && point.z !== null && point.roll !== null && point.pitch !== null && point.yaw !== null) {
+        if (point.values.every(value => value !== null)) {
             complexCoordinates.push({
-                x: point.x,
-                y: point.y,
-                z: point.z,
-                roll: point.roll,
-                pitch: point.pitch,
-                yaw: point.yaw
+                values: point.values as number[]
             });
         }
     }
@@ -178,40 +155,40 @@ function generateTetrahedronGeometry(coord: ComplexCoordinate): number[] {
     const baseHeight = -hDim;
     const baseRadius = hDim / 3;
 
-    // Top vertex (before applying orientation)
-    let v0 = new THREE.Vector3(coord.x, coord.y + topHeight, coord.z);
+    // Extract position and orientation values from the array
+    const x = coord.values[0];
+    const y = coord.values[1];
+    const z = coord.values[2];
+    const roll = coord.values[3];
+    const pitch = coord.values[4];
+    const yaw = coord.values[5];
 
-    // Base vertices (before applying orientation)
-    let v1 = new THREE.Vector3(
-        coord.x + baseRadius * Math.cos(0),
-        coord.y + baseHeight,
-        coord.z + baseRadius * Math.sin(0)
-    );
-    let v2 = new THREE.Vector3(
-        coord.x + baseRadius * Math.cos(2 * Math.PI / 3),
-        coord.y + baseHeight,
-        coord.z + baseRadius * Math.sin(2 * Math.PI / 3)
-    );
-    let v3 = new THREE.Vector3(
-        coord.x + baseRadius * Math.cos(4 * Math.PI / 3),
-        coord.y + baseHeight,
-        coord.z + baseRadius * Math.sin(4 * Math.PI / 3)
-    );
+    // Local vertices in the object’s local space (no translation applied yet)
+    let v0 = new THREE.Vector3(0, topHeight, 0);
+    let v1 = new THREE.Vector3(baseRadius * Math.cos(0), baseHeight, baseRadius * Math.sin(0));
+    let v2 = new THREE.Vector3(baseRadius * Math.cos((2 * Math.PI) / 3), baseHeight, baseRadius * Math.sin((2 * Math.PI) / 3));
+    let v3 = new THREE.Vector3(baseRadius * Math.cos((4 * Math.PI) / 3), baseHeight, baseRadius * Math.sin((4 * Math.PI) / 3));
 
     // Convert roll, pitch, yaw from degrees to radians
-    const rollInRadians = coord.roll * (Math.PI / 180);
-    const pitchInRadians = coord.pitch * (Math.PI / 180);
-    const yawInRadians = coord.yaw * (Math.PI / 180);
+    const rollInRadians = roll * (Math.PI / 180);
+    const pitchInRadians = pitch * (Math.PI / 180);
+    const yawInRadians = yaw * (Math.PI / 180);
 
-    // Apply rotation based on roll, pitch, yaw (in radians)
+    // Create quaternion from Euler angles (rotation first)
     const quaternion = new THREE.Quaternion();
     quaternion.setFromEuler(new THREE.Euler(pitchInRadians, yawInRadians, rollInRadians, 'XYZ'));
 
-    // Apply rotation to the vertices
+    // Apply the rotation to the local vertices
     v0.applyQuaternion(quaternion);
     v1.applyQuaternion(quaternion);
     v2.applyQuaternion(quaternion);
     v3.applyQuaternion(quaternion);
+
+    // After rotation, apply the translation (x, y, z) to each vertex
+    v0.add(new THREE.Vector3(x, y, z));
+    v1.add(new THREE.Vector3(x, y, z));
+    v2.add(new THREE.Vector3(x, y, z));
+    v3.add(new THREE.Vector3(x, y, z));
 
     return [
         // Edges from top to base
@@ -224,7 +201,6 @@ function generateTetrahedronGeometry(coord: ComplexCoordinate): number[] {
         v3.x, v3.y, v3.z, v1.x, v1.y, v1.z
     ];
 }
-
 
 export function createVehicleTraceObjects(coordinates: ComplexCoordinate[]): THREE.Object3D[] {
     if (!Array.isArray(coordinates)) {
