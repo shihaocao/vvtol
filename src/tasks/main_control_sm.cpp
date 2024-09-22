@@ -65,12 +65,23 @@ MainControl::State MainControlSM::autonomous_control()
 
 void MainControlSM::intermittently_health_check()
 {
+#ifndef NATIVE
     uint32_t now_millis = millis();
     if (now_millis > last_hc_millis_ + HC_INTERVAL_MS)
     {
         last_hc_millis_ = now_millis;
         health_check();
     }
+#endif
+#ifdef NATIVE
+    using namespace std::chrono;
+    auto now = duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
+    if (now > last_hc_millis_ + HC_INTERVAL_MS)
+    {
+        last_hc_millis_ = now;
+        health_check();
+    }
+#endif
 }
 
 void MainControlSM::health_check()
