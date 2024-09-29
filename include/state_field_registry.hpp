@@ -44,6 +44,7 @@ struct StateFields
     ]]]*/
     float time_t_average_cycle_time_us{};
     uint32_t mcl_control_cycle_num{};
+    uint32_t mcl_now_ts_ms{};
     MainControl::State mc_state{};
     MainControl::State target_mc_state{};
     GncControl::State gnc_state{};

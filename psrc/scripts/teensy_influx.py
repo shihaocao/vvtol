@@ -120,6 +120,7 @@ def post_sfr(sfr: StateFieldRegistry):
         points.append(vec_measurement(sfr.sim_euler_angles, 'sim_euler_angles', time_point))
     point.field("time_t_average_cycle_time_us", sfr.time_t_average_cycle_time_us)
     point.field("mcl_control_cycle_num", sfr.mcl_control_cycle_num)
+    point.field("mcl_now_ts_ms", sfr.mcl_now_ts_ms)
     point.field("mc_state", sfr.mc_state)
     point.field("target_mc_state", sfr.target_mc_state)
     point.field("gnc_state", sfr.gnc_state)

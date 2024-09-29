@@ -26,31 +26,32 @@ message StateFieldRegistry {
     ]]]*/
     float time_t_average_cycle_time_us = 21;
     uint32 mcl_control_cycle_num = 22;
-    int32 mc_state = 23;
-    int32 target_mc_state = 24;
-    int32 gnc_state = 25;
-    int32 target_gnc_state = 26;
-    uint32 packed_imu_state = 27;
-    SFVector3f zero_vec = 28;
-    SFVector3f imu_linear_acc = 29;
-    SFVector3f imu_acc = 30;
-    SFVector3f imu_gyr_acc = 31;
-    SFVector3f imu_euler_vec = 32;
-    SFVector4f imu_quat = 33;
-    SFVector3f gnc_global_target_error = 34;
-    SFVector3f gnc_global_target_pos = 35;
-    SFVector3f state_global_pos = 36;
-    SFVector3f state_global_vel = 37;
-    SFVector3f state_global_acc = 38;
-    SFVector3f state_euler_vec = 39;
-    SFVector3f gnc_target_global_acc = 40;
-    SFVector4f gnc_global_quat = 41;
-    SFVector3f gnc_euler_angles = 42;
-    SFVector3f sim_global_linear_pos = 43;
-    SFVector3f sim_global_linear_vel = 44;
-    SFVector3f sim_global_linear_acc = 45;
-    SFVector4f sim_global_quat = 46;
-    SFVector3f sim_euler_angles = 47;
+    uint32 mcl_now_ts_ms = 23;
+    int32 mc_state = 24;
+    int32 target_mc_state = 25;
+    int32 gnc_state = 26;
+    int32 target_gnc_state = 27;
+    uint32 packed_imu_state = 28;
+    SFVector3f zero_vec = 29;
+    SFVector3f imu_linear_acc = 30;
+    SFVector3f imu_acc = 31;
+    SFVector3f imu_gyr_acc = 32;
+    SFVector3f imu_euler_vec = 33;
+    SFVector4f imu_quat = 34;
+    SFVector3f gnc_global_target_error = 35;
+    SFVector3f gnc_global_target_pos = 36;
+    SFVector3f state_global_pos = 37;
+    SFVector3f state_global_vel = 38;
+    SFVector3f state_global_acc = 39;
+    SFVector3f state_euler_vec = 40;
+    SFVector3f gnc_target_global_acc = 41;
+    SFVector4f gnc_global_quat = 42;
+    SFVector3f gnc_euler_angles = 43;
+    SFVector3f sim_global_linear_pos = 44;
+    SFVector3f sim_global_linear_vel = 45;
+    SFVector3f sim_global_linear_acc = 46;
+    SFVector4f sim_global_quat = 47;
+    SFVector3f sim_euler_angles = 48;
     //[[[end]]]
 
 }

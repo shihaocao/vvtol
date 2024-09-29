@@ -51,6 +51,11 @@ SINGLE_ITEM_LIST = [
         None
     ),
     SfrItem(
+        SfrType.U32_T,
+        'mcl_now_ts_ms',
+        None
+    ),
+    SfrItem(
         SfrType.MC_STATE_T,
         'mc_state',
         None

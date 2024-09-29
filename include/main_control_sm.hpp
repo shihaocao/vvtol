@@ -27,7 +27,11 @@ public:
     void intermittently_health_check();
     void health_check();
 
+    void empty_control();
     void armed_control();
+    void initialization_control();
+    void flight_control();
+    void safehold_control();
 
     MainControl::State autonomous_control();
 

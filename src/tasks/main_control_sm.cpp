@@ -24,32 +24,17 @@ MainControlSM::MainControlSM(StateFields &sfr) : sfr_(sfr), empty_cvd_({})
 {
     empty_cvd_.add(
         [&]
-        { return sfr.mcl_control_cycle_num - sfr.last_transition_ccno > 1; },
+        { return sfr.mcl_now_ts_ms > 1000; },
         [&]
         {
-            log_printf("Waiting for initial warmup");
+            sfr.mc_state = MainControl::State::INITIALIZATION;
         });
     empty_cvd_.add(
         [&]
-        { return sfr.mcl_control_cycle_num - sfr.last_transition_ccno > 80; },
+        { return sfr.mcl_now_ts_ms > 10 * 1000; },
         [&]
         {
-            log_printf("Motor Init complete going to ARMED");
             sfr.mc_state = MainControl::State::ARMED;
-            log_printf("Going to ARMED!");
-
-            // log() << global_stats.to_string() << '\n';
-        });
-    empty_cvd_.add(
-        [&]
-        { return sfr.mcl_control_cycle_num - sfr.last_transition_ccno > 200; },
-        [&]
-        {
-            log_printf("Flight complete going to HALT");
-            sfr.mc_state = MainControl::State::HALT;
-            log_printf("Going to HALT!");
-
-            // log() << global_stats.to_string() << '\n';
         });
 }
 
@@ -94,13 +79,77 @@ void MainControlSM::armed_control()
     return;
 }
 
+void MainControlSM::empty_control()
+{
+    // Entry Procedure
+    if (sfr_.mc_state != MainControl::EMPTY)
+    {
+        sfr_.target_gnc_state = GncControl::State::EMPTY;
+        sfr_.mc_state = MainControl::EMPTY;
+    }
+
+    // Exit condition
+    if (sfr_.mcl_now_ts_ms > 1 * 1000)
+    {
+        sfr_.target_mc_state = MainControl::State::INITIALIZATION;
+    }
+}
+
+void MainControlSM::initialization_control()
+{
+    // Entry Procedure
+    if (sfr_.mc_state != MainControl::INITIALIZATION)
+    {
+        sfr_.target_gnc_state = GncControl::State::INITIALIZATION;
+        sfr_.mc_state = MainControl::INITIALIZATION;
+    }
+    // Exit condition
+    if (sfr_.mcl_now_ts_ms > 10 * 1000)
+    {
+        sfr_.target_mc_state = MainControl::State::FLIGHT;
+    }
+}
+
+void MainControlSM::flight_control()
+{
+    // Entry Procedure
+    if (sfr_.mc_state != MainControl::State::FLIGHT)
+    {
+        sfr_.target_gnc_state = GncControl::State::ASCENT;
+        sfr_.mc_state = MainControl::State::FLIGHT;
+    }
+
+    // Exit Condition
+    if (sfr_.mcl_now_ts_ms > 20 * 1000)
+    {
+        sfr_.target_mc_state = MainControl::State::SAFEHOLD;
+    }
+}
+
+void MainControlSM::safehold_control()
+{
+    // Entry Procedure
+    if (sfr_.mc_state != MainControl::State::SAFEHOLD)
+    {
+        // Safe the vehicle.
+        sfr_.mc_state = MainControl::State::SAFEHOLD;
+        sfr_.target_gnc_state = GncControl::State::SAFE;
+        (void)false;
+    }
+
+    // No exit condition other than power off.
+}
+
 void MainControlSM::execute()
 {
     intermittently_health_check();
-    switch (sfr_.mc_state)
+    switch (sfr_.target_mc_state)
     {
     case MainControl::State::EMPTY:
-        empty_cvd_.execute();
+        empty_control();
+        break;
+    case MainControl::State::INITIALIZATION:
+        initialization_control();
         break;
     case MainControl::State::ABORT:
         // safe the vehicle
@@ -111,6 +160,8 @@ void MainControlSM::execute()
         break;
     case MainControl::State::ARMED:
         armed_control();
+        break;
+    case MainControl::State::SAFEHOLD:
         break;
     }
 }
