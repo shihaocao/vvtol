@@ -151,17 +151,14 @@ void MainControlSM::execute()
     case MainControl::State::INITIALIZATION:
         initialization_control();
         break;
-    case MainControl::State::ABORT:
-        // safe the vehicle
-        sfr_.target_gnc_state = GncControl::State::DESCENT;
-        break;
-    case MainControl::State::HALT:
-        sfr_.target_gnc_state = GncControl::State::HALT;
+    case MainControl::State::FLIGHT:
+        flight_control();
         break;
     case MainControl::State::ARMED:
         armed_control();
         break;
     case MainControl::State::SAFEHOLD:
+        safehold_control();
         break;
     }
 }

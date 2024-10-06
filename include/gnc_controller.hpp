@@ -23,6 +23,14 @@ public:
 
     void execute();
 
+    void empty_control();
+    void initialization_control();
+    void ascent_control();
+    void safe_control();
+
+    void pid_cmd_control();
+    void safe_the_vehicle();
+
     lin::Vector3f previous_pos_error_;
     lin::Vector3f integral_;
 };

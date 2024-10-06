@@ -23,7 +23,62 @@ void GncController::setup()
     integral_ = lin::Vector3f{}; // Initialize the integral term to zero
 }
 
+void GncController::empty_control()
+{
+    if (sfr_.target_gnc_state != GncControl::State::EMPTY)
+    {
+        sfr_.gnc_state = GncControl::EMPTY;
+    }
+}
+
+void GncController::initialization_control()
+{
+    if (sfr_.target_gnc_state != GncControl::State::INITIALIZATION)
+    {
+        sfr_.gnc_state = GncControl::INITIALIZATION;
+    }
+}
+
+void GncController::ascent_control()
+{
+    if (sfr_.target_gnc_state != GncControl::State::ASCENT)
+    {
+        sfr_.gnc_state = GncControl::ASCENT;
+    }
+}
+
+void GncController::safe_the_vehicle()
+{
+}
+
+void GncController::safe_control()
+{
+    if (sfr_.target_gnc_state != GncControl::State::SAFE)
+    {
+        sfr_.gnc_state = GncControl::SAFE;
+    }
+}
+
 void GncController::execute()
+{
+    switch (sfr_.target_gnc_state)
+    {
+    case GncControl::State::EMPTY:
+        empty_control();
+        break;
+    case GncControl::State::INITIALIZATION:
+        initialization_control();
+        break;
+    case GncControl::State::ASCENT:
+        ascent_control();
+        break;
+    case GncControl::State::SAFE:
+        safe_control();
+        break;
+    }
+}
+
+void GncController::pid_cmd_control()
 {
     sfr_.gnc_global_target_error = sfr_.gnc_global_target_pos - sfr_.state_global_pos;
     lin::Vector3f P = kp * sfr_.gnc_global_target_error;

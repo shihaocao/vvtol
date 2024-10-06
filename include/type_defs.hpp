@@ -16,8 +16,6 @@ namespace MainControl
         ARMED = 2,
         SAFEHOLD = 3,
         FLIGHT = 4,
-        ABORT = 5,
-        HALT = 6,
     };
 }
 
@@ -28,10 +26,6 @@ namespace GncControl
         EMPTY = 0,
         INITIALIZATION = 1,
         SAFE = 2,
-        HOLD = 3,
-        ASCENT = 4,
-        DESCENT = 5,
-        TOUCHDOWN = 6,
-        HALT = 7,
+        ASCENT = 3,
     };
 }
