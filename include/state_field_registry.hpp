@@ -50,6 +50,8 @@ struct StateFields
     GncControl::State gnc_state{};
     GncControl::State target_gnc_state{};
     uint32_t packed_imu_state{};
+    int32_t fin_py_cmd{};
+    int32_t fin_ny_cmd{};
     lin::Vector3f zero_vec{};
     lin::Vector3f imu_linear_acc{};
     lin::Vector3f imu_acc{};
@@ -72,8 +74,8 @@ struct StateFields
     lin::Vector3f sim_euler_angles{};
     //[[[end]]]
 
-    float fin_py_cmd;
-    float fin_ny_cmd;
+    // float fin_py_cmd;
+    // float fin_ny_cmd;
     float fin_px_cmd;
     float fin_nx_cmd;
 

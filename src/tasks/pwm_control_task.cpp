@@ -15,7 +15,7 @@ void PwmControlTask::setup()
 {
 #ifndef NATIVE
     fin_py.attach(FIN_PY_PIN);
-    lower_motor.attach(LOWER_MOTOR_PIN, 1000, 2000);
+    // lower_motor.attach(LOWER_MOTOR_PIN, 1000, 2000);
     fin_py.write(0);
     safe_pwm_outputs();
 #endif
@@ -30,21 +30,21 @@ void PwmControlTask::safe_pwm_outputs()
 
 void PwmControlTask::execute()
 {
-    if (sfr_.mc_state != MainControl::State::FLIGHT)
-    {
-        // TODO: Do not read from main SFR state,
-        // Read from commanded flag
-        // (SMs should propagate down, instead of looking up)
-        safe_pwm_outputs();
-        return;
-    }
+    // if (sfr_.mc_state != MainControl::State::FLIGHT)
+    // {
+    //     // TODO: Do not read from main SFR state,
+    //     // Read from commanded flag
+    //     // (SMs should propagate down, instead of looking up)
+    //     safe_pwm_outputs();
+    //     return;
+    // }
 
-    fin_py_pos += 5;
-    fin_py_pos = fin_py_pos % 180;
+    sfr_.fin_py_cmd += 5;
+    sfr_.fin_py_cmd = sfr_.fin_py_cmd % 180;
 #ifndef NATIVE
-    fin_py.write(fin_py_pos);
+    fin_py.write(sfr_.fin_py_cmd);
 
     // Set some non zero throttle
-    lower_motor.write(10);
+    // lower_motor.write(10);
 #endif
 }

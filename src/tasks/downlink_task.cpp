@@ -84,6 +84,8 @@ void DownlinkTask::execute()
     state_field_registry.gnc_state = sfr_.gnc_state;
     state_field_registry.target_gnc_state = sfr_.target_gnc_state;
     state_field_registry.packed_imu_state = sfr_.packed_imu_state;
+    state_field_registry.fin_py_cmd = sfr_.fin_py_cmd;
+    state_field_registry.fin_ny_cmd = sfr_.fin_ny_cmd;
     lin_link_downlink_sfr(state_field_registry.zero_vec,
                           state_field_registry.has_zero_vec,
                           &sfr_.zero_vec);

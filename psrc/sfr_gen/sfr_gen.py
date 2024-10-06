@@ -4,7 +4,7 @@ import cog
 
 class SfrType(Enum):
     FLOAT_T = 0
-    # I32_T = 1
+    I32_T = 1
     U32_T = 2
     U64_T = 3
     MC_STATE_T = 4
@@ -14,6 +14,7 @@ class SfrType(Enum):
 
 sfr_to_proto = {
     SfrType.FLOAT_T: 'float',
+    SfrType.I32_T: 'int32',
     SfrType.U32_T: 'uint32',
     SfrType.U64_T: 'uint64',
     SfrType.MC_STATE_T: 'int32',
@@ -24,6 +25,7 @@ sfr_to_proto = {
 
 sfr_to_header = {
     SfrType.FLOAT_T: 'float',
+    SfrType.I32_T: 'int32_t',
     SfrType.U32_T: 'uint32_t',
     SfrType.U64_T: 'uint64_t',
     SfrType.MC_STATE_T: 'MainControl::State',
@@ -78,6 +80,16 @@ SINGLE_ITEM_LIST = [
     SfrItem(
         SfrType.U32_T,
         'packed_imu_state',
+        None
+    ),
+    SfrItem(
+        SfrType.I32_T,
+        'fin_py_cmd',
+        None
+    ),
+    SfrItem(
+        SfrType.I32_T,
+        'fin_ny_cmd',
         None
     )
 ]

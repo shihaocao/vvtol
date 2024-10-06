@@ -126,6 +126,8 @@ def post_sfr(sfr: StateFieldRegistry):
     point.field("gnc_state", sfr.gnc_state)
     point.field("target_gnc_state", sfr.target_gnc_state)
     point.field("packed_imu_state", sfr.packed_imu_state)
+    point.field("fin_py_cmd", sfr.fin_py_cmd)
+    point.field("fin_ny_cmd", sfr.fin_ny_cmd)
     #[[[end]]]
 
     imu_sys_state, imu_gyr_state, imu_acc_state, imu_mag_state = struct.pack('>I', sfr.packed_imu_state)
