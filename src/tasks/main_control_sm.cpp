@@ -89,7 +89,7 @@ void MainControlSM::empty_control()
     }
 
     // Exit condition
-    if (sfr_.mcl_now_ts_ms > 1 * 1000)
+    if (sfr_.mcl_now_ts_ms > 3 * 1000)
     {
         sfr_.target_mc_state = MainControl::State::INITIALIZATION;
     }

@@ -3,17 +3,24 @@
 
 Servo esc; // create servo object to control the ESC
 
-int write_val = 0;
+int write_val = 1500;
 void setup()
 {
-    esc.attach(29, 1000, 2000); // Attach the ESC to pin 9
+    esc.attach(23, 1000, 2000); // Attach the ESC to pin 9
     esc.write(write_val);
-    delay(10000); // Wait for 3 seconds to allow the ESC to initialize
+    delay(3000); // Wait for 3 seconds to allow the ESC to initialize
 }
 
 void loop()
 {
-    esc.write(20);
+    if (write_val > 2000)
+    {
+        write_val = 1000;
+    }
+
+    write_val = write_val + 5;
+    esc.writeMicroseconds(write_val);
+    delay(20);
 
     // // Example to control the motor
     // // This will gradually increase the throttle from 0 to maximum
