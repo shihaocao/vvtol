@@ -120,7 +120,7 @@ void MainControlSM::flight_control()
     }
 
     // Exit Condition
-    if (sfr_.mcl_now_ts_ms > 20 * 1000)
+    if (sfr_.mcl_now_ts_ms > 200 * 1000)
     {
         sfr_.target_mc_state = MainControl::State::SAFEHOLD;
     }

@@ -339,3 +339,11 @@ Also here's a link to add more refresh rates in Grafana: `https://community.graf
 Lol my code keeps crashing around CCNO 2000... surely I must have left some suspicious code somewhere that just landmines...
 
 ![CCNO Crash at 2k](documentation/ccno_crashing_at_2000_lol.png)
+
+## 10/20
+
+Today and yesterday I cadded some fins, added them, and got them to move slightly in response to angle error.
+
+
+
+![Some Servos and Fins](documentation/some_servos.jpeg)

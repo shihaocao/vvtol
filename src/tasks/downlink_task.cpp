@@ -86,6 +86,8 @@ void DownlinkTask::execute()
     state_field_registry.packed_imu_state = sfr_.packed_imu_state;
     state_field_registry.fin_py_cmd = sfr_.fin_py_cmd;
     state_field_registry.fin_ny_cmd = sfr_.fin_ny_cmd;
+    state_field_registry.fin_px_cmd = sfr_.fin_px_cmd;
+    state_field_registry.fin_nx_cmd = sfr_.fin_nx_cmd;
     lin_link_downlink_sfr(state_field_registry.zero_vec,
                           state_field_registry.has_zero_vec,
                           &sfr_.zero_vec);
@@ -104,6 +106,12 @@ void DownlinkTask::execute()
     lin_link_downlink_sfr(state_field_registry.imu_quat,
                           state_field_registry.has_imu_quat,
                           &sfr_.imu_quat);
+    lin_link_downlink_sfr(state_field_registry.gnc_orientation_target_quat,
+                          state_field_registry.has_gnc_orientation_target_quat,
+                          &sfr_.gnc_orientation_target_quat);
+    lin_link_downlink_sfr(state_field_registry.gnc_orientation_error_deg,
+                          state_field_registry.has_gnc_orientation_error_deg,
+                          &sfr_.gnc_orientation_error_deg);
     lin_link_downlink_sfr(state_field_registry.gnc_global_target_pos,
                           state_field_registry.has_gnc_global_target_pos,
                           &sfr_.gnc_global_target_pos);

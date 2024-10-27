@@ -6,16 +6,16 @@ Servo esc; // create servo object to control the ESC
 int write_val = 1500;
 void setup()
 {
-    esc.attach(23, 1000, 2000); // Attach the ESC to pin 9
+    esc.attach(22, 1000, 2000); // Attach the ESC to pin 9
     esc.write(write_val);
-    delay(3000); // Wait for 3 seconds to allow the ESC to initialize
+    delay(10000); // Wait for 3 seconds to allow the ESC to initialize
 }
 
 void loop()
 {
-    if (write_val > 2000)
+    if (write_val > 1800)
     {
-        write_val = 1000;
+        write_val = 1200;
     }
 
     write_val = write_val + 5;

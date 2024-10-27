@@ -91,6 +91,16 @@ SINGLE_ITEM_LIST = [
         SfrType.I32_T,
         'fin_ny_cmd',
         None
+    ),
+    SfrItem(
+        SfrType.I32_T,
+        'fin_px_cmd',
+        None
+    ),
+    SfrItem(
+        SfrType.I32_T,
+        'fin_nx_cmd',
+        None
     )
 ]
 DISABLE_SIM_TELEM = True
@@ -123,6 +133,16 @@ VEC_ITEM_LIST = [
     SfrItem(
         SfrType.LIN_VECTOR4F_T,
         'imu_quat',
+        'lin_link_downlink_sfr',
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR4F_T,
+        'gnc_orientation_target_quat',
+        'lin_link_downlink_sfr',
+    ),
+    SfrItem(
+        SfrType.LIN_VECTOR3F_T,
+        'gnc_orientation_error_deg',
         'lin_link_downlink_sfr',
     ),
     SfrItem(

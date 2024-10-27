@@ -13,11 +13,6 @@ message StateFieldRegistry {
     uint32 time_t_last_cycle_end_us = 3;
     uint64 last_transition_ccno = 4;
 
-    float fin_py_cmd = 16;
-    float fin_ny_cmd = 17;
-    float fin_px_cmd = 18;
-    float fin_nx_cmd = 19;
-
     float lower_motor_cmd = 20;
 
     /*[[[cog
@@ -34,26 +29,30 @@ message StateFieldRegistry {
     uint32 packed_imu_state = 28;
     int32 fin_py_cmd = 29;
     int32 fin_ny_cmd = 30;
-    SFVector3f zero_vec = 31;
-    SFVector3f imu_linear_acc = 32;
-    SFVector3f imu_acc = 33;
-    SFVector3f imu_gyr_acc = 34;
-    SFVector3f imu_euler_vec = 35;
-    SFVector4f imu_quat = 36;
-    SFVector3f gnc_global_target_error = 37;
-    SFVector3f gnc_global_target_pos = 38;
-    SFVector3f state_global_pos = 39;
-    SFVector3f state_global_vel = 40;
-    SFVector3f state_global_acc = 41;
-    SFVector3f state_euler_vec = 42;
-    SFVector3f gnc_target_global_acc = 43;
-    SFVector4f gnc_global_quat = 44;
-    SFVector3f gnc_euler_angles = 45;
-    SFVector3f sim_global_linear_pos = 46;
-    SFVector3f sim_global_linear_vel = 47;
-    SFVector3f sim_global_linear_acc = 48;
-    SFVector4f sim_global_quat = 49;
-    SFVector3f sim_euler_angles = 50;
+    int32 fin_px_cmd = 31;
+    int32 fin_nx_cmd = 32;
+    SFVector3f zero_vec = 33;
+    SFVector3f imu_linear_acc = 34;
+    SFVector3f imu_acc = 35;
+    SFVector3f imu_gyr_acc = 36;
+    SFVector3f imu_euler_vec = 37;
+    SFVector4f imu_quat = 38;
+    SFVector4f gnc_orientation_target_quat = 39;
+    SFVector3f gnc_orientation_error_deg = 40;
+    SFVector3f gnc_global_target_error = 41;
+    SFVector3f gnc_global_target_pos = 42;
+    SFVector3f state_global_pos = 43;
+    SFVector3f state_global_vel = 44;
+    SFVector3f state_global_acc = 45;
+    SFVector3f state_euler_vec = 46;
+    SFVector3f gnc_target_global_acc = 47;
+    SFVector4f gnc_global_quat = 48;
+    SFVector3f gnc_euler_angles = 49;
+    SFVector3f sim_global_linear_pos = 50;
+    SFVector3f sim_global_linear_vel = 51;
+    SFVector3f sim_global_linear_acc = 52;
+    SFVector4f sim_global_quat = 53;
+    SFVector3f sim_euler_angles = 54;
     //[[[end]]]
 
 }

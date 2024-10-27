@@ -90,6 +90,10 @@ def post_sfr(sfr: StateFieldRegistry):
         points.append(vec_measurement(sfr.imu_euler_vec, 'imu_euler_vec', time_point))
     if len(sfr.imu_quat.elements) > 0:
         points.append(quat_measurement(sfr.imu_quat, 'imu_quat', time_point))
+    if len(sfr.gnc_orientation_target_quat.elements) > 0:
+        points.append(quat_measurement(sfr.gnc_orientation_target_quat, 'gnc_orientation_target_quat', time_point))
+    if len(sfr.gnc_orientation_error_deg.elements) > 0:
+        points.append(vec_measurement(sfr.gnc_orientation_error_deg, 'gnc_orientation_error_deg', time_point))
     if len(sfr.gnc_global_target_error.elements) > 0:
         points.append(vec_measurement(sfr.gnc_global_target_error, 'gnc_global_target_error', time_point))
     if len(sfr.gnc_global_target_pos.elements) > 0:
@@ -128,6 +132,8 @@ def post_sfr(sfr: StateFieldRegistry):
     point.field("packed_imu_state", sfr.packed_imu_state)
     point.field("fin_py_cmd", sfr.fin_py_cmd)
     point.field("fin_ny_cmd", sfr.fin_ny_cmd)
+    point.field("fin_px_cmd", sfr.fin_px_cmd)
+    point.field("fin_nx_cmd", sfr.fin_nx_cmd)
     #[[[end]]]
 
     imu_sys_state, imu_gyr_state, imu_acc_state, imu_mag_state = struct.pack('>I', sfr.packed_imu_state)

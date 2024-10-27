@@ -28,15 +28,6 @@ class PwmControlTask : public Task<PwmControlTask>
 public:
     std::string name = "pwm_control_task";
 
-    static constexpr int FIN_PX_PIN = 2;
-    static constexpr int FIN_NX_PIN = 3;
-    static constexpr int FIN_PY_PIN = 3; // These are arbitrary, choose PCB optimal
-
-    // static constexpr int FIN_PY_PIN = 28; // These are arbitrary, choose PCB optimal
-    static constexpr int FIN_NY_PIN = 23; // 5
-
-    static constexpr int LOWER_MOTOR_PIN = 29;
-
     int fin_py_pos = 0;
 
     PwmControlTask(StateFields &sfr);

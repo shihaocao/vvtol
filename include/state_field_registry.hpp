@@ -52,12 +52,16 @@ struct StateFields
     uint32_t packed_imu_state{};
     int32_t fin_py_cmd{};
     int32_t fin_ny_cmd{};
+    int32_t fin_px_cmd{};
+    int32_t fin_nx_cmd{};
     lin::Vector3f zero_vec{};
     lin::Vector3f imu_linear_acc{};
     lin::Vector3f imu_acc{};
     lin::Vector3f imu_gyr_acc{};
     lin::Vector3f imu_euler_vec{};
     lin::Vector4f imu_quat{};
+    lin::Vector4f gnc_orientation_target_quat{};
+    lin::Vector3f gnc_orientation_error_deg{};
     lin::Vector3f gnc_global_target_error{};
     lin::Vector3f gnc_global_target_pos{};
     lin::Vector3f state_global_pos{};
@@ -76,8 +80,8 @@ struct StateFields
 
     // float fin_py_cmd;
     // float fin_ny_cmd;
-    float fin_px_cmd;
-    float fin_nx_cmd;
+    // float fin_px_cmd;
+    // float fin_nx_cmd;
 
     float lower_motor_cmd;
 };
